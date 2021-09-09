@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@100&Roboto:wght@100&display=swap');
+
+html {
+    background-color: black;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Encode Sans SC', sans-serif;
+    }
+
+    &, & * {
+        margin: 0;
+        padding: 0;
+        cursor: default;
+    }
+
+    a, a * {
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+
+@media (max-height: 700px) {
+    html {
+        font-size: 14px !important;
+    }
+}
+
+@media (max-height: 600px) {
+    html {
+        font-size: 12px !important;
+    }
+}
+
+@media (max-height: 500px) {
+    html {
+        font-size: 10px !important;
+    }
+}
+
+@keyframes showing {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

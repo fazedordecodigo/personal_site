@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:locale" content="pt-BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sergio Cabral" />
+    <meta property="og:description" content="I'm a Developer" />
+    <meta property="og:url" content="https://sergiocabral.com/" />
+    <meta property="og:site_name" content="sergiocabral.com" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content="https://sergiocabral.com/opengraph.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sergio Cabral" />
+    <meta name="twitter:description" content="I'm a Developer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@100&Roboto:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <title>Sergio Cabral Portfolio</title>
+    <style>
+        html, html * {
+            margin: 0;
+            padding: 0;
+            color: rgba(255,255,255,0.75);
+            cursor: default;
+        }
+        html {
+            background-image: url(background.jpg);
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            height: 100%;
+            font-family: 'Encode Sans SC', sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            height: 100%;
+        }
+        a, a * {
+            cursor: pointer;
+        }
+        h1 {
+            font-size: 1.5em;
+        }
+        h2 {
+            font-size: 1.15em;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 210px;
+            max-width: 80%;
+            width: 350px;
+        }
+        .content::before {
+            z-index: -1;
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .card {
+            background-color: rgba(255,255,255,0.05);
+            background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.05) 10em);
+            padding: 2.5em 1em 1em 1em;
+            border-radius: 0.5em;
+            border: 1px solid rgba(68,68,68,1);
+            box-shadow: 0em 0em 1em 0.5em rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            max-height: 70%;
+            overflow: auto;
+        }
+        .card > * {
+            margin: 0.5em 0;
+        }
+        .profile, .profile > div {
+            background-image: url(profile.jpg);
+            background-repeat: no-repeat;
+            background-size: contain;
+            margin: 0 auto;
+            width: 10em;
+            height: 10em;
+            border-radius: 100%;
+            border: 0.25em solid black;
+            box-shadow:
+                0px 0px 15px 0px rgba(255,255,255,0.5),
+                0px 0px 200px 0px rgba(26, 241, 242, 0.3),
+                inset 0px 0px 10px 0px black;
+            animation: spinner 7200s linear infinite;
+        }
+        .profile > div {
+            background-image: url(profile2.jpg);
+            margin-top: -0.25em;
+            margin-left: -0.25em;
+            animation: hide 7200s linear infinite;
+        }
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(360deg);
+            }
+            100% {
+                transform: rotate(720deg);
+            }
+        }
+        @keyframes hide {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        .social {
+            position: relative;
+        }
+        .social > div {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 1.5em;
+            padding-top: 0.5em;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-bottom: 0.5em;
+            margin-bottom: 0.5em;
+            overflow: auto;
+            height: 125px;
+        }
+        .social a {
+            margin: 0.25em 0.5em;
+            opacity: 0.5;
+            border: 1px solid rgba(255,255,255,0.3);
+            line-height: 2em;
+            width: 2em;
+            border-radius: 100%;
+            transition: opacity 0.5s ease, box-shadow 0.5s ease;
+            text-decoration: none;
+        }
+        .social a:hover {
+            opacity: 1;
+            box-shadow: 0px 0px 10px 0px rgba(187, 236, 236, 0.5);
+            transition: opacity 1s ease;
+        }
+        .social a:hover:after {
+            content: attr(description);
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.5em;
+            position: absolute;
+            left: 0;
+            bottom: -2em;
+            right: 0;
+            color: rgba(255,255,255,0.5);
+            text-shadow: 0px 0px 10px rgba(187, 236, 236, 0.5);
+            opacity: 1;
+        }
+        /* width */
+        ::-webkit-scrollbar {
+            width: 0em;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.75);
+        }
+    </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="card">
+                <div class="profile"><div></div></div>
+                <h1>Sergio Cabral</h1>
+                <h2>Developer</h2>
+                <div class="social"><div>
+                    <a href="https://github.com/sergiocabral" description="GitHub" target="black"><i class="fab fa-github"></i></a>
+                    <a href="https://stackoverflow.com/story/sergiocabral" description="StackOverflow" target="black"><i class="fab fa-stack-overflow"></i></a>
+                    <a href="mailto:contact@sergiocabral.com" description="E-mail" target="black"><i class="far fa-envelope"></i></a>
+                    <a href="https://www.twitch.tv/sergiocabral_com" description="Twitch" target="black"><i class="fab fa-twitch"></i></a>
+                    <a href="https://discord.gg/R82VQuM9Vy" description="Discord" target="black"><i class="fab fa-discord"></i></a>
+                    <a href="https://www.linkedin.com/in/sergiocabraljr" description="LinkedIn" target="black"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.instagram.com/sergiocabraljunior" description="LinkedIn" target="black"><i class="fab fa-instagram"></i></a>
+                    <a href="http://sergiocabral.com/fotos" description="My Pictures" target="black"><i class="fa fa-camera-retro"></i></a>
+                    <a href="http://twitter.com/sergiocabraljr" description="LinkedIn" target="black"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/5522981842500" description="Whatsapp" target="black"><i class="fab fa-whatsapp"></i></a>
+                    <a href="http://sergiocabral.com/git" description="Git Playground" target="black"><i class="fab fa-git"></i></a>
+                    <a href="https://www.youtube.com/channel/UCBBmSw69UpBbncKM2Xbw-hQ" description="Devnator YouTube" target="black"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.youtube.com/c/SergioCabralJr" description="Personal YouTube" target="black"><i class="fab fa-youtube-square"></i></a>
+                    <a href="https://www.facebook.com/sergiocabraljr/" description="Facebook" target="black"><i class="fab fa-facebook-f"></i></i></a>
+                    <a href="http://sergiocabral.com/sorteios" description="Loto Number" target="black"><i class="fas fa-sort-numeric-down"></i></a>
+                </div></div>
+            </div>
+        </div>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-13VVRRD5MR"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-13VVRRD5MR');
+        </script>
+    </body>
+</html>
