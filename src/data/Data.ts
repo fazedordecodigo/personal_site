@@ -2,10 +2,10 @@ import {Configuration} from '../types/Configuration';
 
 const data: Configuration = {
     settings: {
-        "locale": "pt-BR",
-        "cycleInSeconds": 3600,
-        "browserColor": "#FFD602",
-        "lightColor": "#1AF1F2"
+        locale: "pt-BR",
+        cycleInSeconds: 3600,
+        browserColor: "#FFD602",
+        lightColor: "#1AF1F2",
     },
     profile: {
         title: "delatorre.dev",
@@ -20,24 +20,24 @@ const data: Configuration = {
                     {
                         name: "Email",
                         url: "mailto:emerson@delatorre.dev",
-                        icon: "far fa-envelope"
+                        icon: "far fa-envelope",
                     },
                     {
                         name: "Whatsapp",
                         url: "https://wa.me/5521980231818",
-                        icon: "fab fa-whatsapp"
+                        icon: "fab fa-whatsapp",
                     },
                     {
                         name: "Telegram",
                         url: "https://t.me/delatorrea",
-                        icon: "fab fa-telegram"
+                        icon: "fab fa-telegram",
                     },
                     {
                         name: "Discord",
                         url: "https://discord.gg/pVBcXxKx",
-                        icon: "fab fa-discord"
-                    }
-                ]
+                        icon: "fab fa-discord",
+                    },
+                ],
             },
             {
                 name: "fas fa-globe-americas",
@@ -46,74 +46,72 @@ const data: Configuration = {
                     {
                         name: "GitHub",
                         url: "https://github.com/delatorrea",
-                        icon: "fab fa-github"
+                        icon: "fab fa-github",
                     },
                     {
                         name: "StackOverflow",
                         url: "https://stackoverflow.com/story/delatorrea",
-                        icon: "fab fa-stack-overflow"
+                        icon: "fab fa-stack-overflow",
                     },
                     {
                         name: "LinkedIn",
                         url: "https://www.linkedin.com/in/delatorrea",
-                        icon: "fab fa-linkedin"
+                        icon: "fab fa-linkedin",
                     },
                     {
                         name: "Twitch",
                         url: "https://www.twitch.tv/emersondelatorre",
-                        icon: "fab fa-twitch"
+                        icon: "fab fa-twitch",
                     },
                     {
                         name: "YouTube",
                         url: "https://www.youtube.com/c/EmersonDelatorre",
-                        icon: "fab fa-youtube-square"
+                        icon: "fab fa-youtube-square",
                     },
                     {
                         name: "Instagram",
                         url: "https://www.instagram.com/delatorre.dev",
-                        icon: "fab fa-instagram"
+                        icon: "fab fa-instagram",
                     },
                     {
                         name: "Twitter",
                         url: "https://twitter.com/delatorre_",
-                        icon: "fab fa-twitter"
+                        icon: "fab fa-twitter",
                     },
                     {
                         name: "about.me",
                         url: "https://about.me/delatorrea",
-                        icon: "far fa-address-card"
-                    }
-                ]
+                        icon: "far fa-address-card",
+                    },
+                ],
             },
             {
                 name: "fas fa-cogs",
                 description: "Meus Projetos",
                 content: [
                     {
+                        name: "PyFlunt",
+                        url: "https://github.com/Delatorrea/pyflunt",
+                        icon: "fas fa-box-open",
+                    },
+                    {
                         name: "Simulador Banco Imobiliário",
                         url: "https://github.com/Delatorrea/banco_imobiliario_simulador",
-                        icon: "fas fa-dice"
-                    }
-                ]
+                        icon: "fas fa-dice",
+                    },
+                ],
             },
             {
                 name: "fas fa-id-card",
                 description: "Quem Sou Eu?",
                 content: `
                     <p>
-                        VBA Specialisty, trabalho há 8 anos com desenvolvimento, desde o início com VBA.
+                        🏁 Trabalho como <b>Senior Software Engineer</b> na Avanade 😎  desenvolvo microsserviços custom SAP com NestJS.
                     </p>
-                    <p>
-                        🏁 Hoje em dia trabalho como <b>Analista de Dados Negócio</b> 😎 lidando com Power BI, SQL, Python e VBA.
-                    </p>
-                    <p>
-                        📺 Mas você me encontra no <b>Youtube</b> ,
-                        onde publico vídeos sobre programação e BI.
-                    </p>
-                `
-            }
-        ]
-    }
+                `,
+            },
+        ],
+    },
 };
 
 export default data;
