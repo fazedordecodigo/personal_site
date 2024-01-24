@@ -1,229 +1,655 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:locale" content="pt-BR" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Emerson Delatorre" />
-    <meta property="og:description" content="I'm a Developer" />
-    <meta property="og:url" content="https://delatorre.dev/" />
-    <meta property="og:site_name" content="delatorre.dev" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image" content="https://delatorre.dev/opengraph.png" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Sergio Cabral" />
-    <meta name="twitter:description" content="I'm a Developer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@100&Roboto:wght@100&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <title>Sergio Cabral Portfolio</title>
-    <style>
-        html, html * {
-            margin: 0;
-            padding: 0;
-            color: rgba(255,255,255,0.75);
-            cursor: default;
-        }
-        html {
-            background-image: url(background.jpg);
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-            height: 100%;
-            font-family: 'Encode Sans SC', sans-serif;
-        }
-        body {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            height: 100%;
-        }
-        a, a * {
-            cursor: pointer;
-        }
-        h1 {
-            font-size: 1.5em;
-        }
-        h2 {
-            font-size: 1.15em;
-        }
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-width: 210px;
-            max-width: 80%;
-            width: 350px;
-        }
-        .content::before {
-            z-index: -1;
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .card {
-            background-color: rgba(255,255,255,0.05);
-            background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.05) 10em);
-            padding: 2.5em 1em 1em 1em;
-            border-radius: 0.5em;
-            border: 1px solid rgba(68,68,68,1);
-            box-shadow: 0em 0em 1em 0.5em rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            max-height: 70%;
-            overflow: auto;
-        }
-        .card > * {
-            margin: 0.5em 0;
-        }
-        .profile, .profile > div {
-            background-image: url(profile.jpg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            margin: 0 auto;
-            width: 10em;
-            height: 10em;
-            border-radius: 100%;
-            border: 0.25em solid black;
-            box-shadow:
-                0px 0px 15px 0px rgba(255,255,255,0.5),
-                0px 0px 200px 0px rgba(26, 241, 242, 0.3),
-                inset 0px 0px 10px 0px black;
-            animation: spinner 7200s linear infinite;
-        }
-        .profile > div {
-            background-image: url(profile2.jpg);
-            margin-top: -0.25em;
-            margin-left: -0.25em;
-            animation: hide 7200s linear infinite;
-        }
-        @keyframes spinner {
-            0% {
-                transform: rotate(0deg);
-            }
-            50% {
-                transform: rotate(360deg);
-            }
-            100% {
-                transform: rotate(720deg);
-            }
-        }
-        @keyframes hide {
-            0% {
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
-        }
-        .social {
-            position: relative;
-        }
-        .social > div {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            flex-wrap: wrap;
-            font-size: 1.5em;
-            padding-top: 0.5em;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            padding-bottom: 0.5em;
-            margin-bottom: 0.5em;
-            overflow: auto;
-            height: 125px;
-        }
-        .social a {
-            margin: 0.25em 0.5em;
-            opacity: 0.5;
-            border: 1px solid rgba(255,255,255,0.3);
-            line-height: 2em;
-            width: 2em;
-            border-radius: 100%;
-            transition: opacity 0.5s ease, box-shadow 0.5s ease;
-            text-decoration: none;
-        }
-        .social a:hover {
-            opacity: 1;
-            box-shadow: 0px 0px 10px 0px rgba(187, 236, 236, 0.5);
-            transition: opacity 1s ease;
-        }
-        .social a:hover:after {
-            content: attr(description);
-            font-family: 'Roboto', sans-serif;
-            font-size: 0.5em;
-            position: absolute;
-            left: 0;
-            bottom: -2em;
-            right: 0;
-            color: rgba(255,255,255,0.5);
-            text-shadow: 0px 0px 10px rgba(187, 236, 236, 0.5);
-            opacity: 1;
-        }
-        /* width */
-        ::-webkit-scrollbar {
-            width: 0em;
-        }
+<!DOCTYPE HTML>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Emerson Delatorreo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Website Template by freehtml5.co" />
+	<meta name="keywords" content="developer, software engineer, backend" />
+	<meta name="author" content="Emerson Delatorre" />
 
-        /* Track */
-        ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.25);
-        }
+	<!-- 
+	//////////////////////////////////////////////////////
 
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.5);
-        }
+	FREE HTML5 TEMPLATE 
+	DESIGNED & DEVELOPED by FreeHTML5.co
+		
+	Website: 		http://freehtml5.co/
+	Email: 			info@freehtml5.co
+	Twitter: 		http://twitter.com/fh5co
+	Facebook: 		https://www.facebook.com/fh5co
 
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.75);
-        }
-    </style>
-    </head>
-    <body>
-        <div class="content">
-            <div class="card">
-                <div class="profile"><div></div></div>
-                <h1>Sergio Cabral</h1>
-                <h2>Developer</h2>
-                <div class="social"><div>
-                    <a href="https://github.com/sergiocabral" description="GitHub" target="black"><i class="fab fa-github"></i></a>
-                    <a href="https://stackoverflow.com/story/sergiocabral" description="StackOverflow" target="black"><i class="fab fa-stack-overflow"></i></a>
-                    <a href="mailto:contact@sergiocabral.com" description="E-mail" target="black"><i class="far fa-envelope"></i></a>
-                    <a href="https://www.twitch.tv/sergiocabral_com" description="Twitch" target="black"><i class="fab fa-twitch"></i></a>
-                    <a href="https://discord.gg/R82VQuM9Vy" description="Discord" target="black"><i class="fab fa-discord"></i></a>
-                    <a href="https://www.linkedin.com/in/sergiocabraljr" description="LinkedIn" target="black"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://www.instagram.com/sergiocabraljunior" description="LinkedIn" target="black"><i class="fab fa-instagram"></i></a>
-                    <a href="http://sergiocabral.com/fotos" description="My Pictures" target="black"><i class="fa fa-camera-retro"></i></a>
-                    <a href="http://twitter.com/sergiocabraljr" description="LinkedIn" target="black"><i class="fab fa-twitter"></i></a>
-                    <a href="https://wa.me/5522981842500" description="Whatsapp" target="black"><i class="fab fa-whatsapp"></i></a>
-                    <a href="http://sergiocabral.com/git" description="Git Playground" target="black"><i class="fab fa-git"></i></a>
-                    <a href="https://www.youtube.com/channel/UCBBmSw69UpBbncKM2Xbw-hQ" description="Devnator YouTube" target="black"><i class="fab fa-youtube"></i></a>
-                    <a href="https://www.youtube.com/c/SergioCabralJr" description="Personal YouTube" target="black"><i class="fab fa-youtube-square"></i></a>
-                    <a href="https://www.facebook.com/sergiocabraljr/" description="Facebook" target="black"><i class="fab fa-facebook-f"></i></i></a>
-                    <a href="http://sergiocabral.com/sorteios" description="Loto Number" target="black"><i class="fas fa-sort-numeric-down"></i></a>
-                </div></div>
-            </div>
-        </div>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-13VVRRD5MR"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-13VVRRD5MR');
-        </script>
-    </body>
+	//////////////////////////////////////////////////////
+	 -->
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/style.css">
+
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	</head>
+	<body>
+		
+	<div class="fh5co-loader"></div>
+	
+	<div id="page">	
+	<header id="fh5co-header" class="fh5co-cover js-fullheight" role="banner" style="background-image:url(images/cover_bg_3.jpg);" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center">
+					<div class="display-t js-fullheight">
+						<div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn">
+							<div class="profile-thumb" style="background: url(images/user-3.jpg);"></div>
+							<h1><span>Emerson Delatorre</span></h1>
+							<h3><span>Sr Software Engineer</span></h3>
+							<p>
+								<ul class="fh5co-social-icons">
+									<li><a href="https://twitter.com/fazedordecodigo"><i class="icon-twitter2"></i></a></li>
+									<li><a href="https://www.linkedin.com/in/delatorrea"><i class="icon-linkedin2"></i></a></li>
+									<li><a href="https://github.com/fazedordecodigo"><i class="icon-github2"></i></a></li>
+								</ul>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<div id="fh5co-about" class="animate-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>About Me</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<ul class="info">
+						<li><span class="first-block">Full Name:</span><span class="second-block">Louie Jie Mahusay</span></li>
+						<li><span class="first-block">Phone:</span><span class="second-block">+ 1235 2355 98</span></li>
+						<li><span class="first-block">Email:</span><span class="second-block">info@yoursite.com</span></li>
+						<li><span class="first-block">Website:</span><span class="second-block">www.yoursite.com</span></li>
+						<li><span class="first-block">Address:</span><span class="second-block">198 West 21th Street, Suite 721 New York NY 10016</span></li>
+					</ul>
+				</div>
+				<div class="col-md-8">
+					<h2>Hello There!</h2>
+					<p>There live the blind texts far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in bookmarksgrove there live the blind texts far from the countries.</p>
+					<p>Far far away, behind the word mountains, Quos quia provident consequuntur culpa facere ratione maxime commodi voluptates id repellat velit eaque aspernatur expedita. Possimus itaque adipisci there live the blind texts from the countries Vokalia and Consonantia, there live the blind texts. Quos quia provident consequuntur culpa facere ratione maxime commodi voluptates id repellat velit eaque aspernatur expedita. Possimus itaque adipisci.</p>
+					<p>
+						<ul class="fh5co-social-icons">
+							<li><a href="#"><i class="icon-twitter2"></i></a></li>
+							<li><a href="#"><i class="icon-facebook3"></i></a></li>
+							<li><a href="#"><i class="icon-linkedin2"></i></a></li>
+							<li><a href="#"><i class="icon-dribbble2"></i></a></li>
+						</ul>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-resume" class="fh5co-bg-color">
+		<div class="container">
+			<div class="row animate-box">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>My Resume</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0">
+					<ul class="timeline">
+						<li class="timeline-heading text-center animate-box">
+							<div><h3>Work Experience</h3></div>
+						</li>
+						<li class="animate-box timeline-unverted">
+							<div class="timeline-badge"><i class="icon-suitcase"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Senior Developer</h3>
+									<span class="company">Company Name - 2016 - Current</span>
+								</div>
+								<div class="timeline-body">
+									<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-inverted animate-box">
+							<div class="timeline-badge"><i class="icon-suitcase"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Junior Developer</h3>
+									<span class="company">Company Name - 2013 - 2015</span>
+								</div>
+								<div class="timeline-body">
+									<p>Far far away, behind the word mountains, they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+								</div>
+							</div>
+						</li>
+						<li class="animate-box timeline-unverted">
+							<div class="timeline-badge"><i class="icon-suitcase"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">UI/UX Designer</h3>
+									<span class="company">Company Name - 2010 - 2012</span>
+								</div>
+								<div class="timeline-body">
+									<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								</div>
+							</div>
+						</li>
+
+						<br>
+						<li class="timeline-heading text-center animate-box">
+							<div><h3>Education</h3></div>
+						</li>
+						<li class="timeline-inverted animate-box">
+							<div class="timeline-badge"><i class="icon-graduation-cap"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Masters Degree</h3>
+									<span class="company">University Name - 2007 - 2009</span>
+								</div>
+								<div class="timeline-body">
+									<p>Far far away, behind the word mountains, they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+								</div>
+							</div>
+						</li>
+						<li class="animate-box timeline-unverted">
+							<div class="timeline-badge"><i class="icon-graduation-cap"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Bachelors Degree</h3>
+									<span class="company">University Name - 2002 - 2006</span>
+								</div>
+								<div class="timeline-body">
+									<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-inverted animate-box">
+							<div class="timeline-badge"><i class="icon-graduation-cap"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Diploma Course</h3>
+									<span class="company">College Name - 1999 - 2001</span>
+								</div>
+								<div class="timeline-body">
+									<p>Far far away, behind the word mountains, they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+								</div>
+							</div>
+						</li>
+						<li class="animate-box timeline-unverted">
+							<div class="timeline-badge"><i class="icon-graduation-cap"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Graduation</h3>
+									<span class="company">College Name - 1994 - 1998</span>
+								</div>
+								<div class="timeline-body">
+									<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+								</div>
+							</div>
+						</li>
+			    	</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="fh5co-features" class="animate-box">
+		<div class="container">
+			<div class="services-padding">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+						<h2>My Services</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 text-center">
+						<div class="feature-left">
+							<span class="icon">
+								<i class="icon-paintbrush"></i>
+							</span>
+							<div class="feature-copy">
+								<h3>Web Design</h3>
+								<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit.</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4 text-center">
+						<div class="feature-left">
+							<span class="icon">
+								<i class="icon-briefcase"></i>
+							</span>
+							<div class="feature-copy">
+								<h3>Branding</h3>
+								<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit.</p>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-4 text-center">
+						<div class="feature-left">
+							<span class="icon">
+								<i class="icon-search"></i>
+							</span>
+							<div class="feature-copy">
+								<h3>Analytics</h3>
+								<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-md-4 text-center">
+
+						<div class="feature-left">
+							<span class="icon">
+								<i class="icon-bargraph"></i>
+							</span>
+							<div class="feature-copy">
+								<h3>Web Developent</h3>
+								<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit.</p>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="col-md-4 text-center">
+						<div class="feature-left">
+							<span class="icon">
+								<i class="icon-genius"></i>
+							</span>
+							<div class="feature-copy">
+								<h3>Web Marketing</h3>
+								<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit.</p>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-4 text-center">
+						<div class="feature-left">
+							<span class="icon">
+								<i class="icon-chat"></i>
+							</span>
+							<div class="feature-copy">
+								<h3>Support</h3>
+								<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-skills" class="animate-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>Skills</h2>
+				</div>
+			</div>
+			<div class="row row-pb-md">
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="95"><span><strong>HTML5</strong>95%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="93"><span><strong>CSS3</strong>93%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="90"><span><strong>jQuery</strong>90%</span></div>
+				</div>
+
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="89"><span><strong>PHP</strong>89%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="85"><span><strong>MySQL</strong>85%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="90"><span><strong>AngularJS</strong>90%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="85"><span><strong>Ruby</strong>85%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="90"><span><strong>Java</strong>90%</span></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="progress-wrap">
+						<h3><span class="name-left">HTML5/CSS3</span><span class="value-right">95%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-1 progress-bar-striped active" role="progressbar"
+						  aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%">
+						  </div>
+						</div>
+					</div>
+					<div class="progress-wrap">
+						<h3><span class="name-left">WordPress</span><span class="value-right">90%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-2 progress-bar-striped active" role="progressbar"
+						  aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:90%">
+						  </div>
+						</div>
+					</div>
+					<div class="progress-wrap">
+						<h3><span class="name-left">PHP</span><span class="value-right">80%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-3 progress-bar-striped active" role="progressbar"
+						  aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%">
+						  </div>
+						</div>
+					</div>
+					<div class="progress-wrap">
+						<h3><span class="name-left">Java</span><span class="value-right">85%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-4 progress-bar-striped active" role="progressbar"
+						  aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width:85%">
+						  </div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="progress-wrap">
+						<h3><span class="name-left">Design</span><span class="value-right">100%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-5 progress-bar-striped active" role="progressbar"
+						  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+						  </div>
+						</div>
+					</div>
+					<div class="progress-wrap">
+						<h3><span class="name-left">Ruby</span><span class="value-right">70%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-striped active" role="progressbar"
+						  aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
+						  </div>
+						</div>
+					</div>
+					<div class="progress-wrap">
+						<h3><span class="name-left">Python</span><span class="value-right">85%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-1 progress-bar-striped active" role="progressbar"
+						  aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width:85%">
+						  </div>
+						</div>
+					</div>
+					<div class="progress-wrap">
+						<h3><span class="name-left">jQuery</span><span class="value-right">75%</span></h3>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-3 progress-bar-striped active" role="progressbar"
+						  aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width:75%">
+						  </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-work" class="fh5co-bg-dark">
+		<div class="container">
+			<div class="row animate-box">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>Work</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-1.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Illustration</span>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-2.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Brading</span>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-3.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Illustration</span>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-4.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Design</span>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-5.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Website</span>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-6.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Illustration</span>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-7.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Brading</span>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-3 text-center col-padding animate-box">
+					<a href="#" class="work" style="background-image: url(images/portfolio-8.jpg);">
+						<div class="desc">
+							<h3>Project Name</h3>
+							<span>Illustration</span>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-blog">
+		<div class="container">
+			<div class="row animate-box">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>Post on Medium</h2>
+					<p>Dignissimos asperiores vitae velit veniam totam fuga molestias accusamus alias autem provident. Odit ab aliquam dolor eius.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="fh5co-blog animate-box">
+						<a href="#" class="blog-bg" style="background-image: url(images/portfolio-1.jpg);"></a>
+						<div class="blog-text">
+							<span class="posted_on">Mar. 15th 2016</span>
+							<h3><a href="#">Photoshoot On The Street</a></h3>
+							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+							<ul class="stuff">
+								<li><i class="icon-heart2"></i>249</li>
+								<li><i class="icon-eye2"></i>308</li>
+								<li><a href="#">Read More<i class="icon-arrow-right22"></i></a></li>
+							</ul>
+						</div> 
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="fh5co-blog animate-box">
+						<a href="#" class="blog-bg" style="background-image: url(images/portfolio-2.jpg);"></a>
+						<div class="blog-text">
+							<span class="posted_on">Mar. 15th 2016</span>
+							<h3><a href="#">Surfing at Philippines</a></h3>
+							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+							<ul class="stuff">
+								<li><i class="icon-heart2"></i>249</li>
+								<li><i class="icon-eye2"></i>308</li>
+								<li><a href="#">Read More<i class="icon-arrow-right22"></i></a></li>
+							</ul>
+						</div> 
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="fh5co-blog animate-box">
+						<a href="#" class="blog-bg" style="background-image: url(images/portfolio-3.jpg);"></a>
+						<div class="blog-text">
+							<span class="posted_on">Mar. 15th 2016</span>
+							<h3><a href="#">Capture Living On Uderwater</a></h3>
+							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+							<ul class="stuff">
+								<li><i class="icon-heart2"></i>249</li>
+								<li><i class="icon-eye2"></i>308</li>
+								<li><a href="#">Read More<i class="icon-arrow-right22"></i></a></li>
+							</ul>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="fh5co-started" class="fh5co-bg-dark">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row animate-box">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>Hire Me!</h2>
+					<p>Facilis ipsum reprehenderit nemo molestias. Aut cum mollitia reprehenderit. Eos cumque dicta adipisci architecto culpa amet.</p>
+					<p><a href="#" class="btn btn-default btn-lg">Contact Us</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-consult">
+		<div class="video fh5co-video" style="background-image: url(images/cover_bg_1.jpg);">
+			<div class="overlay"></div>
+		</div>
+		<div class="choose animate-box">
+			<h2>Contact</h2>
+			<form action="#">
+				<div class="row form-group">
+					<div class="col-md-6">
+						<input type="text" id="fname" class="form-control" placeholder="Your firstname">
+					</div>
+				</div>
+				<div class="row form-group">
+					<div class="col-md-6">
+						<input type="text" id="lname" class="form-control" placeholder="Your lastname">
+					</div>
+				</div>
+
+				<div class="row form-group">
+					<div class="col-md-12">
+						<input type="text" id="email" class="form-control" placeholder="Your email address">
+					</div>
+				</div>
+
+				<div class="row form-group">
+					<div class="col-md-12">
+						<input type="text" id="subject" class="form-control" placeholder="Your subject of this message">
+					</div>
+				</div>
+
+				<div class="row form-group">
+					<div class="col-md-12">
+						<textarea name="message" id="message" cols="30" rows="10" class="form-control" placeholder="Say something about us"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<input type="submit" value="Send Message" class="btn btn-primary">
+				</div>
+
+			</form>	
+		</div>
+	</div>
+
+	<div id="map" class="fh5co-map"></div>
+	</div>
+	
+	<div id="fh5co-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<p>&copy; 2017 Free HTML5 Template. All Rights Reserved. <br>Designed by <a href="http://freehtml5.co" target="_blank">FreeHTML5.co</a> Demo Images: <a href="http://unsplash.com" target="_blank">Unsplash</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up22"></i></a>
+	</div>
+	
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Stellar Parallax -->
+	<script src="js/jquery.stellar.min.js"></script>
+	<!-- Easy PieChart -->
+	<script src="js/jquery.easypiechart.min.js"></script>
+	<!-- Google Map -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
+	<script src="js/google_map.js"></script>
+	
+	<!-- Main -->
+	<script src="js/main.js"></script>
+
+	</body>
 </html>
+
