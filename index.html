@@ -1,229 +1,302 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:locale" content="pt-BR" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Emerson Delatorre" />
-    <meta property="og:description" content="I'm a Developer" />
-    <meta property="og:url" content="https://delatorre.dev/" />
-    <meta property="og:site_name" content="delatorre.dev" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image" content="https://delatorre.dev/opengraph.png" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Sergio Cabral" />
-    <meta name="twitter:description" content="I'm a Developer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@100&Roboto:wght@100&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <title>Sergio Cabral Portfolio</title>
-    <style>
-        html, html * {
-            margin: 0;
-            padding: 0;
-            color: rgba(255,255,255,0.75);
-            cursor: default;
-        }
-        html {
-            background-image: url(background.jpg);
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-            height: 100%;
-            font-family: 'Encode Sans SC', sans-serif;
-        }
-        body {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            height: 100%;
-        }
-        a, a * {
-            cursor: pointer;
-        }
-        h1 {
-            font-size: 1.5em;
-        }
-        h2 {
-            font-size: 1.15em;
-        }
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-width: 210px;
-            max-width: 80%;
-            width: 350px;
-        }
-        .content::before {
-            z-index: -1;
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .card {
-            background-color: rgba(255,255,255,0.05);
-            background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.05) 10em);
-            padding: 2.5em 1em 1em 1em;
-            border-radius: 0.5em;
-            border: 1px solid rgba(68,68,68,1);
-            box-shadow: 0em 0em 1em 0.5em rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            max-height: 70%;
-            overflow: auto;
-        }
-        .card > * {
-            margin: 0.5em 0;
-        }
-        .profile, .profile > div {
-            background-image: url(profile.jpg);
-            background-repeat: no-repeat;
-            background-size: contain;
-            margin: 0 auto;
-            width: 10em;
-            height: 10em;
-            border-radius: 100%;
-            border: 0.25em solid black;
-            box-shadow:
-                0px 0px 15px 0px rgba(255,255,255,0.5),
-                0px 0px 200px 0px rgba(26, 241, 242, 0.3),
-                inset 0px 0px 10px 0px black;
-            animation: spinner 7200s linear infinite;
-        }
-        .profile > div {
-            background-image: url(profile2.jpg);
-            margin-top: -0.25em;
-            margin-left: -0.25em;
-            animation: hide 7200s linear infinite;
-        }
-        @keyframes spinner {
-            0% {
-                transform: rotate(0deg);
-            }
-            50% {
-                transform: rotate(360deg);
-            }
-            100% {
-                transform: rotate(720deg);
-            }
-        }
-        @keyframes hide {
-            0% {
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
-        }
-        .social {
-            position: relative;
-        }
-        .social > div {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            flex-wrap: wrap;
-            font-size: 1.5em;
-            padding-top: 0.5em;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            padding-bottom: 0.5em;
-            margin-bottom: 0.5em;
-            overflow: auto;
-            height: 125px;
-        }
-        .social a {
-            margin: 0.25em 0.5em;
-            opacity: 0.5;
-            border: 1px solid rgba(255,255,255,0.3);
-            line-height: 2em;
-            width: 2em;
-            border-radius: 100%;
-            transition: opacity 0.5s ease, box-shadow 0.5s ease;
-            text-decoration: none;
-        }
-        .social a:hover {
-            opacity: 1;
-            box-shadow: 0px 0px 10px 0px rgba(187, 236, 236, 0.5);
-            transition: opacity 1s ease;
-        }
-        .social a:hover:after {
-            content: attr(description);
-            font-family: 'Roboto', sans-serif;
-            font-size: 0.5em;
-            position: absolute;
-            left: 0;
-            bottom: -2em;
-            right: 0;
-            color: rgba(255,255,255,0.5);
-            text-shadow: 0px 0px 10px rgba(187, 236, 236, 0.5);
-            opacity: 1;
-        }
-        /* width */
-        ::-webkit-scrollbar {
-            width: 0em;
-        }
+<!DOCTYPE HTML>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Emerson Delatorreo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Website Template by freehtml5.co" />
+	<meta name="keywords" content="developer, software engineer, backend" />
+	<meta name="author" content="Emerson Delatorre" />
 
-        /* Track */
-        ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.25);
-        }
+	<!-- 
+	//////////////////////////////////////////////////////
 
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.5);
-        }
+	FREE HTML5 TEMPLATE 
+	DESIGNED & DEVELOPED by FreeHTML5.co
+		
+	Website: 		http://freehtml5.co/
+	Email: 			info@freehtml5.co
+	Twitter: 		http://twitter.com/fh5co
+	Facebook: 		https://www.facebook.com/fh5co
 
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.75);
-        }
-    </style>
-    </head>
-    <body>
-        <div class="content">
-            <div class="card">
-                <div class="profile"><div></div></div>
-                <h1>Sergio Cabral</h1>
-                <h2>Developer</h2>
-                <div class="social"><div>
-                    <a href="https://github.com/sergiocabral" description="GitHub" target="black"><i class="fab fa-github"></i></a>
-                    <a href="https://stackoverflow.com/story/sergiocabral" description="StackOverflow" target="black"><i class="fab fa-stack-overflow"></i></a>
-                    <a href="mailto:contact@sergiocabral.com" description="E-mail" target="black"><i class="far fa-envelope"></i></a>
-                    <a href="https://www.twitch.tv/sergiocabral_com" description="Twitch" target="black"><i class="fab fa-twitch"></i></a>
-                    <a href="https://discord.gg/R82VQuM9Vy" description="Discord" target="black"><i class="fab fa-discord"></i></a>
-                    <a href="https://www.linkedin.com/in/sergiocabraljr" description="LinkedIn" target="black"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://www.instagram.com/sergiocabraljunior" description="LinkedIn" target="black"><i class="fab fa-instagram"></i></a>
-                    <a href="http://sergiocabral.com/fotos" description="My Pictures" target="black"><i class="fa fa-camera-retro"></i></a>
-                    <a href="http://twitter.com/sergiocabraljr" description="LinkedIn" target="black"><i class="fab fa-twitter"></i></a>
-                    <a href="https://wa.me/5522981842500" description="Whatsapp" target="black"><i class="fab fa-whatsapp"></i></a>
-                    <a href="http://sergiocabral.com/git" description="Git Playground" target="black"><i class="fab fa-git"></i></a>
-                    <a href="https://www.youtube.com/channel/UCBBmSw69UpBbncKM2Xbw-hQ" description="Devnator YouTube" target="black"><i class="fab fa-youtube"></i></a>
-                    <a href="https://www.youtube.com/c/SergioCabralJr" description="Personal YouTube" target="black"><i class="fab fa-youtube-square"></i></a>
-                    <a href="https://www.facebook.com/sergiocabraljr/" description="Facebook" target="black"><i class="fab fa-facebook-f"></i></i></a>
-                    <a href="http://sergiocabral.com/sorteios" description="Loto Number" target="black"><i class="fas fa-sort-numeric-down"></i></a>
-                </div></div>
-            </div>
-        </div>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-13VVRRD5MR"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-13VVRRD5MR');
-        </script>
-    </body>
+	//////////////////////////////////////////////////////
+	 -->
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/style.css">
+
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	</head>
+	<body>
+		
+	<div class="fh5co-loader"></div>
+	
+	<div id="page">	
+	<header id="fh5co-header" class="fh5co-cover js-fullheight" role="banner" style="background-image:url(images/cover_bg_3.jpg);" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center">
+					<div class="display-t js-fullheight">
+						<div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn">
+							<div class="profile-thumb" style="background: url(images/foto.jpeg);"></div>
+							<h1><span>Emerson Delatorre</span></h1>
+							<h3><span>Sr Software Engineer</span></h3>
+							<p>
+								<ul class="fh5co-social-icons">
+									<li><a href="https://twitter.com/fazedordecodigo"><i class="icon-twitter2"></i></a></li>
+									<li><a href="https://www.linkedin.com/in/delatorrea"><i class="icon-linkedin2"></i></a></li>
+									<li><a href="https://github.com/fazedordecodigo"><i class="icon-github2"></i></a></li>
+								</ul>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<div id="fh5co-about" class="animate-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>Sobre Mim</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<ul class="info">
+						<li><span class="first-block">Nome:</span><span class="second-block">Emerson Delatore</span></li>
+						<li><span class="first-block">Email:</span><span class="second-block">emerson@delatore.dev</span></li>
+						<li><span class="first-block">Site:</span><span class="second-block">www.delatorre.dev</span></li>
+						<li><span class="first-block">Cidade:</span><span class="second-block">Serra, ES, BR</span></li>
+					</ul>
+				</div>
+				<div class="col-md-8">
+					<h2>Olá!</h2>
+					<p>Sou Emerson Delatorre, Engenheiro de Software Sr. Tenho 10 anos de experiência em desenvolvimento de software e liderança técnica, com certificações Microsoft em Azure, Data, Power Platform, .NET e Web Development.</p>
+					<p>Meu objetivo é criar soluções de alta qualidade, seguindo as melhores práticas de arquitetura de software, desenvolvimento web e automação de processos. Tenho habilidades em diversas linguagens de programação, como Python, TypeScript e C#, e em ferramentas como Azure DevOps, Power Automate, Azure Functions, ServiceNow e Datadog. Atualmente, trabalho com microserviços, APIs, integrações e testes automatizados para clientes de diferentes setores. Sou apaixonado por tecnologia, inovação e aprendizado contínuo, e busco colaborar com equipes que compartilham desses valores.</p>
+					<p>
+						<ul class="fh5co-social-icons">
+							<li><a href="https://twitter.com/fazedordecodigo"><i class="icon-twitter2"></i></a></li>
+							<li><a href="https://www.linkedin.com/in/delatorrea"><i class="icon-linkedin2"></i></a></li>
+							<li><a href="https://github.com/fazedordecodigo"><i class="icon-github2"></i></a></li>
+						</ul>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-resume" class="fh5co-bg-color">
+		<div class="container">
+			<div class="row animate-box">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>Meu Currículo</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0">
+					<ul class="timeline">
+						<li class="timeline-heading text-center animate-box">
+							<div><h3>Experiência Profissional</h3></div>
+						</li>
+						<li class="animate-box timeline-unverted">
+							<div class="timeline-badge"><i class="icon-suitcase"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Engenheiro de Software Sr.</h3>
+									<span class="company">Avanade - 01/2022 - Atual</span>
+								</div>
+								<div class="timeline-body">
+									<p>Desenvolvimento de microserviços em arquitetura distribuída, aplicando Clean Architecture, Clean Code, SOLID e TDD.</p>
+								</div>
+							</div>
+						</li>
+						<li class="timeline-inverted animate-box">
+							<div class="timeline-badge"><i class="icon-suitcase"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Engenheiro de Software Sr</h3>
+									<span class="company">Vix logistica - 07/2021 - 01/2022</span>
+								</div>
+								<div class="timeline-body">
+									<p>Levantamento de Requisitos, Automatização de Processos, Desenvolvimento de software, Modelagem de dados, Desenvolvimento de Dashboards BI, Suporte ao cliente.</p>
+								</div>
+							</div>
+						</li>
+						<li class="animate-box timeline-unverted">
+							<div class="timeline-badge"><i class="icon-suitcase"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Engenheiro de Software Pleno</h3>
+									<span class="company">Spassu Tecnologia - 02/2018 - 11/2018</span>
+								</div>
+								<div class="timeline-body">
+									<p>Levantamento de Requisitos, Automatização de Processos, Desenvolvimento de software, Modelagem de dados, Desenvolvimento de Dashboards BI, Suporte ao cliente.</p>
+								</div>
+							</div>
+						</li>
+
+						<br>
+						<li class="timeline-heading text-center animate-box">
+							<div><h3>Formação</h3></div>
+						</li>
+						<li class="timeline-inverted animate-box">
+							<div class="timeline-badge"><i class="icon-graduation-cap"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Engenharia de Software</h3>
+									<span class="company">Universidade Estácio de Sá - 11/2023 - 12/2025</span>
+								</div>
+								<div class="timeline-body">
+									<p>Aborda a computação voltada para a especificação, desenvolvimento, manutenção e criação de softwares, com foco na organização, produtividade e qualidade organizacionais.</p>
+								</div>
+							</div>
+						</li>
+						<li class="animate-box timeline-unverted">
+							<div class="timeline-badge"><i class="icon-graduation-cap"></i></div>
+							<div class="timeline-panel">
+								<div class="timeline-heading">
+									<h3 class="timeline-title">Análise e Desenvolvimento de Sistemas</h3>
+									<span class="company">Centro Universitário Internacional - 07/2020 - 12/2022</span>
+								</div>
+								<div class="timeline-body">
+									<p>Ênfase em inteligência artificial e business intelligence.</p>
+								</div>
+							</div>
+						</li>
+			    	</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="fh5co-features" class="animate-box">
+		<div class="container">
+			<div class="services-padding">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+						<h2>Minhas Especialidades</h2>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4 text-center">
+
+						<div class="feature-left">
+							<span class="icon">
+								<i class="icon-bargraph"></i>
+							</span>
+							<div class="feature-copy">
+								<h3>Desenvolvimento Backend</h3>
+								<p>Desenvolvimento de serviços com .NET, Node ou Python.</p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-skills" class="animate-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+					<h2>Skills</h2>
+				</div>
+			</div>
+			<div class="row row-pb-md">
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="95"><span><strong>.NET</strong>95%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="93"><span><strong>C#</strong>95%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="90"><span><strong>Node</strong>90%</span></div>
+				</div>
+
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="89"><span><strong>Typescript</strong>90%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="85"><span><strong>Python</strong>85%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="90"><span><strong>Docker</strong>90%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="85"><span><strong>SQL</strong>85%</span></div>
+				</div>
+				<div class="col-md-3 col-sm-6 col-xs-12 text-center">
+					<div class="chart" data-percent="90"><span><strong>NoSQL</strong>90%</span></div>
+				</div>
+			</div>
+
+	<div id="fh5co-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<p>&copy; 2024 Delatorre.dev. All Rights Reserved. </p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up22"></i></a>
+	</div>
+	
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Stellar Parallax -->
+	<script src="js/jquery.stellar.min.js"></script>
+	<!-- Easy PieChart -->
+	<script src="js/jquery.easypiechart.min.js"></script>
+	<!-- Google Map -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
+	<script src="js/google_map.js"></script>
+	
+	<!-- Main -->
+	<script src="js/main.js"></script>
+
+	</body>
 </html>
+
