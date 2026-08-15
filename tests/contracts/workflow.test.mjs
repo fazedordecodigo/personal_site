@@ -6,6 +6,26 @@ import test from "node:test";
 const workflowText = await readFile(new URL("../../.github/workflows/site.yml", import.meta.url), "utf8");
 const workflow = parse(workflowText);
 
+async function readActConfig() {
+  try {
+    return await readFile(new URL("../../.actrc", import.meta.url), "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") return "";
+    throw error;
+  }
+}
+
+async function readActPlatformMappings() {
+  const configText = await readActConfig();
+  return new Map(
+    configText
+      .split(/\r?\n/)
+      .map((line) => line.trim().match(/^(?:-P|--platform)\s+([^=\s]+)=(\S+)$/))
+      .filter(Boolean)
+      .map((match) => [match[1], match[2]]),
+  );
+}
+
 const pins = {
   "actions/checkout": "3d3c42e5aac5ba805825da76410c181273ba90b1",
   "actions/setup-node": "820762786026740c76f36085b0efc47a31fe5020",
@@ -51,6 +71,25 @@ test("declares the exact trusted events, inputs, runners and concurrency", () =>
   for (const job of Object.values(workflow.jobs)) assert.equal(job["runs-on"], "ubuntu-24.04");
 });
 
+test("provides an act image for every GitHub-hosted runner label", async () => {
+  const platformMappings = await readActPlatformMappings();
+  const runnerLabels = new Set(Object.values(workflow.jobs).map((job) => job["runs-on"]));
+
+  for (const runnerLabel of runnerLabels) {
+    assert.ok(platformMappings.get(runnerLabel), `missing act platform mapping for ${runnerLabel}`);
+  }
+});
+
+test("allocates enough shared memory for act browser gates", async () => {
+  const configText = await readActConfig();
+  const containerOptions = configText
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .find((line) => line.startsWith("--container-options="));
+
+  assert.match(containerOptions ?? "", /(?:^|=)--shm-size=2g(?:\s|$)/);
+});
+
 test("keeps validation secretless and runs the canonical gates once", () => {
   const validation = workflow.jobs["validate-and-build"];
   assert.deepEqual(validation.permissions, { contents: "read" });
@@ -60,7 +99,7 @@ test("keeps validation secretless and runs the canonical gates once", () => {
   assert.match(validationText, /actions\/setup-node@[0-9a-f]{40}/);
   assert.match(validationText, /actions\/setup-java@[0-9a-f]{40}/);
   assert.match(validationText, /npm ci/);
-  assert.match(validationText, /npm exec playwright install --with-deps chromium firefox/);
+  assert.match(validationText, /npm exec -- playwright install --with-deps chromium firefox/);
   assert.match(validationText, /npm run verify:snapshot/);
   assert.match(validationText, /npm run verify:remote/);
   const nodeSetup = findStep(validation, "Set up Node");
@@ -89,7 +128,7 @@ test("keeps validation secretless and runs the canonical gates once", () => {
   assert.equal(manifest.if, "${{ success() }}");
   const upload = findStep(validation, "Upload verified public artifact");
   assert.match(upload.uses, /actions\/upload-artifact@[0-9a-f]{40}$/);
-  assert.equal(upload.if, "${{ success() }}");
+  assert.equal(upload.if, "${{ success() && !env.ACT }}");
   assert.equal(upload.with.path, "public");
 });
 

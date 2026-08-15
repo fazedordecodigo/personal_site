@@ -15,7 +15,7 @@ Site pessoal estático de Emerson Delatorre, publicado como um artefato fechado 
 - Node.js `22.23.2` conforme `.nvmrc`.
 - Java 21 (Temurin recomendado) para o Nu HTML Checker.
 - Dependências instaladas com `npm ci`.
-- Chromium e Firefox do Playwright; em Linux, use `npm exec playwright install --with-deps chromium firefox` quando necessário.
+- Chromium e Firefox do Playwright; em Linux, use `npm exec -- playwright install --with-deps chromium firefox` quando necessário.
 
 ## Comandos canônicos
 
