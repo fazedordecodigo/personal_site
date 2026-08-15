@@ -1,4 +1,5 @@
 export const STATIC_COPY_MANIFEST = Object.freeze([
+  Object.freeze({ source: "staticwebapp.config.json", destination: "staticwebapp.config.json" }),
   Object.freeze({ source: "src/robots.txt", destination: "robots.txt" }),
   Object.freeze({ source: "src/sitemap.xml", destination: "sitemap.xml" }),
   Object.freeze({ source: "src/css/site.css", destination: "css/site.css" }),
