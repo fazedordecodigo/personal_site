@@ -5,9 +5,7 @@ module.exports = {
       startServerCommand: "node scripts/serve.mjs public 4173",
       url: ["http://127.0.0.1:4173/"],
       startServerReadyPattern: "Listening on http://127.0.0.1:4173",
-      settings: {
-        chromeFlags: "--headless",
-      },
+      settings: process.env.GITHUB_ACTIONS === "true" ? { chromeFlags: "--no-sandbox" } : {},
     },
     assert: {
       assertions: {
