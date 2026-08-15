@@ -26,6 +26,7 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
   await writeFile(join(workspace, "src-index.template.html"), "");
   await import("node:fs/promises").then(({ mkdir }) => Promise.all([
     mkdir(join(workspace, "src", "css"), { recursive: true }),
+    mkdir(join(workspace, "src", "js"), { recursive: true }),
     mkdir(join(workspace, "src", "assets", "images"), { recursive: true }),
     mkdir(join(workspace, "src", "assets", "fonts"), { recursive: true }),
     mkdir(join(workspace, "content"), { recursive: true }),
@@ -34,6 +35,7 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
   await writeFile(join(workspace, "src", "robots.txt"), "User-agent: *\nAllow: /\n");
   await writeFile(join(workspace, "src", "sitemap.xml"), "<?xml version=\"1.0\"?><urlset></urlset>\n");
   await writeFile(join(workspace, "src", "css", "site.css"), "body { color: red; }\n");
+  await writeFile(join(workspace, "src", "js", "substack-embed.js"), "(() => {})();\n");
   await writeFile(join(workspace, "src", "assets", "images", "emerson-delatorre.jpg"), "jpeg");
   for (const name of [
     "space-grotesk-latin-700-normal.woff2",
@@ -85,6 +87,7 @@ test("successful snapshot build returns built report and swaps public atomically
     "assets/images/emerson-delatorre.jpg",
     "css/site.css",
     "index.html",
+    "js/substack-embed.js",
     "robots.txt",
     "sitemap.xml",
   ];

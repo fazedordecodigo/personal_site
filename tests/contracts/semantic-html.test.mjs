@@ -56,7 +56,9 @@ test("does not use inline code, handlers or legacy prototype markup", () => {
     assert.equal(attr(node, "style"), undefined);
     for (const attribute of node.attrs ?? []) assert.equal(attribute.name.startsWith("on"), false);
   }
-  assert.equal(elements("script").length, 0);
+  assert.equal(elements("script").length, 1);
+  assert.equal(attr(elements("script")[0], "src"), "/js/substack-embed.js");
+  assert.equal(attr(elements("script")[0], "defer"), "");
   for (const forbidden of ["bootstrap", "jquery", "icomoon", "stellar", "animate", "carousel", "PROTÓTIPO", "?state="]) {
     assert.equal(html.toLowerCase().includes(forbidden.toLowerCase()), false, forbidden);
   }
