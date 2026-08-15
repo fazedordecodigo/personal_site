@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!DOCTYPE rss [<!ENTITY secret "not allowed">]>
+<rss><channel><item><title>&secret;</title></item></channel></rss>

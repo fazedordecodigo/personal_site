@@ -1,0 +1,8 @@
+<rss version="2.0"><channel>
+  <item><title></title><description>sem título</description><link>https://fazedordecodigo.substack.com/p/fixture-invalid-title</link><guid>urn:fixture:invalid-title</guid><pubDate>Wed, 13 Aug 2026 10:00:00 GMT</pubDate></item>
+  <item><title>Fazedor de Código: host ruim</title><description>resumo</description><link>https://example.com/p/fixture-host</link><guid>urn:fixture:invalid-host</guid><pubDate>Wed, 13 Aug 2026 09:00:00 GMT</pubDate></item>
+  <item><title>Fazedor de Código: data ruim</title><description>resumo</description><link>https://fazedordecodigo.substack.com/p/fixture-date</link><guid>urn:fixture:invalid-date</guid><pubDate>not a date</pubDate></item>
+  <item><title>Fazedor de Código: válido um</title><description>Resumo um.</description><link>https://fazedordecodigo.substack.com/p/fixture-valid-one</link><guid>urn:fixture:invalid-valid-one</guid><pubDate>Mon, 11 Aug 2026 10:00:00 GMT</pubDate></item>
+  <item><title>Fazedor de Código: válido dois</title><description>Resumo dois.</description><link>https://fazedordecodigo.substack.com/p/fixture-valid-two</link><guid>urn:fixture:invalid-valid-two</guid><pubDate>Sun, 10 Aug 2026 10:00:00 GMT</pubDate></item>
+  <item><title>Fazedor de Código: válido três</title><description>Resumo três.</description><link>https://fazedordecodigo.substack.com/p/fixture-valid-three</link><guid>urn:fixture:invalid-valid-three</guid><pubDate>Sat, 09 Aug 2026 10:00:00 GMT</pubDate></item>
+</channel></rss>

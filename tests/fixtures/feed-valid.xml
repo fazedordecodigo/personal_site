@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Fixture Feed</title>
+    <item>
+      <title>  Cursor Weekly:  Clareza &amp; prática  </title>
+      <description>&lt;p&gt;Uma &amp;lt;ideia&amp;gt; com &lt;strong&gt;texto&lt;/strong&gt; útil.&lt;/p&gt;</description>
+      <link>https://fazedordecodigo.substack.com/p/fixture-cursor?utm_source=test#story</link>
+      <guid> urn:fixture:cursor-3 </guid>
+      <pubDate>Wed, 13 Aug 2026 03:48:38 GMT</pubDate>
+      <content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/">do not use</content:encoded>
+    </item>
+    <item>
+      <title>Fazedor de Código: texto de data</title>
+      <description><![CDATA[<p>Resumo <em>completo</em> para o card.</p>]]></description>
+      <link>https://fazedordecodigo.substack.com/p/fixture-fazedor</link>
+      <guid>urn:fixture:fazedor-1</guid>
+      <pubDate>Mon, 11 Aug 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Devin Weekly: aprender construindo</title>
+      <description>Primeiro parágrafo.&#10;Segundo parágrafo &amp; ponto.</description>
+      <link> https://fazedordecodigo.substack.com/p/fixture-devin </link>
+      <guid>urn:fixture:devin-2</guid>
+      <pubDate>Tue, 12 Aug 2026 09:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Fazedor de Código: artigo quatro</title>
+      <description>Resumo quatro.</description>
+      <link>https://fazedordecodigo.substack.com/p/fixture-four</link>
+      <guid>urn:fixture:four</guid>
+      <pubDate>Sun, 10 Aug 2026 09:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Fazedor de Código: artigo cinco</title>
+      <description>Resumo cinco.</description>
+      <link>https://fazedordecodigo.substack.com/p/fixture-five</link>
+      <guid>urn:fixture:five</guid>
+      <pubDate>Sat, 09 Aug 2026 09:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Fazedor de Código: artigo seis</title>
+      <description>Resumo seis.</description>
+      <link>https://fazedordecodigo.substack.com/p/fixture-six</link>
+      <guid>urn:fixture:six</guid>
+      <pubDate>Fri, 08 Aug 2026 09:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

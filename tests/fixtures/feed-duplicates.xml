@@ -1,0 +1,37 @@
+<rss version="2.0"><channel>
+  <item>
+    <title>Fazedor de Código: igual</title><description>Resumo igual.</description>
+    <link>https://fazedordecodigo.substack.com/p/fixture-duplicate</link>
+    <guid>urn:fixture:duplicate</guid><pubDate>Fri, 08 Aug 2026 08:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Fazedor de Código: igual</title><description>Resumo igual.</description>
+    <link>https://fazedordecodigo.substack.com/p/fixture-duplicate?x=1</link>
+    <guid> urn:fixture:duplicate </guid><pubDate>Fri, 08 Aug 2026 08:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Cursor Weekly: conflito A</title><description>Resumo A.</description>
+    <link>https://fazedordecodigo.substack.com/p/fixture-conflict-a</link>
+    <guid>urn:fixture:conflict</guid><pubDate>Tue, 12 Aug 2026 10:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Cursor Weekly: conflito B</title><description>Resumo B.</description>
+    <link>https://fazedordecodigo.substack.com/p/fixture-conflict-b</link>
+    <guid>urn:fixture:conflict</guid><pubDate>Tue, 12 Aug 2026 10:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Devin Weekly: válido um</title><description>Resumo um.</description>
+    <link>https://fazedordecodigo.substack.com/p/fixture-valid-one</link>
+    <guid>urn:fixture:valid-one</guid><pubDate>Mon, 11 Aug 2026 10:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Fazedor de Código: válido dois</title><description>Resumo dois.</description>
+    <link>https://fazedordecodigo.substack.com/p/fixture-valid-two</link>
+    <guid>urn:fixture:valid-two</guid><pubDate>Sun, 10 Aug 2026 10:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Fazedor de Código: válido três</title><description>Resumo três.</description>
+    <link>https://fazedordecodigo.substack.com/p/fixture-valid-three</link>
+    <guid>urn:fixture:valid-three</guid><pubDate>Sat, 09 Aug 2026 10:00:00 GMT</pubDate>
+  </item>
+</channel></rss>
