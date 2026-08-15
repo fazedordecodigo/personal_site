@@ -6,9 +6,9 @@ const root = new URL("../../", import.meta.url);
 const read = async (relativePath) => readFile(new URL(relativePath, root), "utf8");
 
 const expectedScripts = {
-  test: "node --test tests/unit",
-  "test:unit": "node --test tests/unit",
-  "test:contracts": "node --test tests/contracts",
+  test: "node --test tests/unit/*.test.mjs",
+  "test:unit": "node --test tests/unit/*.test.mjs",
+  "test:contracts": "node --test tests/contracts/*.test.mjs",
   "lint:js": "eslint scripts src/js tests --no-error-on-unmatched-pattern",
   "lint:css": "stylelint src/css/site.css",
   lint: "npm run lint:js && npm run lint:css",
