@@ -1,0 +1,257 @@
+name: Personal site
+
+run-name: >-
+  site / ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number)
+    || (github.event_name == 'workflow_dispatch' && inputs.deployment_target == 'preview' && 'preview')
+    || (github.event_name == 'workflow_dispatch' && inputs.deployment_target == 'production' && 'production')
+    || (github.event_name == 'workflow_dispatch' && inputs.deployment_target == 'build-only' && 'build-only')
+    || ((github.event_name == 'push' || github.event_name == 'schedule') && 'production')
+    || 'build-only' }}
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Deployment target
+        required: true
+        default: build-only
+        type: choice
+        options:
+          - build-only
+          - preview
+          - production
+  schedule:
+    - cron: "17 12 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('site-pr-{0}', github.event.pull_request.number) || 'site-external' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Set up Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install browsers
+        run: npm exec playwright install --with-deps chromium firefox
+
+      - name: Build and verify
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            npm run verify:snapshot
+          else
+            npm run verify:remote
+          fi
+
+      - name: Report BuildReport
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          if [[ ! -f build-report.json ]]; then
+            echo "BuildReport indisponível: falha anterior ao build." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if (( $(wc -c < build-report.json) > 32768 )); then
+            echo "BuildReport inválido: limite de tamanho excedido." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          node --input-type=module - <<'NODE'
+          import { appendFileSync, readFileSync } from "node:fs";
+
+          const report = JSON.parse(readFileSync("build-report.json", "utf8"));
+          const expectedKeys = [
+            "articleCount",
+            "articleMode",
+            "articleSource",
+            "fallbackReasonCode",
+            "outputFiles",
+            "snapshotFetchedAt",
+            "state",
+            "status",
+          ];
+          if (Object.keys(report).sort().join("|") !== expectedKeys.join("|")) {
+            throw new Error("BuildReport schema inválido.");
+          }
+          if (!["built", "blocked"].includes(report.status)) throw new Error("BuildReport status inválido.");
+          if (!["snapshot", "remote-required"].includes(report.articleMode)) throw new Error("BuildReport mode inválido.");
+          if (!["empty", "fresh", "refresh-error", "stale"].includes(report.state)) throw new Error("BuildReport state inválido.");
+          if (!["remote", "snapshot"].includes(report.articleSource)) throw new Error("BuildReport source inválido.");
+          if (!Number.isInteger(report.articleCount) || report.articleCount < 0 || report.articleCount > 3) {
+            throw new Error("BuildReport count inválido.");
+          }
+          if (report.snapshotFetchedAt !== null && (
+            typeof report.snapshotFetchedAt !== "string" ||
+            report.snapshotFetchedAt.length > 40 ||
+            !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(report.snapshotFetchedAt) ||
+            Number.isNaN(new Date(report.snapshotFetchedAt).getTime()) ||
+            new Date(report.snapshotFetchedAt).toISOString() !== report.snapshotFetchedAt
+          )) {
+            throw new Error("BuildReport timestamp inválido.");
+          }
+          if (!Array.isArray(report.outputFiles) || report.outputFiles.length > 64 || report.outputFiles.some((value) => (
+            typeof value !== "string" || value.length > 200 || !/^[A-Za-z0-9._/-]+$/.test(value) || value.includes("..")
+          ))) {
+            throw new Error("BuildReport output inválido.");
+          }
+          if (report.fallbackReasonCode !== null && (
+            typeof report.fallbackReasonCode !== "string" ||
+            !/^[A-Z0-9_]{1,64}$/.test(report.fallbackReasonCode)
+          )) {
+            throw new Error("BuildReport fallback inválido.");
+          }
+
+          const summary = [
+            "### BuildReport",
+            `- status: ${report.status}`,
+            `- mode: ${report.articleMode}`,
+            `- state: ${report.state}`,
+            `- source: ${report.articleSource}`,
+            `- articles: ${report.articleCount}`,
+            `- snapshotFetchedAt: ${report.snapshotFetchedAt ?? "null"}`,
+            `- output files: ${report.outputFiles.length}`,
+            `- fallback: ${report.fallbackReasonCode ?? "none"}`,
+            "",
+          ].join("\n");
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+          NODE
+
+      - name: Write artifact manifest
+        if: ${{ success() }}
+        run: node scripts/check-artifact.mjs public >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload verified public artifact
+        if: ${{ success() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: personal-site-public-${{ github.sha }}
+          path: public
+          if-no-files-found: error
+
+  deploy-preview:
+    needs: validate-and-build
+    if: >-
+      ${{ needs.validate-and-build.result == 'success'
+        && github.event_name == 'workflow_dispatch'
+        && github.ref == 'refs/heads/main'
+        && inputs.deployment_target == 'preview'
+        && vars.PREVIEW_DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    environment:
+      name: preview
+      url: ${{ steps.deploy.outputs.static_web_app_url }}
+    steps:
+      - name: Freshness guard
+        id: freshness
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          main_sha="$(gh api repos/$GITHUB_REPOSITORY/git/ref/heads/main --jq .object.sha)"
+          latest_id="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/site.yml/runs?branch=main&per_page=100" | jq --arg title "site / preview" '[.workflow_runs[] | select(.event != "pull_request" and .display_title == $title) | .id] | max // 0')"
+          if [[ "$GITHUB_SHA" == "$main_sha" && "$GITHUB_RUN_ID" -eq "$latest_id" ]]; then
+            echo "deploy_allowed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_allowed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download verified artifact
+        if: ${{ steps.freshness.outputs.deploy_allowed == 'true' }}
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: personal-site-public-${{ github.sha }}
+          path: public
+
+      - name: Deploy preview
+        if: ${{ steps.freshness.outputs.deploy_allowed == 'true' }}
+        id: deploy
+        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SMOKE_089E11B1E }}
+          repo_token: ${{ github.token }}
+          action: upload
+          app_location: /public
+          output_location: ""
+          skip_app_build: true
+          deployment_environment: qa
+
+  deploy-production:
+    needs: validate-and-build
+    if: >-
+      ${{ needs.validate-and-build.result == 'success'
+        && github.ref == 'refs/heads/main'
+        && vars.PRODUCTION_DEPLOY_ENABLED == 'true'
+        && (github.event_name == 'push'
+          || github.event_name == 'schedule'
+          || (github.event_name == 'workflow_dispatch' && inputs.deployment_target == 'production')) }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.static_web_app_url }}
+    steps:
+      - name: Freshness guard
+        id: freshness
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          main_sha="$(gh api repos/$GITHUB_REPOSITORY/git/ref/heads/main --jq .object.sha)"
+          latest_id="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/site.yml/runs?branch=main&per_page=100" | jq --arg title "site / production" '[.workflow_runs[] | select(.event != "pull_request" and .display_title == $title) | .id] | max // 0')"
+          if [[ "$GITHUB_SHA" == "$main_sha" && "$GITHUB_RUN_ID" -eq "$latest_id" ]]; then
+            echo "deploy_allowed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy_allowed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download verified artifact
+        if: ${{ steps.freshness.outputs.deploy_allowed == 'true' }}
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: personal-site-public-${{ github.sha }}
+          path: public
+
+      - name: Deploy production
+        if: ${{ steps.freshness.outputs.deploy_allowed == 'true' }}
+        id: deploy
+        uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9 # v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ORANGE_SMOKE_089E11B1E }}
+          repo_token: ${{ github.token }}
+          action: upload
+          app_location: /public
+          output_location: ""
+          skip_app_build: true
