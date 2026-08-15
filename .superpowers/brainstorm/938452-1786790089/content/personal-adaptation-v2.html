@@ -1,0 +1,13 @@
+<style>
+  #adaptation-loading { color:#F7F7F5; min-height:40vh; display:grid; place-items:center; font:500 16px Inter,system-ui,sans-serif; }
+  .fc-wrap .fc-intro { color:var(--bg) !important; }
+  .fc-wrap .fc-intro .subtitle { color:var(--bg) !important; opacity:.72; }
+  .fc-wrap .fc-intro code { color:var(--fg) !important; }
+</style>
+<div id="adaptation-mount"><div id="adaptation-loading">Carregando a adaptação do design system…</div></div>
+<script>
+  fetch('/files/personal-adaptation.html')
+    .then(function(response){ return response.text(); })
+    .then(function(markup){ document.getElementById('adaptation-mount').innerHTML = markup; })
+    .catch(function(){ document.getElementById('adaptation-loading').textContent = 'Não foi possível carregar a prévia.'; });
+</script>

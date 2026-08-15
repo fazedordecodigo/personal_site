@@ -1,0 +1,121 @@
+<style>
+  .direction-intro { max-width: 880px; margin-bottom: 24px; }
+  .direction-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .direction-grid .card { overflow: hidden; padding: 0; }
+  .direction-grid .card-body { padding: 16px 18px 18px; }
+  .mini-site { min-height: 410px; padding: 22px; position: relative; overflow: hidden; }
+  .mini-nav { display: flex; justify-content: space-between; align-items: center; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+  .mini-mark { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; font-weight: 800; }
+  .mini-links { display: flex; gap: 12px; opacity: .75; }
+  .mini-hero { padding: 52px 0 30px; position: relative; z-index: 1; }
+  .mini-kicker { font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 12px; }
+  .mini-title { font-size: 29px; line-height: 1.02; font-weight: 800; margin-bottom: 12px; max-width: 260px; }
+  .mini-copy { font-size: 11px; line-height: 1.55; max-width: 270px; opacity: .82; }
+  .mini-actions { display: flex; gap: 8px; margin-top: 20px; }
+  .mini-btn { display: inline-flex; padding: 9px 12px; border-radius: 8px; font-size: 9px; font-weight: 700; }
+  .mini-btn.ghost { background: transparent; }
+  .mini-articles { margin-top: 22px; display: grid; grid-template-columns: 1.25fr .75fr; gap: 9px; }
+  .mini-article { min-height: 82px; padding: 11px; border-radius: 10px; font-size: 9px; line-height: 1.35; }
+  .mini-article span { display: block; opacity: .55; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .08em; font-size: 7px; }
+  .palette { display: flex; gap: 6px; margin-top: 13px; }
+  .swatch { width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(127,127,127,.2); }
+
+  .technical { background: #071525; color: #eaf6ff; font-family: Inter, ui-sans-serif, sans-serif; }
+  .technical:after { content: ""; position: absolute; width: 230px; height: 230px; right: -105px; top: 55px; border-radius: 50%; background: radial-gradient(circle, rgba(26,199,255,.25), transparent 66%); }
+  .technical .mini-mark { background: #20c7ff; color: #071525; }
+  .technical .mini-kicker { color: #ffbf47; }
+  .technical .mini-title em { color: #20c7ff; font-style: normal; }
+  .technical .mini-btn { background: #ffbf47; color: #071525; }
+  .technical .mini-btn.ghost { color: #eaf6ff; border: 1px solid #355069; }
+  .technical .mini-article { background: #10263b; border: 1px solid #1c3b56; }
+
+  .editorial { background: #f4efe5; color: #171717; font-family: Georgia, "Times New Roman", serif; }
+  .editorial .mini-nav { font-family: Arial, sans-serif; border-bottom: 1px solid #171717; padding-bottom: 12px; }
+  .editorial .mini-mark { background: #171717; color: #f4efe5; border-radius: 2px; }
+  .editorial .mini-kicker { color: #c2382f; font-family: Arial, sans-serif; }
+  .editorial .mini-title { font-weight: 500; font-size: 31px; }
+  .editorial .mini-btn { border-radius: 0; background: #c2382f; color: #fff; font-family: Arial, sans-serif; }
+  .editorial .mini-btn.ghost { color: #171717; border-bottom: 1px solid #171717; }
+  .editorial .mini-articles { border-top: 1px solid #171717; padding-top: 10px; }
+  .editorial .mini-article { border-radius: 0; background: transparent; border-right: 1px solid #c9c0b1; }
+
+  .studio { background: linear-gradient(145deg, #24143f 0%, #120d20 68%); color: #fff7fe; font-family: "Trebuchet MS", ui-sans-serif, sans-serif; }
+  .studio:before { content: ""; position: absolute; width: 155px; height: 155px; right: -38px; top: 72px; border-radius: 42% 58% 70% 30%; background: linear-gradient(135deg, #ff5f87, #8c62ff); transform: rotate(22deg); filter: blur(2px); opacity: .86; }
+  .studio .mini-mark { background: linear-gradient(135deg, #d9ff56, #55f4c5); color: #161020; border-radius: 10px; }
+  .studio .mini-kicker { color: #d9ff56; }
+  .studio .mini-title { font-size: 30px; position: relative; }
+  .studio .mini-title em { color: #ff7ba0; font-style: normal; }
+  .studio .mini-copy { max-width: 230px; }
+  .studio .mini-btn { background: #d9ff56; color: #161020; border-radius: 999px; }
+  .studio .mini-btn.ghost { color: #fff7fe; border: 1px solid rgba(255,255,255,.32); }
+  .studio .mini-articles { position: relative; z-index: 1; }
+  .studio .mini-article { background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.15); backdrop-filter: blur(8px); }
+
+  @media (max-width: 900px) { .direction-grid { grid-template-columns: 1fr; } .mini-site { min-height: 360px; } }
+</style>
+
+<div class="direction-intro">
+  <div class="label">Decisão visual</div>
+  <h2>Qual linguagem deve representar Emerson?</h2>
+  <p class="subtitle">Compare personalidade, contraste e hierarquia. O conteúdo é o mesmo; muda a marca percebida. Clique em uma direção.</p>
+</div>
+
+<div class="cards direction-grid">
+  <div class="card" data-choice="technical-authority" onclick="toggleSelect(this)">
+    <div class="mini-site technical">
+      <div class="mini-nav"><div class="mini-mark">ED</div><div class="mini-links"><span>Perfil</span><span>Artigos</span></div></div>
+      <div class="mini-hero">
+        <div class="mini-kicker">IA · Engenharia · Ensino</div>
+        <div class="mini-title">Código com <em>clareza</em>, impacto com método.</div>
+        <div class="mini-copy">AI Software Engineer, professor e autor. Ideias práticas para construir software e trabalhar melhor com agentes.</div>
+        <div class="mini-actions"><span class="mini-btn">Assinar newsletter</span><span class="mini-btn ghost">Conhecer perfil</span></div>
+      </div>
+      <div class="mini-articles"><div class="mini-article"><span>Último artigo</span>O futuro do desenvolvimento guiado por IA</div><div class="mini-article"><span>Newsletter</span>Notas sem ruído</div></div>
+    </div>
+    <div class="card-body">
+      <h3>A · Autoridade técnica</h3>
+      <p>Azul-marinho, ciano e âmbar. Precisa, confiável e contemporânea sem parecer uma startup genérica.</p>
+      <div class="palette"><span class="swatch" style="background:#071525"></span><span class="swatch" style="background:#20c7ff"></span><span class="swatch" style="background:#ffbf47"></span><span class="swatch" style="background:#eaf6ff"></span></div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="editorial-craft" onclick="toggleSelect(this)">
+    <div class="mini-site editorial">
+      <div class="mini-nav"><div class="mini-mark">ED</div><div class="mini-links"><span>Perfil</span><span>Artigos</span></div></div>
+      <div class="mini-hero">
+        <div class="mini-kicker">Fazedor de Código</div>
+        <div class="mini-title">Engenharia explicada por quem constrói.</div>
+        <div class="mini-copy">Experiências, ferramentas e decisões para profissionais que querem produzir software melhor.</div>
+        <div class="mini-actions"><span class="mini-btn">Receber novos textos</span><span class="mini-btn ghost">Sobre Emerson</span></div>
+      </div>
+      <div class="mini-articles"><div class="mini-article"><span>Edição recente</span>Agentes, contexto e a nova engenharia</div><div class="mini-article"><span>Perfil</span>15+ anos construindo</div></div>
+    </div>
+    <div class="card-body">
+      <h3>B · Autor editorial</h3>
+      <p>Marfim, tinta e vermelho. Mais humana e intelectual; coloca a escrita e o ensino no centro.</p>
+      <div class="palette"><span class="swatch" style="background:#f4efe5"></span><span class="swatch" style="background:#171717"></span><span class="swatch" style="background:#c2382f"></span><span class="swatch" style="background:#c9c0b1"></span></div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="ai-studio" onclick="toggleSelect(this)">
+    <div class="mini-site studio">
+      <div class="mini-nav"><div class="mini-mark">ED</div><div class="mini-links"><span>Perfil</span><span>Artigos</span></div></div>
+      <div class="mini-hero">
+        <div class="mini-kicker">Software × Inteligência Artificial</div>
+        <div class="mini-title">Construindo o <em>próximo jeito</em> de programar.</div>
+        <div class="mini-copy">Engenharia, agentes de código e aprendizado compartilhados por quem experimenta no mundo real.</div>
+        <div class="mini-actions"><span class="mini-btn">Entrar na comunidade</span><span class="mini-btn ghost">Explorar artigos</span></div>
+      </div>
+      <div class="mini-articles"><div class="mini-article"><span>Em destaque</span>Spec-driven development na prática</div><div class="mini-article"><span>Agenda</span>Aulas e meetups</div></div>
+    </div>
+    <div class="card-body">
+      <h3>C · Estúdio de IA</h3>
+      <p>Índigo, coral e lima. Expressiva e memorável; enfatiza experimentação, comunidade e futuro.</p>
+      <div class="palette"><span class="swatch" style="background:#24143f"></span><span class="swatch" style="background:#8c62ff"></span><span class="swatch" style="background:#ff5f87"></span><span class="swatch" style="background:#d9ff56"></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:22px">
+  <p><strong>Minha recomendação:</strong> A — sustenta autoridade profissional, deixa o conteúdo respirar e oferece contraste acessível. Podemos incorporar um pouco da personalidade editorial de B depois.</p>
+</div>
