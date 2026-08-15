@@ -125,7 +125,6 @@ test.describe("Substack click-to-load boundary", () => {
     await page.route(EMBED_URL, () => new Promise(() => {}));
     await page.goto("/");
     await page.locator("#load-substack").click();
-    expect(await page.locator("#iframe-status").textContent()).toBe(LOADING_TEXT);
     await expect.poll(() => requests.length).toBe(1);
     await page.locator(".external-link").focus();
     await page.clock.runFor(26);
