@@ -1,0 +1,157 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+  .fc-wrap {
+    --bg:#F7F7F5; --fg:#111111; --accent:#FF6A00; --surface:#FFFFFF;
+    --bege:#E9D8C3; --marrom:#8B5E3C; --muted:#6E6C67; --border:#DCD9D3;
+    --bege-tint:color-mix(in oklab, var(--bege) 45%, var(--bg));
+    --accent-tint:color-mix(in oklab, var(--accent) 12%, var(--bg));
+    color:var(--fg); font-family:Inter,system-ui,sans-serif;
+  }
+  .fc-intro { max-width:900px; margin-bottom:24px; }
+  .fc-intro code { font-family:"JetBrains Mono",monospace; background:var(--bege-tint); padding:2px 6px; border-radius:6px; }
+  .fc-browser { background:var(--bg); border:1px solid var(--fg); border-radius:18px; overflow:hidden; box-shadow:0 10px 28px color-mix(in oklab,var(--fg) 12%,transparent); }
+  .fc-browserbar { height:38px; background:var(--fg); display:flex; align-items:center; gap:6px; padding:0 14px; }
+  .fc-browserbar i { width:8px; height:8px; border-radius:50%; background:var(--bg); opacity:.55; }
+  .fc-page { background:var(--bg); }
+  .fc-container { max-width:1060px; margin:auto; padding-inline:28px; }
+  .fc-top { position:relative; display:flex; justify-content:space-between; align-items:center; padding-block:16px; border-bottom:1px dashed var(--border); }
+  .fc-logo { font-family:"Space Grotesk",sans-serif; font-size:17px; font-weight:700; letter-spacing:.01em; }
+  .fc-logo b { color:var(--accent); }
+  .fc-nav { display:flex; gap:7px; font-size:11px; font-weight:600; }
+  .fc-nav span { padding:8px 11px; border-radius:999px; }
+  .fc-nav .active { background:var(--bege); }
+  .fc-hero { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(250px,.75fr); gap:48px; align-items:center; padding-block:72px; }
+  .fc-eyebrow { font:600 10px/1.4 "JetBrains Mono",monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .fc-h1 { font:700 clamp(38px,5vw,64px)/.94 "Space Grotesk",sans-serif; letter-spacing:.01em; text-transform:uppercase; max-width:680px; margin:17px 0 21px; }
+  .fc-h1 b { color:var(--accent); }
+  .fc-lead { max-width:580px; font-size:16px; line-height:1.58; color:var(--muted); }
+  .fc-actions { display:flex; gap:10px; margin-top:26px; flex-wrap:wrap; }
+  .fc-btn { display:inline-flex; min-height:44px; align-items:center; padding:0 17px; border-radius:999px; font-size:12px; font-weight:700; border:1.5px solid var(--fg); }
+  .fc-btn.primary { background:var(--accent); color:var(--fg); border-color:var(--accent); }
+  .fc-portrait-stage { position:relative; min-height:360px; background:var(--bege-tint); border:1px solid var(--border); border-radius:24px; display:grid; place-items:center; overflow:hidden; }
+  .fc-portrait-stage:after { content:""; position:absolute; inset:17px; border:1px dashed var(--marrom); border-radius:18px; opacity:.5; }
+  .fc-portrait { width:190px; height:240px; border-radius:95px 95px 28px 28px; background:var(--bege); border:1.5px solid var(--fg); display:grid; place-items:center; font:700 64px "Space Grotesk",sans-serif; position:relative; z-index:1; }
+  .fc-portrait small { position:absolute; bottom:17px; font:600 8px "JetBrains Mono",monospace; letter-spacing:.13em; }
+  .fc-stamp { position:absolute; right:13px; top:19px; width:54px; height:54px; background:var(--fg); color:var(--bg); border-radius:50%; display:grid; place-items:center; font:600 17px "JetBrains Mono",monospace; z-index:2; transform:rotate(7deg); }
+  .fc-proof { border-top:1px dashed var(--border); border-bottom:1px dashed var(--border); display:grid; grid-template-columns:repeat(4,1fr); }
+  .fc-proof div { padding:19px 14px; border-right:1px dashed var(--border); }
+  .fc-proof div:last-child { border-right:0; }
+  .fc-proof strong { display:block; font:700 17px "Space Grotesk",sans-serif; text-transform:uppercase; }
+  .fc-proof span { font-size:9px; color:var(--muted); }
+  .fc-section { padding-block:62px; border-bottom:1px dashed var(--border); }
+  .fc-section-head { display:grid; grid-template-columns:120px 1fr; gap:22px; margin-bottom:30px; }
+  .fc-h2 { font:700 31px/1.04 "Space Grotesk",sans-serif; text-transform:uppercase; max-width:650px; }
+  .fc-profile { display:grid; grid-template-columns:1.15fr .85fr; gap:18px; }
+  .fc-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:22px; }
+  .fc-card.dark { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+  .fc-card h3 { font:700 16px/1.2 "Space Grotesk",sans-serif; text-transform:uppercase; margin-bottom:12px; }
+  .fc-card p { font-size:12px; line-height:1.62; color:var(--muted); }
+  .fc-card.dark p { color:color-mix(in oklab,var(--bg) 70%,var(--fg)); }
+  .fc-tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:17px; }
+  .fc-tag { border:1px solid var(--border); border-radius:999px; padding:7px 10px; font:600 9px "JetBrains Mono",monospace; background:var(--bg); }
+  .fc-articles { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .fc-article { min-height:176px; display:flex; flex-direction:column; justify-content:space-between; }
+  .fc-article .meta { font:600 8px "JetBrains Mono",monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .fc-article h3 { font-size:16px; margin:14px 0; }
+  .fc-article .arrow { border-top:1px dashed var(--border); padding-top:12px; font-size:10px; font-weight:700; }
+  .fc-newsletter { display:grid; grid-template-columns:1fr 1fr; background:var(--fg); color:var(--bg); border-radius:24px; overflow:hidden; }
+  .fc-news-copy { padding:36px; }
+  .fc-news-copy .fc-eyebrow { color:var(--accent); }
+  .fc-news-copy h2 { font:700 31px/1.05 "Space Grotesk",sans-serif; text-transform:uppercase; margin:16px 0; }
+  .fc-news-copy p { color:color-mix(in oklab,var(--bg) 72%,var(--fg)); font-size:12px; line-height:1.6; }
+  .fc-embed { background:var(--surface); color:var(--fg); margin:18px; border-radius:16px; padding:27px; display:flex; flex-direction:column; justify-content:center; }
+  .fc-embed .embed-label { font:600 8px "JetBrains Mono",monospace; letter-spacing:.12em; color:var(--muted); }
+  .fc-embed h3 { font:700 20px "Space Grotesk",sans-serif; margin:12px 0 15px; }
+  .fc-input { border:1px solid var(--border); border-radius:8px; height:42px; padding:0 12px; color:var(--muted); display:flex; align-items:center; font-size:11px; }
+  .fc-embed .fc-btn { margin-top:9px; justify-content:center; }
+  .fc-footer { background:var(--fg); color:var(--bg); padding-block:28px; }
+  .fc-footerline { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+  .fc-signature { font:700 13px "Space Grotesk",sans-serif; text-transform:uppercase; }
+  .fc-signature b { color:var(--accent); }
+  .fc-notes { margin-top:22px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .fc-note { border:1px solid var(--border); border-radius:14px; padding:16px; background:var(--surface); }
+  .fc-note h4 { font:700 13px "Space Grotesk",sans-serif; text-transform:uppercase; margin-bottom:7px; }
+  .fc-note p { color:var(--muted); font-size:11px; line-height:1.5; }
+  .fc-decision { margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .fc-decision .option { min-height:78px; }
+  @media(max-width:820px){
+    .fc-hero,.fc-profile,.fc-newsletter{grid-template-columns:1fr}.fc-portrait-stage{min-height:280px}.fc-proof{grid-template-columns:repeat(2,1fr)}.fc-articles,.fc-notes{grid-template-columns:1fr}.fc-section-head{grid-template-columns:1fr}.fc-nav{display:none}
+  }
+</style>
+
+<div class="fc-wrap">
+  <div class="fc-intro">
+    <div class="label">Adaptação proposta</div>
+    <h2>Fazedor de Código como sistema; Emerson como protagonista</h2>
+    <p class="subtitle">A página pessoal herda <code>#F7F7F5</code>, tinta preta, laranja <code>#FF6A00</code>, Space Grotesk, Inter, mono e divisórias tracejadas. O retrato substitui a capivara como ponto focal principal; “Fazedor de Código” vira o produto editorial e CTA de assinatura.</p>
+  </div>
+
+  <div class="fc-browser">
+    <div class="fc-browserbar"><i></i><i></i><i></i></div>
+    <div class="fc-page">
+      <div class="fc-container">
+        <div class="fc-top">
+          <div class="fc-logo">EMERSON DELATORRE<b>_</b></div>
+          <div class="fc-nav"><span class="active">Início</span><span>Perfil</span><span>Artigos</span><span>Contato</span></div>
+        </div>
+
+        <section class="fc-hero">
+          <div>
+            <div class="fc-eyebrow">AI SOFTWARE ENGINEER · PROFESSOR · AUTOR</div>
+            <h1 class="fc-h1">CONSTRUO SOFTWARE.<br>COMPARTILHO O <b>CAMINHO_</b></h1>
+            <p class="fc-lead">Engenharia de software, inteligência artificial e aprendizado prático para quem quer construir melhor — com método, curiosidade e impacto.</p>
+            <div class="fc-actions"><span class="fc-btn primary">Assinar Fazedor de Código</span><span class="fc-btn">Conhecer trajetória</span></div>
+          </div>
+          <div class="fc-portrait-stage">
+            <div class="fc-stamp">{_}</div>
+            <div class="fc-portrait">ED<small>FOTO ATUAL</small></div>
+          </div>
+        </section>
+
+        <div class="fc-proof">
+          <div><strong>15+ anos</strong><span>Engenharia de software</span></div>
+          <div><strong>Vibra Digital</strong><span>AI Software Engineer</span></div>
+          <div><strong>FIAP</strong><span>Professor e palestrante</span></div>
+          <div><strong>Comunidade</strong><span>Conteúdo e encontros</span></div>
+        </div>
+
+        <section class="fc-section">
+          <div class="fc-section-head"><div class="fc-eyebrow">01 · PERFIL</div><h2 class="fc-h2">ENGENHARIA, ENSINO E IA NA MESMA TRAJETÓRIA_</h2></div>
+          <div class="fc-profile">
+            <article class="fc-card"><h3>Sobre Emerson</h3><p>Uma narrativa curta, atualizada a partir do LinkedIn e escrita em primeira pessoa. O foco deixa de ser uma lista de tecnologias e passa a explicar o impacto: construir sistemas, formar pessoas e tornar o uso de IA mais produtivo e seguro.</p><div class="fc-tags"><span class="fc-tag">SOFTWARE ENGINEERING</span><span class="fc-tag">AI</span><span class="fc-tag">EDUCAÇÃO</span></div></article>
+            <article class="fc-card dark"><div class="fc-eyebrow">POSICIONAMENTO</div><h3>Profissional primeiro. Comunidade sempre por perto.</h3><p>O site pertence a Emerson. A marca Fazedor de Código aparece como newsletter, produção editorial e assinatura — sem competir com o nome pessoal.</p></article>
+          </div>
+        </section>
+
+        <section class="fc-section">
+          <div class="fc-section-head"><div class="fc-eyebrow">02 · ARTIGOS</div><h2 class="fc-h2">IDEIAS RECENTES, DIRETO DO SUBSTACK_</h2></div>
+          <div class="fc-articles">
+            <article class="fc-card fc-article"><div><div class="meta">NEWSLETTER · MAIS RECENTE</div><h3>Devin Weekly #1</h3><p>O que realmente importa no ecossistema de agentes de código.</p></div><div class="arrow">LER NO SUBSTACK →</div></article>
+            <article class="fc-card fc-article"><div><div class="meta">ENGENHARIA + IA</div><h3>Cursor Weekly</h3><p>Mudanças, contexto e consequências para quem desenvolve software.</p></div><div class="arrow">LER NO SUBSTACK →</div></article>
+            <article class="fc-card fc-article"><div><div class="meta">PRÁTICA</div><h3>SDD e o fim do vibe coding</h3><p>Por que requisitos verificáveis mudam o trabalho com agentes.</p></div><div class="arrow">LER NO SUBSTACK →</div></article>
+          </div>
+        </section>
+
+        <section class="fc-section">
+          <div class="fc-newsletter">
+            <div class="fc-news-copy"><div class="fc-eyebrow">FAZEDOR DE CÓDIGO</div><h2>RECEBA O QUE VALE A PENA LER_</h2><p>Uma chamada autoral envolve o embed oficial do Substack. O iframe continua branco e responsivo; o sistema pessoal cria contexto sem tentar reestilizá-lo internamente.</p></div>
+            <div class="fc-embed"><div class="embed-label">SUBSTACK · INSCRIÇÃO</div><h3>Fazedor de Código</h3><div class="fc-input">seu@email.com</div><span class="fc-btn primary">Inscrever-se</span></div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="fc-footer"><div class="fc-container fc-footerline"><div class="fc-logo">EMERSON DELATORRE<b>_</b></div><div class="fc-signature">CODE. COMPARTILHE. CONSTRUA. <b>IMPACTE.</b></div></div></footer>
+    </div>
+  </div>
+
+  <div class="fc-notes">
+    <div class="fc-note"><h4>Preservado</h4><p>Tokens, tipografia, grade de 8px, cantos generosos, bordas finas, tracejados e parcimônia do laranja.</p></div>
+    <div class="fc-note"><h4>Personalizado</h4><p>Nome de Emerson no topo, retrato como foco, bio em primeira pessoa, provas profissionais e trajetória.</p></div>
+    <div class="fc-note"><h4>Reposicionado</h4><p>Fazedor de Código deixa de ser a identidade da página e vira a frente editorial: artigos, comunidade e assinatura.</p></div>
+  </div>
+
+  <div class="options fc-decision">
+    <div class="option" data-choice="approve-personal-adaptation" onclick="toggleSelect(this)"><div class="letter">✓</div><div class="content"><h3>Aprovar direção</h3><p>Usar esta relação entre marca pessoal e Fazedor de Código.</p></div></div>
+    <div class="option" data-choice="revise-personal-adaptation" onclick="toggleSelect(this)"><div class="letter">↺</div><div class="content"><h3>Pedir ajustes</h3><p>Indicar o que precisa mudar antes de registrar a decisão.</p></div></div>
+  </div>
+</div>

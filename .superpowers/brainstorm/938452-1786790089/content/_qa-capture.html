@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>QA capture helper</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    #stage {
+      position: relative;
+      width: 100%;
+    }
+
+    iframe {
+      position: absolute;
+      inset: 0 auto auto 0;
+      border: 0;
+      transform: scale(0.5);
+      transform-origin: top left;
+    }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <iframe id="capture-frame" title="Protótipo preparado para captura de QA"></iframe>
+  </div>
+  <script>
+    (function () {
+      "use strict";
+      var params = new URLSearchParams(window.location.search);
+      var width = Number(params.get("width")) || 1425;
+      var height = Number(params.get("height")) || 4000;
+      var state = params.get("state") || "ready";
+      var stage = document.getElementById("stage");
+      var frame = document.getElementById("capture-frame");
+
+      stage.style.height = height + "px";
+      frame.width = String(width);
+      frame.height = String(height);
+      frame.src = "personal-site-prototype-v3.html?state=" + encodeURIComponent(state);
+    }());
+  </script>
+</body>
+</html>

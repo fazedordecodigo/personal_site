@@ -1,0 +1,1691 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>PROTÓTIPO — Emerson · Engenharia de software, IA e educação</title>
+  <style>
+    :root {
+      --bg: #F7F7F5;
+      --fg: #111111;
+      --accent: #FF6A00;
+      --surface: #FFFFFF;
+      --bege: #E9D8C3;
+      --marrom: #8B5E3C;
+      --muted: #6E6C67;
+      --border: #DCD9D3;
+      --bege-tint: color-mix(in oklab, var(--bege) 45%, var(--bg));
+      --accent-hover: color-mix(in oklab, var(--accent) 88%, var(--fg));
+      --danger-tint: color-mix(in oklab, var(--marrom) 8%, var(--surface));
+      --dark-muted: color-mix(in oklab, var(--bg) 72%, var(--fg));
+      --font-display: "Space Grotesk", "Arial Narrow", Arial, sans-serif;
+      --font-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --space-05: 4px;
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-5: 40px;
+      --space-6: 48px;
+      --space-8: 64px;
+      --space-10: 80px;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 10px 28px color-mix(in oklab, var(--fg) 12%, transparent);
+      --dur-fast: 120ms;
+      --dur-base: 200ms;
+      --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      color-scheme: light;
+      scroll-behavior: smooth;
+      scroll-padding-top: 88px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      padding-bottom: 104px;
+    }
+
+    body,
+    button,
+    a {
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img,
+    iframe {
+      max-width: 100%;
+    }
+
+    img {
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-underline-offset: 0.22em;
+      text-decoration-thickness: 1px;
+    }
+
+    button {
+      color: inherit;
+      font: inherit;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--fg);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: var(--space-2);
+      left: var(--space-2);
+      translate: 0 -180%;
+      border: 2px solid var(--fg);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: translate var(--dur-fast) var(--ease-out);
+    }
+
+    .skip-link:focus {
+      translate: 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .container {
+      width: min(100% - 48px, 1160px);
+      margin-inline: auto;
+    }
+
+    .prototype-banner {
+      border-bottom: 1px dashed var(--border);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .prototype-banner .container {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: start;
+      gap: var(--space-2);
+      padding-block: 12px;
+    }
+
+    .prototype-label {
+      margin: 0;
+      border: 1px solid var(--bg);
+      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      font: 600 11px/1.4 var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .prototype-question {
+      max-width: 86ch;
+      margin: 0;
+      color: var(--dark-muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .site-header {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      border-bottom: 1px dashed var(--border);
+      background: color-mix(in oklab, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-shell {
+      display: flex;
+      min-height: 72px;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+    }
+
+    .brand {
+      flex: 0 0 auto;
+      font: 700 20px/1 var(--font-display);
+      letter-spacing: 0.01em;
+      text-decoration: none;
+    }
+
+    .brand-mark,
+    .underscore {
+      color: var(--accent);
+    }
+
+    .site-nav {
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .site-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .site-nav ul {
+      display: flex;
+      width: max-content;
+      gap: var(--space-1);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .site-nav a {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      border-radius: var(--radius-pill);
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+      transition: background-color var(--dur-fast) var(--ease-out);
+    }
+
+    .site-nav a[aria-current="page"] {
+      background: var(--bege);
+    }
+
+    .site-nav a:hover {
+      background: var(--bege-tint);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+      gap: var(--space-6);
+      align-items: center;
+      min-height: 680px;
+      padding-block: var(--space-10);
+    }
+
+    .hero-copy,
+    .portrait-card,
+    .article-card,
+    .profile-card,
+    .newsletter-copy,
+    .embed-shell {
+      min-width: 0;
+    }
+
+    .eyebrow,
+    .kicker,
+    .snapshot-label {
+      margin: 0;
+      color: var(--muted);
+      font: 600 11px/1.45 var(--font-mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .ambassador-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+      margin: var(--space-3) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ambassador-badge {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      border: 1.5px solid var(--fg);
+      border-radius: var(--radius-pill);
+      padding: 0 16px;
+      background: var(--bege);
+      font: 700 13px/1.2 var(--font-display);
+      letter-spacing: 0.02em;
+    }
+
+    .ambassador-badge:last-child {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    h2,
+    h3,
+    p {
+      overflow-wrap: break-word;
+    }
+
+    h1,
+    h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 13ch;
+      margin: var(--space-3) 0;
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 0.98;
+      word-break: normal;
+      hyphens: none;
+    }
+
+    .keep-word {
+      white-space: nowrap;
+    }
+
+    .hero-lead {
+      max-width: 63ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(16px, 1.5vw, 18px);
+      line-height: 1.65;
+    }
+
+    .hero-actions,
+    .section-actions,
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-actions {
+      margin-top: var(--space-4);
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--fg);
+      border-radius: var(--radius-pill);
+      padding: 0 18px;
+      background: transparent;
+      color: var(--fg);
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.2;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+    }
+
+    .button:hover {
+      background: var(--bege-tint);
+      transform: translateY(-1px);
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    .button-primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--fg);
+      box-shadow: 0 4px 0 color-mix(in oklab, var(--accent) 78%, var(--fg));
+    }
+
+    .button-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .portrait-card {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      min-height: 480px;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--bege-tint);
+      padding: var(--space-4);
+    }
+
+    .portrait-card::before {
+      position: absolute;
+      z-index: -1;
+      inset: 17px;
+      border: 1px dashed var(--marrom);
+      border-radius: 18px;
+      content: "";
+      opacity: 0.52;
+    }
+
+    .portrait-card img {
+      width: min(82%, 336px);
+      height: auto;
+      aspect-ratio: 1;
+      border: 1.5px solid var(--fg);
+      border-radius: 50% 50% 30px 30px;
+      background: var(--bege);
+      object-fit: cover;
+    }
+
+    .portrait-stamp {
+      position: absolute;
+      z-index: 2;
+      top: 28px;
+      right: 28px;
+      display: grid;
+      width: 64px;
+      height: 64px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--fg);
+      color: var(--bg);
+      font: 600 18px/1 var(--font-mono);
+      rotate: 7deg;
+    }
+
+    .portrait-card figcaption {
+      position: absolute;
+      z-index: 2;
+      bottom: 28px;
+      left: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      padding: 8px 12px;
+      font: 600 11px/1.4 var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .proofs {
+      border-block: 1px dashed var(--border);
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .proof-grid li {
+      min-width: 0;
+      padding: var(--space-3) var(--space-2);
+      border-right: 1px dashed var(--border);
+    }
+
+    .proof-grid li:last-child {
+      border-right: 0;
+    }
+
+    .proof-grid strong {
+      display: block;
+      font: 700 18px/1.15 var(--font-display);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .proof-grid span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .section {
+      padding-block: var(--space-8);
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: 136px minmax(0, 1fr);
+      gap: var(--space-3);
+      align-items: start;
+      margin-bottom: var(--space-5);
+    }
+
+    .section-heading h2 {
+      max-width: 20ch;
+      margin: 0;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.02;
+    }
+
+    .section-heading .section-lead {
+      grid-column: 2;
+      max-width: 64ch;
+      margin: -20px 0 0;
+      color: var(--muted);
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: var(--space-2);
+    }
+
+    .profile-card,
+    .article-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: var(--space-3);
+    }
+
+    .profile-card h3,
+    .article-card h3 {
+      margin: 12px 0;
+      font: 650 22px/1.2 var(--font-display);
+    }
+
+    .profile-card p,
+    .article-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .profile-card-dark {
+      border-color: var(--fg);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .profile-card-dark .kicker {
+      color: var(--bg);
+      opacity: 0.72;
+    }
+
+    .profile-card-dark p {
+      color: var(--dark-muted);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: var(--space-3) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tag-list li {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--bg);
+      padding: 7px 10px;
+      color: var(--fg);
+      font: 600 10px/1.2 var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .snapshot-bar,
+    .state-feedback {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: var(--space-2);
+    }
+
+    .snapshot-bar p,
+    .state-feedback p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .snapshot-bar a,
+    .state-feedback a {
+      flex: 0 0 auto;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .snapshot-bar.has-warning,
+    .state-feedback {
+      border-color: var(--marrom);
+      background: var(--danger-tint);
+    }
+
+    .state-feedback {
+      display: block;
+      padding: var(--space-3);
+    }
+
+    .state-feedback h3 {
+      margin: 0 0 var(--space-1);
+      font: 700 20px/1.2 var(--font-display);
+    }
+
+    .state-feedback a {
+      display: inline-block;
+      margin-top: var(--space-2);
+    }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-2);
+    }
+
+    .article-card {
+      display: flex;
+      min-height: 292px;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+    }
+
+    .article-image-slot {
+      display: none;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      place-items: center;
+      margin-bottom: var(--space-3);
+      border: 1px dashed var(--marrom);
+      border-radius: 12px;
+      background: var(--bege-tint);
+      color: var(--muted);
+      padding: var(--space-2);
+      text-align: center;
+      font: 600 10px/1.5 var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .article-image-slot strong {
+      display: block;
+      color: var(--fg);
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .article-grid.show-image-fallback .article-image-slot {
+      display: grid;
+    }
+
+    .article-card:hover,
+    .article-card:focus-within {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .article-card time {
+      font: 600 10px/1.4 var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .article-card footer {
+      margin-top: var(--space-3);
+      border-top: 1px dashed var(--border);
+      padding-top: var(--space-2);
+    }
+
+    .article-card a {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .article-card a:hover {
+      text-decoration: underline;
+    }
+
+    .newsletter-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .newsletter-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--space-6);
+    }
+
+    .newsletter-copy .eyebrow {
+      color: var(--accent);
+    }
+
+    .newsletter-copy h2 {
+      margin: var(--space-2) 0;
+      font-size: clamp(32px, 4vw, 44px);
+      line-height: 1.02;
+    }
+
+    .newsletter-copy p {
+      margin: 0;
+      color: var(--dark-muted);
+    }
+
+    .embed-shell {
+      margin: var(--space-2);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      color: var(--fg);
+      padding: var(--space-3);
+    }
+
+    .embed-facade {
+      display: grid;
+      min-height: 320px;
+      align-content: center;
+      justify-items: start;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      padding: var(--space-3);
+    }
+
+    .embed-facade h3 {
+      margin: 12px 0;
+      font: 700 24px/1.15 var(--font-display);
+    }
+
+    .embed-facade p,
+    .embed-note,
+    .iframe-status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .embed-facade .button {
+      margin-top: var(--space-3);
+    }
+
+    .iframe-panel {
+      min-height: 320px;
+    }
+
+    .iframe-status {
+      margin-bottom: var(--space-1);
+    }
+
+    .iframe-panel iframe {
+      display: block;
+      width: 100%;
+      min-height: 320px;
+      border: 0;
+      background: var(--surface);
+    }
+
+    .mobile-embed-message {
+      display: none;
+      border: 1px solid var(--marrom);
+      border-radius: 12px;
+      background: var(--danger-tint);
+      padding: var(--space-2);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .mobile-embed-message p {
+      margin: 0;
+    }
+
+    .external-signup {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      margin-top: var(--space-2);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .embed-note {
+      margin-top: var(--space-1);
+      font-size: 11px;
+    }
+
+    .site-footer {
+      background: var(--fg);
+      color: var(--bg);
+      padding-block: var(--space-8);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-5);
+      align-items: end;
+    }
+
+    .footer-kicker {
+      margin: 0 0 var(--space-2);
+      color: var(--accent);
+      font: 600 11px/1.4 var(--font-mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .site-footer h2 {
+      max-width: 18ch;
+      margin: 0;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.05;
+    }
+
+    .footer-links {
+      justify-content: flex-end;
+    }
+
+    .footer-links a {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      border: 1px solid var(--bg);
+      border-radius: var(--radius-pill);
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    .site-footer a:focus-visible {
+      outline: 3px solid var(--bg);
+      outline-offset: 3px;
+    }
+
+    .footer-links a:focus-visible {
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    .footer-signature {
+      grid-column: 1 / -1;
+      margin: var(--space-5) 0 0;
+      border-top: 1px dashed color-mix(in oklab, var(--bg) 28%, var(--fg));
+      padding-top: var(--space-3);
+      color: var(--dark-muted);
+      font: 700 13px/1.5 var(--font-display);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .prototype-switcher {
+      position: fixed;
+      z-index: 80;
+      bottom: 16px;
+      left: 50%;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      width: min(calc(100% - 24px), 490px);
+      min-height: 64px;
+      align-items: center;
+      gap: var(--space-1);
+      translate: -50% 0;
+      border: 1px solid var(--fg);
+      border-radius: var(--radius-pill);
+      background: var(--fg);
+      color: var(--bg);
+      box-shadow: var(--shadow-soft);
+      padding: 8px;
+    }
+
+    .prototype-switcher button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--bg) 34%, var(--fg));
+      border-radius: 50%;
+      background: transparent;
+      color: var(--bg);
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .prototype-switcher button:hover {
+      background: color-mix(in oklab, var(--bg) 12%, var(--fg));
+    }
+
+    .prototype-switcher button:focus-visible {
+      outline-color: var(--bg);
+      outline-offset: 2px;
+    }
+
+    .state-copy {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .state-counter {
+      display: block;
+      color: var(--dark-muted);
+      font: 600 9px/1.2 var(--font-mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .state-name {
+      display: block;
+      overflow: hidden;
+      font-size: 13px;
+      font-weight: 750;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .state-hint {
+      display: block;
+      color: var(--dark-muted);
+      font-size: 9px;
+      line-height: 1.2;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-block: var(--space-8);
+      }
+
+      .hero-copy {
+        max-width: 760px;
+      }
+
+      .portrait-card {
+        min-height: 440px;
+      }
+
+      .profile-grid,
+      .newsletter-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .article-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .article-card {
+        min-height: 236px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .proof-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .proof-grid li:nth-child(2) {
+        border-right: 0;
+      }
+
+      .proof-grid li:nth-child(-n + 2) {
+        border-bottom: 1px dashed var(--border);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(100% - 32px, 1160px);
+      }
+
+      .prototype-banner .container {
+        grid-template-columns: 1fr;
+        gap: var(--space-1);
+      }
+
+      .prototype-label {
+        width: fit-content;
+      }
+
+      .nav-shell {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--space-1);
+        padding-block: 12px;
+      }
+
+      .site-nav {
+        width: 100%;
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading .section-lead {
+        grid-column: 1;
+        margin: 0;
+      }
+
+      .snapshot-bar {
+        flex-direction: column;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
+      }
+
+      .footer-signature {
+        grid-column: 1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding-bottom: 96px;
+      }
+
+      h1 {
+        max-width: 100%;
+        font-size: clamp(32px, 10.5vw, 40px);
+        line-height: 1.02;
+      }
+
+      .hero {
+        gap: var(--space-4);
+        padding-block: var(--space-6);
+      }
+
+      .ambassador-list,
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .ambassador-badge,
+      .hero-actions .button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .portrait-card {
+        min-height: 344px;
+        padding: var(--space-3);
+      }
+
+      .portrait-card img {
+        width: min(80%, 248px);
+      }
+
+      .portrait-stamp {
+        top: 22px;
+        right: 22px;
+        width: 52px;
+        height: 52px;
+        font-size: 15px;
+      }
+
+      .portrait-card figcaption {
+        bottom: 22px;
+        left: 22px;
+      }
+
+      .proof-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .proof-grid li,
+      .proof-grid li:nth-child(2) {
+        border-right: 0;
+        border-bottom: 1px dashed var(--border);
+      }
+
+      .proof-grid li:last-child {
+        border-bottom: 0;
+      }
+
+      .section {
+        padding-block: var(--space-6);
+      }
+
+      .section-heading {
+        margin-bottom: var(--space-4);
+      }
+
+      .profile-card,
+      .article-card,
+      .embed-shell {
+        padding: var(--space-2);
+      }
+
+      .newsletter-copy {
+        padding: var(--space-4) var(--space-3);
+      }
+
+      .embed-shell {
+        margin: var(--space-1);
+      }
+
+      .embed-facade {
+        padding: var(--space-2);
+      }
+
+      .embed-facade,
+      .iframe-panel {
+        display: none !important;
+      }
+
+      .mobile-embed-message {
+        display: block;
+      }
+
+      .prototype-switcher {
+        bottom: 8px;
+        width: calc(100% - 16px);
+      }
+
+      .state-hint {
+        display: none;
+      }
+    }
+
+    @media (max-width: 240px) {
+      .container {
+        width: calc(100% - 16px);
+      }
+
+      .skip-link {
+        right: 4px;
+        left: 4px;
+        padding-inline: 6px;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+
+      .prototype-label {
+        width: 100%;
+        padding: 8px;
+        text-align: center;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .site-nav {
+        overflow-x: visible;
+      }
+
+      .site-nav ul {
+        width: 100%;
+        min-width: 0;
+        flex-wrap: wrap;
+      }
+
+      .prototype-question,
+      .ambassador-badge,
+      .button,
+      .external-signup,
+      .footer-links a {
+        overflow-wrap: anywhere;
+      }
+
+      h1 {
+        font-size: clamp(26px, 16vw, 32px);
+      }
+
+      h1,
+      strong {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      .keep-word {
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .ambassador-badge,
+      .button {
+        padding: 10px 8px;
+        text-align: center;
+      }
+
+      .portrait-card {
+        min-height: 260px;
+        padding: var(--space-2);
+      }
+
+      .portrait-card img {
+        width: min(72%, 120px);
+      }
+
+      .portrait-stamp {
+        top: 12px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+      }
+
+      .portrait-card figcaption {
+        right: 8px;
+        bottom: 8px;
+        left: 8px;
+        padding: 6px;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+
+      .footer-links a {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        word-break: break-word;
+      }
+
+      .section-heading,
+      .footer-grid {
+        width: 100%;
+        max-width: 100%;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .section-heading > *,
+      .footer-grid > *,
+      .footer-links,
+      .footer-signature {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .footer-links {
+        width: 100%;
+      }
+
+      .site-footer h2,
+      .footer-signature {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      .underscore {
+        display: none;
+      }
+
+      .snapshot-bar,
+      .snapshot-bar > *,
+      #snapshot-description,
+      #snapshot-copy {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+
+      .prototype-switcher {
+        bottom: 4px;
+        grid-template-areas:
+          "copy copy copy"
+          "previous . next";
+        grid-template-rows: auto 44px;
+        width: calc(100% - 8px);
+      }
+
+      #previous-state {
+        grid-area: previous;
+      }
+
+      .state-copy {
+        grid-area: copy;
+        width: 100%;
+      }
+
+      #next-state {
+        grid-area: next;
+      }
+
+      .state-name {
+        overflow: visible;
+        line-height: 1.25;
+        text-overflow: clip;
+        white-space: normal;
+      }
+
+      .state-counter {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body data-prototype-state="normal">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <aside class="prototype-banner" aria-label="Aviso sobre o protótipo">
+    <div class="container">
+      <p class="prototype-label">PROTÓTIPO — NÃO PRODUÇÃO</p>
+      <p class="prototype-question"><strong>Pergunta:</strong> a direção visual aprovada continua coerente numa página completa responsiva com a foto real, a copy aprovada, os badges de embaixador e os estados de feed e Substack?</p>
+    </div>
+  </aside>
+
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="#inicio" aria-label="Emerson — início">EMERSON<span class="brand-mark" aria-hidden="true">_</span></a>
+      <nav class="site-nav" aria-label="Principal">
+        <ul>
+          <li><a href="#inicio" aria-current="page">Início</a></li>
+          <li><a href="#perfil">Perfil</a></li>
+          <li><a href="#artigos">Artigos</a></li>
+          <li><a href="#newsletter">Newsletter</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo" tabindex="-1">
+    <section class="container hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Engenharia de software · IA · Educação</p>
+        <ul class="ambassador-list" aria-label="Destaques profissionais confirmados">
+          <li class="ambassador-badge">Cursor Ambassador</li>
+          <li class="ambassador-badge">Devin Ambassador</li>
+        </ul>
+        <h1 id="hero-title">Construo software. Ensino o processo. <span class="keep-word">Compartilho</span> o que funciona.<span class="underscore" aria-hidden="true">_</span></h1>
+        <p class="hero-lead">Atuo na interseção entre engenharia de software e inteligência artificial. No Fazedor de Código, transformo prática em software aberto, materiais de ensino, artigos e encontros para quem quer construir com mais clareza, qualidade e segurança.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#newsletter">Assinar o Fazedor de Código</a>
+          <a class="button" href="#contato">Vamos conversar</a>
+        </div>
+      </div>
+
+      <figure class="portrait-card">
+        <span class="portrait-stamp" aria-hidden="true">{_}</span>
+        <img src="assets/eu.jpg" width="400" height="400" alt="Retrato de Emerson Delatorre">
+        <figcaption>Emerson Delatorre</figcaption>
+      </figure>
+    </section>
+
+    <section class="proofs" aria-labelledby="proofs-title">
+      <div class="container">
+        <h2 class="sr-only" id="proofs-title">Provas profissionais</h2>
+        <ul class="proof-grid">
+          <li><strong>Engenharia + IA</strong><span>Software, agentes e qualidade</span></li>
+          <li><strong>PyFlunt</strong><span>Open source em Python</span></li>
+          <li><strong>Ensino prático</strong><span>Materiais, workshops e palestras</span></li>
+          <li><strong>Fazedor de Código</strong><span>Newsletter, artigos e comunidade</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="container section" id="perfil" aria-labelledby="profile-title">
+      <header class="section-heading">
+        <p class="eyebrow">01 · Perfil</p>
+        <h2 id="profile-title">Engenharia, ensino e IA na mesma trajetória<span class="underscore" aria-hidden="true">_</span></h2>
+        <p class="section-lead">Projetos públicos, materiais didáticos, artigos e encontros formam o mesmo ciclo: construir, testar, explicar e melhorar com a comunidade.</p>
+      </header>
+
+      <div class="profile-grid">
+        <article class="profile-card">
+          <p class="kicker">Como eu trabalho</p>
+          <h3>Prática primeiro, clareza sempre</h3>
+          <p>O ponto de partida é o software real. A partir dele, organizo processos, compartilho decisões e transformo aprendizado em material que outras pessoas conseguem usar.</p>
+          <ul class="tag-list" aria-label="Temas de atuação">
+            <li>Agentes de IA</li>
+            <li>Arquitetura</li>
+            <li>Qualidade</li>
+            <li>Open source</li>
+          </ul>
+        </article>
+
+        <article class="profile-card profile-card-dark">
+          <p class="kicker">Frente editorial</p>
+          <h3>Fazedor de Código</h3>
+          <p>A página é de Emerson. O Fazedor de Código reúne newsletter, artigos e comunidade — e concentra a assinatura principal sem competir com a marca pessoal.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container section" id="artigos" aria-labelledby="articles-title">
+      <header class="section-heading">
+        <p class="eyebrow">02 · Artigos</p>
+        <h2 id="articles-title">Ideias recentes, direto do Substack<span class="underscore" aria-hidden="true">_</span></h2>
+        <p class="section-lead">Três publicações reais materializadas como snapshot. O protótipo não consulta RSS nem proxy no navegador. As capas disponíveis contêm marcas de terceiros e não são exibidas sem validação de uso; o estado <code>image-fallback</code> mostra somente uma simulação neutra, sem request de imagem.</p>
+      </header>
+
+      <div class="snapshot-bar" id="snapshot-bar" role="status" aria-live="polite" aria-atomic="true">
+        <p id="snapshot-description"><span class="snapshot-label" id="snapshot-label">Snapshot do feed oficial</span><br><span id="snapshot-copy">Capturado em 15 ago. 2026; datas exibidas em America/Sao_Paulo.</span></p>
+        <a href="https://fazedordecodigo.substack.com/feed" rel="external noopener noreferrer">Abrir feed oficial</a>
+      </div>
+
+      <div class="state-feedback" id="feed-empty" role="status" hidden>
+        <h3>Sem snapshot disponível</h3>
+        <p>Os cards ficam ocultos porque não há conteúdo local válido. Nenhum artigo fictício ocupa o lugar do feed; a publicação continua acessível pelo link direto.</p>
+        <a href="https://fazedordecodigo.substack.com/" rel="external noopener noreferrer">Ver todos os artigos no Substack</a>
+      </div>
+
+      <div class="article-grid" id="article-grid" aria-describedby="snapshot-description">
+        <article class="article-card">
+          <div class="article-image-slot" role="img" aria-label="Simulação neutra de fallback para capa não exibida; nenhuma imagem ou marca foi carregada.">
+            <span aria-hidden="true"><strong>{_}</strong>Simulação · sem capa</span>
+          </div>
+          <div>
+            <p class="kicker">Cursor Weekly</p>
+            <h3>Cursor Weekly — Edição #11</h3>
+            <p>Plugins do Google Workspace, Mixture-of-Kittens para NVL72s, a mecânica do Auto mode e o resumo de estabilidade da semana.</p>
+          </div>
+          <footer>
+            <time datetime="2026-08-13T00:48:38Z">12 ago. 2026</time><br>
+            <a href="https://fazedordecodigo.substack.com/p/cursor-weekly-edicao-11" rel="external noopener noreferrer">Ler no Substack&nbsp;→</a>
+          </footer>
+        </article>
+
+        <article class="article-card">
+          <div class="article-image-slot" role="img" aria-label="Simulação neutra de fallback para capa não exibida; nenhuma imagem ou marca foi carregada.">
+            <span aria-hidden="true"><strong>{_}</strong>Simulação · sem capa</span>
+          </div>
+          <div>
+            <p class="kicker">Cursor Weekly</p>
+            <h3>Cursor Weekly — Edição #10</h3>
+            <p>Novo plano mensal na Índia, iPad em todos os planos pagos e o ambiente que faz agentes autorarem mais da metade dos PRs do Cursor.</p>
+          </div>
+          <footer>
+            <time datetime="2026-08-13T00:46:13Z">12 ago. 2026</time><br>
+            <a href="https://fazedordecodigo.substack.com/p/cursor-weekly-edicao-10" rel="external noopener noreferrer">Ler no Substack&nbsp;→</a>
+          </footer>
+        </article>
+
+        <article class="article-card">
+          <div class="article-image-slot" role="img" aria-label="Simulação neutra de fallback para capa não exibida; nenhuma imagem ou marca foi carregada.">
+            <span aria-hidden="true"><strong>{_}</strong>Simulação · sem capa</span>
+          </div>
+          <div>
+            <p class="kicker">Devin Weekly</p>
+            <h3>Devin Weekly - Edição #4</h3>
+            <p>Release de 07/08 leva automações à API v3, adiciona filas, Terraform e gatilhos do GitLab.</p>
+          </div>
+          <footer>
+            <time datetime="2026-08-13T00:11:57Z">12 ago. 2026</time><br>
+            <a href="https://fazedordecodigo.substack.com/p/devin-weekly-4" rel="external noopener noreferrer">Ler no Substack&nbsp;→</a>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <section class="container section" id="newsletter" aria-labelledby="newsletter-title">
+      <div class="newsletter-panel">
+        <div class="newsletter-copy">
+          <p class="eyebrow">Fazedor de Código</p>
+          <h2 id="newsletter-title">Receba o que vale a pena ler<span class="underscore" aria-hidden="true">_</span></h2>
+          <p>Carregue o formulário somente se quiser interagir com o Substack. A moldura pertence a esta página; o conteúdo interno, a coleta e os estados do formulário pertencem ao terceiro.</p>
+        </div>
+
+        <section class="embed-shell" aria-labelledby="embed-shell-title">
+          <h3 class="sr-only" id="embed-shell-title">Inscrição no Fazedor de Código pelo Substack</h3>
+          <div class="embed-facade" id="embed-facade">
+            <p class="kicker">Substack · click-to-load</p>
+            <h3>O terceiro ainda não foi solicitado</h3>
+            <p>Ao continuar, o navegador solicitará o formulário ao Substack, que pode carregar cookies, telemetria e outros recursos de terceiros. Nenhuma inscrição é enviada automaticamente.</p>
+            <button class="button button-primary" id="load-substack" type="button">Carregar formulário do Substack</button>
+          </div>
+
+          <div class="mobile-embed-message" id="mobile-embed-message" role="status" tabindex="-1">
+            <p><strong>Formulário não oferecido nesta largura.</strong> A moldura deixaria o iframe abaixo dos 320 px internos já testados. Use o fallback <em>Assinar no Substack</em> logo abaixo.</p>
+          </div>
+
+          <div class="iframe-panel" id="iframe-panel" aria-busy="false" hidden>
+            <p class="iframe-status" id="iframe-status" role="status" aria-live="polite" tabindex="-1">Solicitação enviada ao Substack; o conteúdo interno ainda não foi confirmado. Se a área abaixo não funcionar, use o link externo.</p>
+            <iframe
+              id="substack-frame"
+              title="Inscrição na newsletter Fazedor de Código"
+              width="480"
+              height="320"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              aria-describedby="iframe-status"
+            ></iframe>
+          </div>
+
+          <a class="external-signup" href="https://fazedordecodigo.substack.com/" rel="external noopener noreferrer">Assinar no Substack</a>
+          <p class="embed-note">Este link permanece disponível em todos os estados. O protótipo não tenta corrigir nem reestilizar o CSS interno do iframe.</p>
+          <p class="embed-note"><strong>Limite responsivo:</strong> em larguras de até 480 px, este protótipo não oferece o iframe; o mínimo validado continua sendo 320 × 320 internos.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contato">
+    <div class="container footer-grid">
+      <div>
+        <p class="footer-kicker">Contato</p>
+        <h2>Vamos construir algo que valha a pena compartilhar?</h2>
+      </div>
+      <nav class="footer-links" aria-label="Links de Emerson">
+        <a href="https://www.linkedin.com/in/fazedordecodigo/" rel="external noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/fazedordecodigo" rel="external noopener noreferrer">GitHub</a>
+        <a href="https://fazedordecodigo.substack.com/" rel="external noopener noreferrer">Substack</a>
+      </nav>
+      <p class="footer-signature"><span class="brand">EMERSON<span class="brand-mark" aria-hidden="true">_</span></span><br>Code. Compartilhe. Construa. <span class="underscore">Impacte.</span></p>
+    </div>
+  </footer>
+
+  <aside class="prototype-switcher" aria-label="Estados do feed no protótipo">
+    <button id="previous-state" type="button" aria-label="Estado anterior" aria-keyshortcuts="ArrowLeft">←</button>
+    <div class="state-copy" aria-live="polite" aria-atomic="true">
+      <span class="state-counter" id="state-counter">Estado do feed 1 de 5</span>
+      <strong class="state-name" id="state-name">Normal</strong>
+      <span class="state-hint">Use ← → · URL ?state=</span>
+    </div>
+    <button id="next-state" type="button" aria-label="Próximo estado" aria-keyshortcuts="ArrowRight">→</button>
+  </aside>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var EMBED_URL = "https://fazedordecodigo.substack.com/embed";
+      var states = [
+        { key: "normal", label: "Normal" },
+        { key: "stale", label: "Snapshot antigo" },
+        { key: "refresh-error", label: "Falha ao atualizar · snapshot preservado" },
+        { key: "empty", label: "Sem snapshot" },
+        { key: "image-fallback", label: "Fallback de imagem · simulação neutra" }
+      ];
+
+      var body = document.body;
+      var articleGrid = document.getElementById("article-grid");
+      var feedEmpty = document.getElementById("feed-empty");
+      var snapshotBar = document.getElementById("snapshot-bar");
+      var snapshotLabel = document.getElementById("snapshot-label");
+      var snapshotCopy = document.getElementById("snapshot-copy");
+      var facade = document.getElementById("embed-facade");
+      var iframePanel = document.getElementById("iframe-panel");
+      var frame = document.getElementById("substack-frame");
+      var iframeStatus = document.getElementById("iframe-status");
+      var mobileEmbedMessage = document.getElementById("mobile-embed-message");
+      var loadButton = document.getElementById("load-substack");
+      var previousButton = document.getElementById("previous-state");
+      var nextButton = document.getElementById("next-state");
+      var stateName = document.getElementById("state-name");
+      var stateCounter = document.getElementById("state-counter");
+      var currentIndex = 0;
+
+      function findStateIndex(key) {
+        for (var index = 0; index < states.length; index += 1) {
+          if (states[index].key === key) return index;
+        }
+        return -1;
+      }
+
+      function updateUrl(key) {
+        try {
+          var url = new URL(window.location.href);
+          url.searchParams.set("state", key);
+          window.history.replaceState({}, "", url);
+        } catch (error) {
+          /* O estado visual continua funcional mesmo se file: bloquear history. */
+        }
+      }
+
+      function setState(key, shouldUpdateUrl) {
+        var nextIndex = findStateIndex(key);
+        if (nextIndex < 0) nextIndex = 0;
+        currentIndex = nextIndex;
+
+        var state = states[currentIndex];
+        var isEmpty = state.key === "empty";
+        var isImageFallback = state.key === "image-fallback";
+        var hasWarning = state.key === "stale" || state.key === "refresh-error";
+
+        body.dataset.prototypeState = state.key;
+        articleGrid.hidden = isEmpty;
+        articleGrid.classList.toggle("show-image-fallback", isImageFallback);
+        feedEmpty.hidden = !isEmpty;
+        snapshotBar.hidden = isEmpty;
+        snapshotBar.classList.toggle("has-warning", hasWarning);
+
+        if (state.key === "stale") {
+          snapshotLabel.textContent = "Snapshot antigo";
+          snapshotCopy.textContent = "Última captura preservada: 15 ago. 2026. A implementação deve sinalizar a idade e nunca substituir conteúdo válido por vazio.";
+        } else if (state.key === "refresh-error") {
+          snapshotLabel.textContent = "Falha ao atualizar · snapshot preservado";
+          snapshotCopy.textContent = "A atualização mais recente falhou. Os três cards continuam vindo do último snapshot válido, capturado em 15 ago. 2026.";
+        } else if (state.key === "empty") {
+          snapshotLabel.textContent = "Sem snapshot";
+          snapshotCopy.textContent = "Nenhum conteúdo local válido está disponível.";
+        } else if (state.key === "image-fallback") {
+          snapshotLabel.textContent = "Fallback de imagem · simulação neutra";
+          snapshotCopy.textContent = "As capas com marcas de terceiros não são exibidas. Os slots abaixo são neutros, simulados em CSS e não fazem request de imagem.";
+        } else {
+          snapshotLabel.textContent = "Snapshot do feed oficial";
+          snapshotCopy.textContent = "Capturado em 15 ago. 2026; datas exibidas em America/Sao_Paulo.";
+        }
+
+        stateName.textContent = state.label;
+        stateCounter.textContent = "Estado do feed " + (currentIndex + 1) + " de " + states.length;
+        if (shouldUpdateUrl !== false) updateUrl(state.key);
+      }
+
+      function cycleState(direction) {
+        var nextIndex = (currentIndex + direction + states.length) % states.length;
+        setState(states[nextIndex].key, true);
+      }
+
+      loadButton.addEventListener("click", function () {
+        if (window.matchMedia("(max-width: 480px)").matches) {
+          mobileEmbedMessage.focus();
+          return;
+        }
+
+        if (!frame.hasAttribute("src")) {
+          facade.hidden = true;
+          iframePanel.hidden = false;
+          iframePanel.setAttribute("aria-busy", "true");
+          iframeStatus.textContent = "Solicitação enviada ao Substack; o conteúdo interno ainda não foi confirmado. Se a área abaixo não funcionar, use Assinar no Substack.";
+          frame.setAttribute("src", EMBED_URL);
+        }
+        window.requestAnimationFrame(function () {
+          iframeStatus.focus();
+        });
+      });
+
+      frame.addEventListener("load", function () {
+        if (!iframePanel.hidden && frame.getAttribute("src") === EMBED_URL) {
+          iframePanel.setAttribute("aria-busy", "false");
+          iframeStatus.textContent = "O navegador concluiu a navegação do iframe, mas este protótipo não consegue confirmar o conteúdo interno do terceiro. Se necessário, use Assinar no Substack.";
+        }
+      });
+
+      previousButton.addEventListener("click", function () {
+        cycleState(-1);
+      });
+
+      nextButton.addEventListener("click", function () {
+        cycleState(1);
+      });
+
+      document.addEventListener("keydown", function (event) {
+        var target = event.target;
+        var interactiveSelector = "a, button, input, textarea, select, option, label, summary, iframe, nav, [contenteditable], [role='button'], [role='link'], [role='tab'], [role='menuitem'], [role='slider'], [role='spinbutton'], [role='textbox'], [tabindex]:not([tabindex='-1'])";
+        var isInteractive = target && target.closest && target.closest(interactiveSelector);
+        if (event.defaultPrevented || isInteractive || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          cycleState(-1);
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault();
+          cycleState(1);
+        }
+      });
+
+      var requestedState = new URLSearchParams(window.location.search).get("state");
+      var initialState = findStateIndex(requestedState) >= 0 ? requestedState : "normal";
+      setState(initialState, Boolean(requestedState));
+    }());
+  </script>
+</body>
+</html>
