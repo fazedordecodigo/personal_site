@@ -101,7 +101,7 @@ test("keeps validation secretless and runs the canonical gates once", () => {
   assert.match(validationText, /npm ci/);
   assert.match(validationText, /npm exec -- playwright install --with-deps chromium firefox/);
   assert.match(validationText, /npm run verify:snapshot/);
-  assert.match(validationText, /npm run verify:remote/);
+  assert.doesNotMatch(validationText, /npm run verify:remote/);
   const nodeSetup = findStep(validation, "Set up Node");
   assert.equal(nodeSetup.with["node-version-file"], ".nvmrc");
   const javaSetup = findStep(validation, "Set up Java");

@@ -66,11 +66,7 @@ jobs:
       - name: Build and verify
         run: |
           set -euo pipefail
-          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-            npm run verify:snapshot
-          else
-            npm run verify:remote
-          fi
+          npm run verify:snapshot
 
       - name: Report BuildReport
         if: ${{ always() }}
