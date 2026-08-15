@@ -1,4 +1,13 @@
 export const STATIC_COPY_MANIFEST = Object.freeze([
   Object.freeze({ source: "src/robots.txt", destination: "robots.txt" }),
   Object.freeze({ source: "src/sitemap.xml", destination: "sitemap.xml" }),
+  Object.freeze({ source: "src/css/site.css", destination: "css/site.css" }),
+  Object.freeze({ source: "src/assets/images/emerson-delatorre.jpg", destination: "assets/images/emerson-delatorre.jpg" }),
+  Object.freeze({ source: "src/assets/fonts/space-grotesk-latin-700-normal.woff2", destination: "assets/fonts/space-grotesk-latin-700-normal.woff2" }),
+  Object.freeze({ source: "src/assets/fonts/inter-latin-400-normal.woff2", destination: "assets/fonts/inter-latin-400-normal.woff2" }),
+  Object.freeze({ source: "src/assets/fonts/inter-latin-600-normal.woff2", destination: "assets/fonts/inter-latin-600-normal.woff2" }),
+  Object.freeze({ source: "src/assets/fonts/jetbrains-mono-latin-500-normal.woff2", destination: "assets/fonts/jetbrains-mono-latin-500-normal.woff2" }),
+  Object.freeze({ source: "src/assets/fonts/jetbrains-mono-latin-700-normal.woff2", destination: "assets/fonts/jetbrains-mono-latin-700-normal.woff2" }),
+  Object.freeze({ source: "src/assets/fonts/LICENSES.md", destination: "assets/fonts/LICENSES.md" }),
+  Object.freeze({ source: "src/assets/fonts/OFL-1.1.txt", destination: "assets/fonts/OFL-1.1.txt" }),
 ]);
