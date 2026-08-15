@@ -25,12 +25,25 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
   const workspace = await mkdtemp(join(tmpdir(), "personal-site-build-"));
   await writeFile(join(workspace, "src-index.template.html"), "");
   await import("node:fs/promises").then(({ mkdir }) => Promise.all([
-    mkdir(join(workspace, "src"), { recursive: true }),
+    mkdir(join(workspace, "src", "css"), { recursive: true }),
+    mkdir(join(workspace, "src", "assets", "images"), { recursive: true }),
+    mkdir(join(workspace, "src", "assets", "fonts"), { recursive: true }),
     mkdir(join(workspace, "content"), { recursive: true }),
   ]));
   await writeFile(join(workspace, "src", "index.template.html"), invalidTemplate ? "<!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->" : "<!doctype html><html><body><!-- ARTICLES_SLOT --></body></html>");
   await writeFile(join(workspace, "src", "robots.txt"), "User-agent: *\nAllow: /\n");
   await writeFile(join(workspace, "src", "sitemap.xml"), "<?xml version=\"1.0\"?><urlset></urlset>\n");
+  await writeFile(join(workspace, "src", "css", "site.css"), "body { color: red; }\n");
+  await writeFile(join(workspace, "src", "assets", "images", "emerson-delatorre.jpg"), "jpeg");
+  for (const name of [
+    "space-grotesk-latin-700-normal.woff2",
+    "inter-latin-400-normal.woff2",
+    "inter-latin-600-normal.woff2",
+    "jetbrains-mono-latin-500-normal.woff2",
+    "jetbrains-mono-latin-700-normal.woff2",
+    "LICENSES.md",
+    "OFL-1.1.txt",
+  ]) await writeFile(join(workspace, "src", "assets", "fonts", name), name);
   await writeFile(join(workspace, "content", "articles.snapshot.json"), JSON.stringify(invalidSnapshot ? { bad: true } : feedSnapshot()));
   return workspace;
 }
@@ -51,7 +64,7 @@ async function snapshotBytes(path) {
     if (error.code === "ENOENT") return [];
     throw error;
   }
-  return entries.sort(([left], [right]) => left.localeCompare(right));
+  return entries.sort();
 }
 
 test("successful snapshot build returns built report and swaps public atomically", async () => {
@@ -61,12 +74,22 @@ test("successful snapshot build returns built report and swaps public atomically
   assert.equal(report.articleCount, 3);
   assert.equal(report.articleSource, "snapshot");
   assert.equal(report.state, "fresh");
-  assert.deepEqual(report.outputFiles, ["index.html", "robots.txt", "sitemap.xml"]);
-  assert.deepEqual(await snapshotBytes(join(workspace, "public")), [
-    ["index.html", await readFile(join(workspace, "public", "index.html"))],
-    ["robots.txt", await readFile(join(workspace, "public", "robots.txt"))],
-    ["sitemap.xml", await readFile(join(workspace, "public", "sitemap.xml"))],
-  ]);
+  const expectedFiles = [
+    "assets/fonts/LICENSES.md",
+    "assets/fonts/OFL-1.1.txt",
+    "assets/fonts/inter-latin-400-normal.woff2",
+    "assets/fonts/inter-latin-600-normal.woff2",
+    "assets/fonts/jetbrains-mono-latin-500-normal.woff2",
+    "assets/fonts/jetbrains-mono-latin-700-normal.woff2",
+    "assets/fonts/space-grotesk-latin-700-normal.woff2",
+    "assets/images/emerson-delatorre.jpg",
+    "css/site.css",
+    "index.html",
+    "robots.txt",
+    "sitemap.xml",
+  ];
+  assert.deepEqual(report.outputFiles, expectedFiles);
+  assert.deepEqual((await snapshotBytes(join(workspace, "public"))).map(([name]) => name), expectedFiles);
   assert.equal(JSON.parse(await readFile(join(workspace, "build-report.json"))).status, "built");
 });
 
