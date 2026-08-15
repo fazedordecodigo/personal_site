@@ -34,6 +34,7 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
   await writeFile(join(workspace, "src", "index.template.html"), invalidTemplate ? "<!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->" : "<!doctype html><html><body><!-- ARTICLES_SLOT --></body></html>");
   await writeFile(join(workspace, "src", "robots.txt"), "User-agent: *\nAllow: /\n");
   await writeFile(join(workspace, "src", "sitemap.xml"), "<?xml version=\"1.0\"?><urlset></urlset>\n");
+  await writeFile(join(workspace, "staticwebapp.config.json"), "{}\n");
   await writeFile(join(workspace, "src", "css", "site.css"), "body { color: red; }\n");
   await writeFile(join(workspace, "src", "js", "substack-embed.js"), "(() => {})();\n");
   await writeFile(join(workspace, "src", "assets", "images", "emerson-delatorre.jpg"), "jpeg");
@@ -90,6 +91,7 @@ test("successful snapshot build returns built report and swaps public atomically
     "js/substack-embed.js",
     "robots.txt",
     "sitemap.xml",
+    "staticwebapp.config.json",
   ];
   assert.deepEqual(report.outputFiles, expectedFiles);
   assert.deepEqual((await snapshotBytes(join(workspace, "public"))).map(([name]) => name), expectedFiles);

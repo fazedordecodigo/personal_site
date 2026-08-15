@@ -525,6 +525,10 @@ p {
   opacity: 0.78;
 }
 
+.newsletter-copy .eyebrow {
+  color: var(--orange);
+}
+
 .embed-shell {
   background: var(--surface);
   border-radius: var(--radius-medium);
@@ -787,8 +791,8 @@ p {
   *::before,
   *::after {
     scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
     animation-iteration-count: 1 !important;
   }
 }
