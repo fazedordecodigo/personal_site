@@ -39,6 +39,25 @@ test("stacks the approved regions at tablet and mobile widths", async ({ page })
   expect(await page.locator(".article-grid").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length)).toBe(3);
 });
 
+test("aligns all article cards below the update metadata on desktop", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const layout = await page.locator(".article-grid").evaluate((grid) => {
+    const metadata = grid.querySelector(".article-meta");
+    const cards = [...grid.querySelectorAll(".article-card")];
+
+    return {
+      metadataBottom: metadata.getBoundingClientRect().bottom,
+      cardTops: cards.map((card) => card.getBoundingClientRect().top),
+    };
+  });
+
+  expect(layout.cardTops).toHaveLength(3);
+  expect(layout.cardTops.every((top) => Math.abs(top - layout.cardTops[0]) < 1)).toBe(true);
+  expect(layout.cardTops[0]).toBeGreaterThan(layout.metadataBottom);
+});
+
 test("reflows at a narrow 160 CSS pixel viewport without clipped content", async ({ page }) => {
   await page.setViewportSize({ width: 160, height: 1200 });
   await page.goto("/");

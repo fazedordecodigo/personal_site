@@ -486,6 +486,7 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 24px;
+  grid-column: 1 / -1;
   margin-top: 24px;
   min-width: 0;
 }
