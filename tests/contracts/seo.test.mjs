@@ -50,16 +50,16 @@ function jpegDimensions(bytes) {
 }
 
 test("keeps the exact canonical and social metadata", async () => {
-  assert.equal(textContent(elements("title")[0]), "Emerson Delatorre — Engenharia de Software, IA e Educação");
+  assert.equal(textContent(elements("title")[0]), "Emerson Delatorre — Engenharia, comunidade e palco");
   const names = metaMap("name");
-  assert.equal(names.description, "Engenharia de software, inteligência artificial e ensino prático. Conheça projetos, artigos e o Fazedor de Código.");
+  assert.equal(names.description, "Senior Python Software Engineer na Zup Innovation. Líder da Fazedor de Código, palestrante e embaixador SpaceXAI, Devin e N8N.");
   const properties = metaMap("property");
   assert.deepEqual(properties, {
     "og:type": "website",
     "og:locale": "pt_BR",
     "og:site_name": "Emerson Delatorre",
-    "og:title": "Emerson Delatorre — Engenharia de Software, IA e Educação",
-    "og:description": "Engenharia de software, inteligência artificial e ensino prático. Conheça projetos, artigos e o Fazedor de Código.",
+    "og:title": "Emerson Delatorre — Engenharia, comunidade e palco",
+    "og:description": "Senior Python Software Engineer na Zup Innovation. Líder da Fazedor de Código, palestrante e embaixador SpaceXAI, Devin e N8N.",
     "og:url": "https://delatorre.dev/",
     "og:image": "https://delatorre.dev/assets/images/emerson-delatorre.jpg",
     "og:image:width": "400",
@@ -70,8 +70,8 @@ test("keeps the exact canonical and social metadata", async () => {
     viewport: "width=device-width, initial-scale=1",
     description: names.description,
     "twitter:card": "summary",
-    "twitter:title": "Emerson Delatorre — Engenharia de Software, IA e Educação",
-    "twitter:description": "Engenharia de software, inteligência artificial e ensino prático. Conheça projetos, artigos e o Fazedor de Código.",
+    "twitter:title": "Emerson Delatorre — Engenharia, comunidade e palco",
+    "twitter:description": "Senior Python Software Engineer na Zup Innovation. Líder da Fazedor de Código, palestrante e embaixador SpaceXAI, Devin e N8N.",
     "twitter:image": "https://delatorre.dev/assets/images/emerson-delatorre.jpg",
     "twitter:image:alt": "Retrato de Emerson Delatorre",
   });

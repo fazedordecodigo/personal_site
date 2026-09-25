@@ -33,7 +33,10 @@ test("keeps resources local until the explicit iframe boundary", async () => {
   assert.equal(attr(elements("script")[0], "src"), "/js/substack-embed.js");
   assert.equal(attr(elements("script")[0], "defer"), "");
   assert.deepEqual(elements("link").filter((node) => attr(node, "rel") === "stylesheet").map((node) => attr(node, "href")), ["/css/site.css"]);
-  assert.deepEqual(elements("img").map((node) => attr(node, "src")), ["/assets/images/emerson-delatorre.jpg"]);
+  assert.deepEqual(elements("img").map((node) => attr(node, "src")), [
+    "/assets/images/emerson-delatorre.jpg",
+    "/assets/images/fazedor-de-codigo-logo.svg",
+  ]);
   const frames = elements("iframe");
   assert.equal(frames.length, 1);
   assert.equal(attr(frames[0], "src"), undefined);

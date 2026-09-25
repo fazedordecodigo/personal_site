@@ -43,6 +43,12 @@ test("keeps the approved portrait and exact local font allowlist", async () => {
   const portrait = await read("src/assets/images/emerson-delatorre.jpg");
   assert.equal(hash(portrait), "63fb6bdb780c1c3f44fa9e4b2f62dea91f0795427fed85c9b65d3c93eba62ecd");
   assert.deepEqual(jpegDimensions(portrait), { width: 400, height: 400 });
+  const logoBytes = await read("src/assets/images/fazedor-de-codigo-logo.svg");
+  const logo = logoBytes.toString("utf8");
+  assert.equal(hash(logoBytes), "ac95f7411379416a98eb6af5516158687eef5e9bce8ea10d8422dcf413afdabb");
+  assert.match(logo, /viewBox="0 0 511\.94 100"/);
+  assert.match(logo, /Fazedor de Código — versão horizontal estreita/);
+  assert.doesNotMatch(logo, /(?:src|href)="https?:\/\//);
   const fontNames = (await readdir(new URL("../../src/assets/fonts/", import.meta.url))).sort();
   assert.deepEqual(fontNames, [
     "LICENSES.md",
@@ -58,7 +64,7 @@ test("keeps the approved portrait and exact local font allowlist", async () => {
   assert.match(await readText("src/assets/fonts/LICENSES.md"), /OFL-1\.1/);
 });
 
-test("uses only local font URLs and one dimensioned portrait", async () => {
+test("uses only local font URLs and the approved local images", async () => {
   const css = await readText("src/css/site.css");
   for (const [name] of fonts) {
     assert.match(css, new RegExp(`/assets/fonts/${name.replaceAll(".", "\\.")}`));
@@ -71,12 +77,17 @@ test("uses only local font URLs and one dimensioned portrait", async () => {
   walk(document, (node) => {
     if (node.tagName === "img") images.push(node);
   });
-  assert.equal(images.length, 1);
-  const attributes = Object.fromEntries(images[0].attrs.map((entry) => [entry.name, entry.value]));
-  assert.equal(attributes.src, "/assets/images/emerson-delatorre.jpg");
-  assert.equal(attributes.width, "400");
-  assert.equal(attributes.height, "400");
-  assert.equal(attributes.fetchpriority, "high");
-  assert.equal(attributes.loading, undefined);
+  assert.equal(images.length, 2);
+  const portrait = Object.fromEntries(images[0].attrs.map((entry) => [entry.name, entry.value]));
+  assert.equal(portrait.src, "/assets/images/emerson-delatorre.jpg");
+  assert.equal(portrait.width, "400");
+  assert.equal(portrait.height, "400");
+  assert.equal(portrait.fetchpriority, "high");
+  assert.equal(portrait.loading, undefined);
+  const logo = Object.fromEntries(images[1].attrs.map((entry) => [entry.name, entry.value]));
+  assert.equal(logo.src, "/assets/images/fazedor-de-codigo-logo.svg");
+  assert.equal(logo.width, "512");
+  assert.equal(logo.height, "100");
+  assert.equal(logo.alt, "Logo oficial da comunidade Fazedor de Código");
   assert.doesNotMatch(html, /<img[^>]+article/i);
 });

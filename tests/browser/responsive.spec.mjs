@@ -14,7 +14,7 @@ for (const width of widths) {
     }));
     expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
     expect(metrics.bodyScrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
-    const controls = page.locator(".button, button, .nav-list a, .footer-links a, .external-link");
+    const controls = page.locator(".button, button, .nav-list a, .footer-links a, .external-link, .talks-more summary, .spotlight-card .text-link, .profile-card__link");
     const count = await controls.count();
     for (let index = 0; index < count; index += 1) {
       const box = await controls.nth(index).boundingBox();
