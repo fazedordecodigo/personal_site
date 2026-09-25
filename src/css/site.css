@@ -232,8 +232,11 @@ button {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.72rem;
   font-weight: 700;
+  max-width: 100%;
   min-height: 32px;
+  overflow-wrap: anywhere;
   padding: 7px 12px;
+  white-space: normal;
 }
 
 h1,
@@ -270,6 +273,13 @@ h3 {
 
 p {
   line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+li,
+.button,
+.text-link {
+  overflow-wrap: anywhere;
 }
 
 .hero__lead,
@@ -483,6 +493,7 @@ p {
   gap: 32px;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   margin-top: 48px;
+  min-width: 0;
   padding: 32px;
 }
 
@@ -781,7 +792,7 @@ p {
   .profile-grid,
   .newsletter-panel,
   .community-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .article-grid {

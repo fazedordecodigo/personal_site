@@ -7,7 +7,7 @@ test.describe("approved visual contract", () => {
       await page.goto("/");
       await expect(page.locator("body")).toHaveCSS("background-color", "rgb(247, 247, 245)");
       await expect(page.locator("h1")).toHaveCSS("font-family", /Space Grotesk/);
-      await expect(page.locator(".button--primary")).toHaveCSS("background-color", "rgb(255, 106, 0)");
+      await expect(page.locator(".hero .button--primary")).toHaveCSS("background-color", "rgb(255, 106, 0)");
       await expect(page.locator(".newsletter-panel")).toHaveCSS("background-color", "rgb(17, 17, 17)");
       const screenshotName = `test-results/visual-${width}.png`;
       await page.screenshot({ path: screenshotName, fullPage: true });

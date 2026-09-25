@@ -21,7 +21,7 @@ const staticCopy = [
   "Senior Python Software Engineer — Zup Innovation · desde set/2026",
   "Construo software. Lidero comunidade. Falo no palco.",
   "Como Senior Python Software Engineer na Zup Innovation, aplico Python e arquitetura de software para desenvolver soluções robustas. Lidero a Fazedor de Código, falo em encontros sobre qualidade, agentes e engenharia com IA, e mantenho software aberto — sem transformar esta página num currículo.",
-  "Forward Deployed Engineer | SpaceXAI Ambassador | Devin Ambassador | N8N Ambassador | Community & Education | Fazedor de Código Leader | Speaker | OSS Contributor",
+  "Forward Deployed Engineer | SpaceXAI Ambassador | Devin Ambassador | N8N Ambassador | Community &amp; Education | Fazedor de Código Leader | Speaker | OSS Contributor",
   "Ver palestras e eventos",
   "Vamos conversar",
   "Retrato de Emerson Delatorre",
