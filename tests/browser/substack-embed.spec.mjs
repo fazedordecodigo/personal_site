@@ -62,8 +62,8 @@ test.describe("Substack click-to-load boundary", () => {
       const requests = trackEmbedRequests(page);
       await assertInitialBoundary(page, width);
       await page.mouse.wheel(0, 800);
-      await page.locator('a[href="#perfil"]').hover();
-      await page.locator('a[href="#perfil"]').focus();
+      await page.locator('a[href="#quem-e"]').hover();
+      await page.locator('a[href="#quem-e"]').focus();
       await page.keyboard.press("Tab");
       await page.locator('a[href="#artigos"]').focus();
       await page.keyboard.press("Enter");

@@ -2,7 +2,7 @@ import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const widths = [320, 480, 481, 768, 1440];
-const regions = ["header", "#inicio", ".proof-strip", "#perfil", "#artigos", "#newsletter", "footer"];
+const regions = ["header", "#inicio", ".proof-strip", "#quem-e", "#comunidade", "#eventos", "#palestras", "#certificacoes", "#artigos", "#newsletter", "footer"];
 
 test.describe("@a11y controlled page", () => {
   for (const width of widths) {
@@ -25,7 +25,7 @@ test.describe("@a11y controlled page", () => {
       return rect.width > 0 && rect.height > 0 && !(element.textContent || "").trim() && !element.getAttribute("aria-label");
     }).map((element) => element.outerHTML));
     expect(unnamed).toEqual([]);
-    const undersized = await page.locator(".button, button, .nav-list a, .footer-links a, .external-link").evaluateAll((elements) => elements.filter((element) => {
+    const undersized = await page.locator(".button, button, .nav-list a, .footer-links a, .external-link, .talks-more summary, .spotlight-card .text-link, .profile-card__link").evaluateAll((elements) => elements.filter((element) => {
       const rect = element.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0 && (rect.width < 44 || rect.height < 44);
     }).map((element) => element.textContent?.trim()));

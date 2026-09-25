@@ -91,7 +91,8 @@ a {
 
 a:focus-visible,
 button:focus-visible,
-iframe:focus-visible {
+iframe:focus-visible,
+summary:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
@@ -279,8 +280,30 @@ p {
   max-width: 720px;
 }
 
+.role-line {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  margin: 0 0 20px;
+  overflow-wrap: anywhere;
+}
+
 .hero__lead {
   margin: 28px 0 0;
+}
+
+.headline-line {
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+  margin: 20px 0 0;
+  max-width: 720px;
+  overflow-wrap: anywhere;
 }
 
 .cta-row {
@@ -431,6 +454,14 @@ p {
   color: var(--orange);
 }
 
+.profile-card__link {
+  align-items: center;
+  color: var(--orange);
+  display: inline-flex;
+  margin-top: 28px;
+  min-height: 44px;
+}
+
 .tag-list {
   margin-top: 28px;
 }
@@ -442,6 +473,110 @@ p {
   min-width: 0;
   overflow-wrap: anywhere;
   padding: 7px 12px;
+}
+
+.community-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  display: grid;
+  gap: 32px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  margin-top: 48px;
+  padding: 32px;
+}
+
+.community-brand {
+  align-items: center;
+  background: var(--surface);
+  display: flex;
+  min-width: 0;
+}
+
+.community-brand img {
+  height: auto;
+  max-width: 100%;
+  width: min(100%, 512px);
+}
+
+.community-copy .button {
+  margin-top: 24px;
+}
+
+.community-copy p:not(.card-kicker) {
+  color: var(--muted);
+  margin: 20px 0 0;
+}
+
+.card-grid,
+.talk-list {
+  display: grid;
+  gap: 16px;
+  list-style: none;
+  margin: 48px 0 0;
+  padding: 0;
+}
+
+.event-grid,
+.cert-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+
+.spotlight-card,
+.talk-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  padding: 24px;
+}
+
+.spotlight-card h3,
+.talk-item h3 {
+  margin-top: 8px;
+}
+
+.spotlight-card p:not(.card-kicker),
+.talk-item p:not(.card-kicker) {
+  color: var(--muted);
+  margin: 16px 0 0;
+}
+
+.spotlight-card .text-link {
+  align-items: center;
+  display: inline-flex;
+  margin-top: auto;
+  min-height: 44px;
+  padding-top: 8px;
+}
+
+.talks-more {
+  margin-top: 24px;
+}
+
+.talks-more summary {
+  align-items: center;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 600;
+  min-height: 44px;
+  padding: 12px 18px;
+}
+
+.talks-more .talk-list--more {
+  margin-top: 16px;
+}
+
+.talks-more + .text-link {
+  align-items: center;
+  display: inline-flex;
+  margin-top: 24px;
+  min-height: 44px;
 }
 
 .article-grid {
@@ -644,7 +779,8 @@ p {
   }
 
   .profile-grid,
-  .newsletter-panel {
+  .newsletter-panel,
+  .community-panel {
     grid-template-columns: 1fr;
   }
 
@@ -744,7 +880,10 @@ p {
 
   .profile-card,
   .article-card,
-  .embed-shell {
+  .embed-shell,
+  .community-panel,
+  .spotlight-card,
+  .talk-item {
     padding: 20px;
   }
 
@@ -774,7 +913,10 @@ p {
   }
 
   .button,
-  .cta-row {
+  .cta-row,
+  .talks-more summary,
+  .talks-more + .text-link,
+  .profile-card__link {
     width: 100%;
   }
 

@@ -38,6 +38,7 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
   await writeFile(join(workspace, "src", "css", "site.css"), "body { color: red; }\n");
   await writeFile(join(workspace, "src", "js", "substack-embed.js"), "(() => {})();\n");
   await writeFile(join(workspace, "src", "assets", "images", "emerson-delatorre.jpg"), "jpeg");
+  await writeFile(join(workspace, "src", "assets", "images", "fazedor-de-codigo-logo.svg"), "<svg></svg>");
   for (const name of [
     "space-grotesk-latin-700-normal.woff2",
     "inter-latin-400-normal.woff2",
@@ -86,6 +87,7 @@ test("successful snapshot build returns built report and swaps public atomically
     "assets/fonts/jetbrains-mono-latin-700-normal.woff2",
     "assets/fonts/space-grotesk-latin-700-normal.woff2",
     "assets/images/emerson-delatorre.jpg",
+    "assets/images/fazedor-de-codigo-logo.svg",
     "css/site.css",
     "index.html",
     "js/substack-embed.js",

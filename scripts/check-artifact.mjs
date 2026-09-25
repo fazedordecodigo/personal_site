@@ -16,6 +16,7 @@ export const ARTIFACT_ALLOWLIST = Object.freeze([
   "css/site.css",
   "js/substack-embed.js",
   "assets/images/emerson-delatorre.jpg",
+  "assets/images/fazedor-de-codigo-logo.svg",
   "assets/fonts/LICENSES.md",
   "assets/fonts/OFL-1.1.txt",
   "assets/fonts/space-grotesk-latin-700-normal.woff2",

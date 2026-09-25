@@ -5,6 +5,7 @@ export const STATIC_COPY_MANIFEST = Object.freeze([
   Object.freeze({ source: "src/css/site.css", destination: "css/site.css" }),
   Object.freeze({ source: "src/js/substack-embed.js", destination: "js/substack-embed.js" }),
   Object.freeze({ source: "src/assets/images/emerson-delatorre.jpg", destination: "assets/images/emerson-delatorre.jpg" }),
+  Object.freeze({ source: "src/assets/images/fazedor-de-codigo-logo.svg", destination: "assets/images/fazedor-de-codigo-logo.svg" }),
   Object.freeze({ source: "src/assets/fonts/space-grotesk-latin-700-normal.woff2", destination: "assets/fonts/space-grotesk-latin-700-normal.woff2" }),
   Object.freeze({ source: "src/assets/fonts/inter-latin-400-normal.woff2", destination: "assets/fonts/inter-latin-400-normal.woff2" }),
   Object.freeze({ source: "src/assets/fonts/inter-latin-600-normal.woff2", destination: "assets/fonts/inter-latin-600-normal.woff2" }),
