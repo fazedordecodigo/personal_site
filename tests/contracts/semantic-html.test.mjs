@@ -59,6 +59,7 @@ test("does not use inline code, handlers or legacy prototype markup", () => {
   assert.equal(elements("script").length, 1);
   assert.equal(attr(elements("script")[0], "src"), "/js/substack-embed.js");
   assert.equal(attr(elements("script")[0], "defer"), "");
+  assert.ok(elements("iframe").some((node) => attr(node, "src") === "https://luma.com/embed/calendar/cal-ySWMeFE0nNFt5kA/events"));
   for (const forbidden of ["bootstrap", "jquery", "icomoon", "stellar", "animate", "carousel", "PROTÓTIPO", "?state="]) {
     assert.equal(html.toLowerCase().includes(forbidden.toLowerCase()), false, forbidden);
   }

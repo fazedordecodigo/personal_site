@@ -16,7 +16,7 @@ test.describe("keyboard and focus contracts", () => {
     await page.goto("/");
     const expected = [
       "Pular para o conteúdo",
-      "EMERSON_",
+      "DELATORRE_",
       "Início",
       "Quem é",
       "Comunidade",
@@ -29,14 +29,13 @@ test.describe("keyboard and focus contracts", () => {
       "Vamos conversar",
       "Ver PyFlunt no GitHub",
       "Visitar fazedordecodigo.com",
-      "Abrir Devin Meetup no Luma",
-      "Abrir Cursor Meetup no Luma",
-      "Ver mais palestras",
+      "Abrir agenda no Luma",
+      ...Array.from({ length: 12 }, () => "Ver palestra"),
       "Ver mais no Sessionize",
-      "Ler no Substack →",
-      "Ler no Substack →",
-      "Ler no Substack →",
-      "Ver todos os artigos no Substack",
+      "Agent Package Manager (APM): gerenciando contexto de agentes de IA como dependências",
+      "Modelo ou harness? O modelo define o teto, mas o harness decide o resultado",
+      "Preço por token não é custo por tarefa: a inversão que muda a economia dos modelos de raciocínio",
+      "Ver todos os artigos no dev.to →",
       "Carregar formulário do Substack",
       "Assinar no Substack",
       "LinkedIn",
@@ -79,7 +78,7 @@ test.describe("keyboard and focus contracts", () => {
     await page.setViewportSize({ width: 480, height: 1000 });
     await page.goto("/");
     const focused = [];
-    for (let index = 0; index < 30; index += 1) {
+    for (let index = 0; index < 40; index += 1) {
       await page.keyboard.press("Tab");
       const current = await activeSummary(page);
       if (current.text.includes("Pular para o conteúdo") && focused.length > 0) break;

@@ -1,32 +1,32 @@
 {
+    "schemaVersion": 1,
+    "sourceUrl": "https://dev.to/api/articles?username=fazedordecodigo&per_page=3",
+    "fetchedAt": "2026-10-04T01:30:00.000Z",
+    "timeZone": "America/Sao_Paulo",
     "articles": [
         {
-            "excerpt": "Plugins do Google Workspace, Mixture-of-Kittens para NVL72s, a mecânica do Auto mode e o resumo de estabilidade da semana.",
-            "eyebrow": "Cursor Weekly",
-            "id": "https://fazedordecodigo.substack.com/p/cursor-weekly-edicao-11",
-            "publishedAt": "2026-08-13T00:48:38.000Z",
-            "title": "Cursor Weekly — Edição #11",
-            "url": "https://fazedordecodigo.substack.com/p/cursor-weekly-edicao-11"
+            "id": "4779399",
+            "title": "Agent Package Manager (APM): gerenciando contexto de agentes de IA como dependências",
+            "excerpt": "1. O que é o Agent Package Manager? O Agent Package Manager (APM) é um dependency manager...",
+            "publishedAt": "2026-10-01T01:04:30.000Z",
+            "url": "https://dev.to/fazedordecodigo/agent-package-manager-apm-gerenciando-contexto-de-agentes-de-ia-como-dependencias-16c3",
+            "eyebrow": "Artigo"
         },
         {
-            "excerpt": "Novo plano mensal na Índia, iPad em todos os planos pagos e o ambiente que faz agentes autorarem mais da metade dos PRs do Cursor.",
-            "eyebrow": "Cursor Weekly",
-            "id": "https://fazedordecodigo.substack.com/p/cursor-weekly-edicao-10",
-            "publishedAt": "2026-08-13T00:46:13.000Z",
-            "title": "Cursor Weekly — Edição #10",
-            "url": "https://fazedordecodigo.substack.com/p/cursor-weekly-edicao-10"
+            "id": "4272203",
+            "title": "Modelo ou harness? O modelo define o teto, mas o harness decide o resultado",
+            "excerpt": "Por que o melhor agente de IA não é necessariamente aquele que usa o modelo mais poderoso — e como...",
+            "publishedAt": "2026-07-30T13:06:38.000Z",
+            "url": "https://dev.to/fazedordecodigo/modelo-ou-harness-o-modelo-define-o-teto-mas-o-harness-decide-o-resultado-5b38",
+            "eyebrow": "Artigo"
         },
         {
-            "excerpt": "Release de 07/08 leva automações à API v3, adiciona filas, Terraform e gatilhos do GitLab.",
-            "eyebrow": "Devin Weekly",
-            "id": "https://fazedordecodigo.substack.com/p/devin-weekly-4",
-            "publishedAt": "2026-08-13T00:11:57.000Z",
-            "title": "Devin Weekly - Edição #4",
-            "url": "https://fazedordecodigo.substack.com/p/devin-weekly-4"
+            "id": "3950145",
+            "title": "Preço por token não é custo por tarefa: a inversão que muda a economia dos modelos de raciocínio",
+            "excerpt": "Modelos aparentemente baratos podem consumir mais tokens, executar mais etapas e terminar com uma...",
+            "publishedAt": "2026-06-20T16:15:08.000Z",
+            "url": "https://dev.to/fazedordecodigo/preco-por-token-nao-e-custo-por-tarefa-a-inversao-que-muda-a-economia-dos-modelos-de-raciocinio-p51",
+            "eyebrow": "Artigo"
         }
-    ],
-    "fetchedAt": "2026-08-15T15:22:23.806Z",
-    "schemaVersion": 1,
-    "sourceUrl": "https://fazedordecodigo.substack.com/feed",
-    "timeZone": "America/Sao_Paulo"
+    ]
 }

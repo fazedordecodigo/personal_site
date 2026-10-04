@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { MAX_FEED_BYTES } from "../../scripts/articles/constants.mjs";
+import { FEED_URL, MAX_FEED_BYTES } from "../../scripts/articles/constants.mjs";
 import {
   FeedFetchError,
   SnapshotContractError,
@@ -19,22 +19,22 @@ const article = (id, number) => ({
   title: `Fazedor de Código: artigo ${number}`,
   excerpt: `Resumo ${number}.`,
   publishedAt: `2026-08-${String(10 + number).padStart(2, "0")}T12:00:00.000Z`,
-  url: `https://fazedordecodigo.substack.com/p/fixture-${number}`,
-  eyebrow: "Fazedor de Código",
+  url: `https://dev.to/fazedordecodigo/fixture-${number}`,
+  eyebrow: "Artigo",
 });
 const snapshot = (fetchedAt = "2026-08-15T10:00:00.000Z") => ({
   schemaVersion: 1,
-  sourceUrl: "https://fazedordecodigo.substack.com/feed",
+  sourceUrl: FEED_URL,
   fetchedAt,
   timeZone: "America/Sao_Paulo",
-  articles: [article("urn:fixture:1", 1), article("urn:fixture:2", 2), article("urn:fixture:3", 3)],
+  articles: [article("1", 1), article("2", 2), article("3", 3)],
 });
 
-const feedXml = `<?xml version="1.0"?><rss><channel>
-  <item><title>Fazedor de Código: um</title><description>Resumo um.</description><link>https://fazedordecodigo.substack.com/p/fixture-one</link><guid>urn:fixture:one</guid><pubDate>Wed, 13 Aug 2026 10:00:00 GMT</pubDate></item>
-  <item><title>Fazedor de Código: dois</title><description>Resumo dois.</description><link>https://fazedordecodigo.substack.com/p/fixture-two</link><guid>urn:fixture:two</guid><pubDate>Tue, 12 Aug 2026 10:00:00 GMT</pubDate></item>
-  <item><title>Fazedor de Código: três</title><description>Resumo três.</description><link>https://fazedordecodigo.substack.com/p/fixture-three</link><guid>urn:fixture:three</guid><pubDate>Mon, 11 Aug 2026 10:00:00 GMT</pubDate></item>
-</channel></rss>`;
+const feedJson = JSON.stringify([
+  { id: "one", title: "Fazedor de Código: um", description: "Resumo um.", url: "https://dev.to/fazedordecodigo/fixture-one", published_at: "2026-08-13T10:00:00.000Z" },
+  { id: "two", title: "Fazedor de Código: dois", description: "Resumo dois.", url: "https://dev.to/fazedordecodigo/fixture-two", published_at: "2026-08-12T10:00:00.000Z" },
+  { id: "three", title: "Fazedor de Código: três", description: "Resumo três.", url: "https://dev.to/fazedordecodigo/fixture-three", published_at: "2026-08-11T10:00:00.000Z" },
+]);
 
 async function writeSnapshotFile(value) {
   const directory = await mkdtemp(join(tmpdir(), "personal-site-snapshot-"));
@@ -99,7 +99,7 @@ test("remote fetch validates status and content type", async () => {
     assert.equal(error.code, "HTTP_STATUS");
     return true;
   });
-  await assert.rejects(fetchRemoteSnapshot({ fetchImpl: async () => new Response(feedXml, { status: 200, headers: { "content-type": "text/html" } }), now: () => now, sleep: async () => {} }), (error) => {
+  await assert.rejects(fetchRemoteSnapshot({ fetchImpl: async () => new Response(feedJson, { status: 200, headers: { "content-type": "text/html" } }), now: () => now, sleep: async () => {} }), (error) => {
     assert.equal(error.code, "CONTENT_TYPE");
     return true;
   });
@@ -108,7 +108,7 @@ test("remote fetch validates status and content type", async () => {
 test("remote fetch rejects Content-Length and streamed bodies over 1 MiB", async () => {
   const tooLargeHeader = new Response("small", {
     status: 200,
-    headers: { "content-type": "application/xml", "content-length": String(MAX_FEED_BYTES + 1) },
+    headers: { "content-type": "application/json", "content-length": String(MAX_FEED_BYTES + 1) },
   });
   await assert.rejects(fetchRemoteSnapshot({ fetchImpl: async () => tooLargeHeader, now: () => now, sleep: async () => {} }), (error) => {
     assert.equal(error.code, "BODY_TOO_LARGE");
@@ -121,7 +121,7 @@ test("remote fetch rejects Content-Length and streamed bodies over 1 MiB", async
       controller.close();
     },
   });
-  await assert.rejects(fetchRemoteSnapshot({ fetchImpl: async () => new Response(body, { status: 200, headers: { "content-type": "application/xml" } }), now: () => now, sleep: async () => {} }), (error) => {
+  await assert.rejects(fetchRemoteSnapshot({ fetchImpl: async () => new Response(body, { status: 200, headers: { "content-type": "application/json" } }), now: () => now, sleep: async () => {} }), (error) => {
     assert.equal(error.code, "BODY_TOO_LARGE");
     return true;
   });
@@ -150,15 +150,15 @@ test("remote fetch applies timeout and retry policy with two attempts maximum", 
   }
 });
 
-test("remote fetch does not retry malformed XML or forbidden redirects", async () => {
+test("remote fetch does not retry malformed JSON or forbidden redirects", async () => {
   let malformedAttempts = 0;
   await assert.rejects(fetchRemoteSnapshot({
     fetchImpl: async () => {
       malformedAttempts += 1;
-      return new Response("<rss>", { status: 200, headers: { "content-type": "application/xml" } });
+      return new Response("{", { status: 200, headers: { "content-type": "application/json" } });
     },
     now: () => now,
-    sleep: async () => assert.fail("malformed XML must not sleep"),
+    sleep: async () => assert.fail("malformed JSON must not sleep"),
   }), (error) => {
     assert.equal(error.code, "REMOTE_CONTRACT");
     return true;
@@ -169,7 +169,7 @@ test("remote fetch does not retry malformed XML or forbidden redirects", async (
   await assert.rejects(fetchRemoteSnapshot({
     fetchImpl: async () => {
       redirectAttempts += 1;
-      return new Response(null, { status: 302, headers: { location: "https://evil.example/feed" } });
+      return new Response(null, { status: 302, headers: { location: "https://evil.example/api/articles" } });
     },
     now: () => now,
     sleep: async () => assert.fail("forbidden redirect must not sleep"),
@@ -186,9 +186,9 @@ test("remote fetch validates at most three approved redirects", async () => {
     fetchImpl: async (url) => {
       calls.push(url);
       if (calls.length <= 3) {
-        return new Response(null, { status: 302, headers: { location: `https://fazedordecodigo.substack.com/feed?redirect=${calls.length}` } });
+        return new Response(null, { status: 302, headers: { location: `https://dev.to/api/articles?redirect=${calls.length}` } });
       }
-      return new Response(feedXml, { status: 200, headers: { "content-type": "application/xml" } });
+      return new Response(feedJson, { status: 200, headers: { "content-type": "application/json" } });
     },
     now: () => now,
     sleep: async () => {},

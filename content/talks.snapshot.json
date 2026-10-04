@@ -1,0 +1,202 @@
+{
+  "source": "Notion Conteúdos collection://38ecc91c-731d-8097-acd5-000bcf9540d0",
+  "filter": "Tipo contains Palestra",
+  "fetched_at": "2026-10-03",
+  "count": 14,
+  "talks": [
+    {
+      "tema": "TBD",
+      "data": "2026-10-31",
+      "evento": "Devin Meetup",
+      "local": [
+        "Manaus"
+      ],
+      "url": null,
+      "tipo": [
+        "Evento",
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/3c6cc91c731d80e39a9eca9c74bd2be5"
+    },
+    {
+      "tema": "TBD",
+      "data": "2026-09-26",
+      "evento": "Devin Meetup",
+      "local": [
+        "Rio de Janeiro",
+        "FIAP"
+      ],
+      "url": "https://luma.com/l2f11j2p",
+      "tipo": [
+        "Evento",
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/3accc91c731d8071a5fcdc949d91f7db"
+    },
+    {
+      "tema": "Qualidade de Código com Agentes de Codificação: do “vibe coding” ao pipeline verificável",
+      "data": "2026-09-24",
+      "evento": "TDC São Paulo",
+      "local": [
+        "São Paulo"
+      ],
+      "url": "https://thedevconf.com/tdc/2026/sao-paulo/trilha-devtest-e-ia",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/396cc91c731d805c85dfeb2944bb6906"
+    },
+    {
+      "tema": "Qualidade de Código com Agentes de Codificação: do “vibe coding” ao pipeline verificável",
+      "data": "2026-09-19",
+      "evento": "Tech Summit Rio",
+      "local": [
+        "FIAP",
+        "Rio de Janeiro"
+      ],
+      "url": "https://recrutatech.com.br/ingresso/tech-summit-rio-de-janeiro",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/396cc91c731d806a8645dca3c8ad6113"
+    },
+    {
+      "tema": "SDD e o Fim do “Vibe Coding”: O Futuro do Desenvolvimento Guiado por IA",
+      "data": "2026-08-29",
+      "evento": "IEEE Computer Society",
+      "local": [
+        "Rio de Janeiro",
+        "UERJ"
+      ],
+      "url": "https://www.cs80rio.com.br/",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/399cc91c731d80e4917ef77409d96afe"
+    },
+    {
+      "tema": "SDD e o Fim do “Vibe Coding”: O Futuro do Desenvolvimento Guiado por IA",
+      "data": "2026-08-29",
+      "evento": "MVP Conf",
+      "local": [
+        "Rio de Janeiro"
+      ],
+      "url": "https://www.mvpconf.com.br/regional/rj/agosto-2026",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/3b8cc91c731d80b68682c1ed2bb2c5ab"
+    },
+    {
+      "tema": "SDD e o Fim do “Vibe Coding”: O Futuro do Desenvolvimento Guiado por IA com Kiro",
+      "data": "2026-08-18",
+      "evento": "AWS Meetup",
+      "local": [
+        "Rio de Janeiro",
+        "FIAP"
+      ],
+      "url": "https://www.meetup.com/pt-br/aws-user-group-rio/events/315579183/",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/396cc91c731d8014b15ac032c9eeda82"
+    },
+    {
+      "tema": "IA para Concelheiros",
+      "data": "2026-08-07",
+      "evento": "SUCESU - SP",
+      "local": [
+        "Zoom"
+      ],
+      "url": null,
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/3b8cc91c731d80cfa8aade697abbc1b6"
+    },
+    {
+      "tema": "SDD e o Fim do “Vibe Coding”: O Futuro do Desenvolvimento Guiado por IA",
+      "data": "2026-08-05",
+      "evento": null,
+      "local": [
+        "Youtube"
+      ],
+      "url": "https://www.youtube.com/watch?v=bBt4K-ZmNt4",
+      "tipo": [
+        "Palestra",
+        "Live"
+      ],
+      "notion": "https://app.notion.com/399cc91c731d80bd9a68e9a1f9c9b728"
+    },
+    {
+      "tema": "Qualidade de Código com Agentes de Codificação: do “vibe coding” ao pipeline verificável",
+      "data": "2026-07-11",
+      "evento": "Cursor Meetup",
+      "local": [
+        "Rio de Janeiro",
+        "BQ Coworking"
+      ],
+      "url": "https://luma.com/45jawdhf?tk=bSuAG1",
+      "tipo": [
+        "Palestra",
+        "Evento"
+      ],
+      "notion": "https://app.notion.com/38ecc91c731d809d9aa8cc83d5ad9034"
+    },
+    {
+      "tema": "SDD e o Fim do “Vibe Coding”: O Futuro do Desenvolvimento Guiado por IA",
+      "data": "2026-07-07",
+      "evento": "GDG Rio",
+      "local": [
+        "Rio de Janeiro",
+        "FIAP"
+      ],
+      "url": "https://gdg.community.dev/events/details/google-gdg-rio-de-janeiro-presents-google-extended-io-rio-de-janeiro/",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/38ecc91c731d807a9176f767c0d70ca0"
+    },
+    {
+      "tema": "Primeiros Passos técnicos em IA",
+      "data": "2026-06-27",
+      "evento": "FIAP Reboot Experience",
+      "local": [
+        "Rio de Janeiro",
+        "FIAP"
+      ],
+      "url": "https://www.fiap.com.br/reboot-experience/",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/38ecc91c731d80749208fc8dff49ce23"
+    },
+    {
+      "tema": "SDD e o Fim do “Vibe Coding”: O Futuro do Desenvolvimento Guiado por IA",
+      "data": "2026-06-13",
+      "evento": "Agentcon Rio",
+      "local": [
+        "Rio de Janeiro",
+        "IBMEC"
+      ],
+      "url": "https://globalai.community/e/oyoh5sq2",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/38ecc91c731d805a8887ee1c2418deba"
+    },
+    {
+      "tema": "A Ascensão dos Agentes: Dominando o Contexto e a \"Sopa de Letrinhas\" da IA no Desenvolvimento com Github Copilot",
+      "data": "2026-02-28",
+      "evento": "Codecon Meetup Rio",
+      "local": [
+        "Rio de Janeiro"
+      ],
+      "url": "https://dev.to/fazedordecodigo/a-ascensao-dos-agentes-dominando-o-contexto-e-a-sopa-de-letrinhas-da-ia-no-desenvolvimento-com-27k5",
+      "tipo": [
+        "Palestra"
+      ],
+      "notion": "https://app.notion.com/38ecc91c731d80fd8a05eaf9084f8106"
+    }
+  ]
+}

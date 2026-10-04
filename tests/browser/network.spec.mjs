@@ -7,14 +7,14 @@ const TIMEOUT_TEXT = "Não foi possível confirmar o carregamento do formulário
 test.describe("network and third-party boundary", () => {
   for (const width of [320, 480, 481, 1440]) {
     test(`does not contact third parties before activation at ${width}px`, async ({ page }) => {
-      const thirdPartyRequests = [];
+      const substackRequests = [];
       page.on("request", (request) => {
-        if (request.url().startsWith(SUBSTACK_ORIGIN)) thirdPartyRequests.push(request.url());
+        if (request.url().startsWith(SUBSTACK_ORIGIN)) substackRequests.push(request.url());
       });
       await page.setViewportSize({ width, height: 1000 });
       await page.goto("/");
       await page.waitForTimeout(100);
-      expect(thirdPartyRequests).toEqual([]);
+      expect(substackRequests).toEqual([]);
     });
   }
 

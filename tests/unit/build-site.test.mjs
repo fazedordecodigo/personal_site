@@ -4,20 +4,37 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
+import { FEED_URL } from "../../scripts/articles/constants.mjs";
 import { buildSite, nodeFsAdapter } from "../../scripts/build-site.mjs";
 
 const feedSnapshot = () => ({
   schemaVersion: 1,
-  sourceUrl: "https://fazedordecodigo.substack.com/feed",
+  sourceUrl: FEED_URL,
   fetchedAt: "2026-08-15T10:00:00.000Z",
   timeZone: "America/Sao_Paulo",
   articles: [1, 2, 3].map((number) => ({
-    id: `urn:fixture:${number}`,
+    id: `${number}`,
     title: `Fazedor de Código: artigo ${number}`,
     excerpt: `Resumo ${number}.`,
     publishedAt: `2026-08-${String(10 + number).padStart(2, "0")}T12:00:00.000Z`,
-    url: `https://fazedordecodigo.substack.com/p/fixture-${number}`,
-    eyebrow: "Fazedor de Código",
+    url: `https://dev.to/fazedordecodigo/fixture-${number}`,
+    eyebrow: "Artigo",
+  })),
+});
+
+const talksSnapshot = () => ({
+  source: "test",
+  filter: "Tipo contains Palestra",
+  fetched_at: "2026-10-03",
+  count: 14,
+  talks: Array.from({ length: 14 }, (_, index) => ({
+    tema: `Palestra ${index + 1}`,
+    data: `2026-09-${String(14 - index).padStart(2, "0")}`,
+    evento: `Evento ${index + 1}`,
+    local: ["Rio de Janeiro"],
+    url: `https://example.com/talk-${index + 1}`,
+    tipo: ["Palestra"],
+    notion: `https://app.notion.com/talk-${index + 1}`,
   })),
 });
 
@@ -31,7 +48,7 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
     mkdir(join(workspace, "src", "assets", "fonts"), { recursive: true }),
     mkdir(join(workspace, "content"), { recursive: true }),
   ]));
-  await writeFile(join(workspace, "src", "index.template.html"), invalidTemplate ? "<!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->" : "<!doctype html><html><body><!-- ARTICLES_SLOT --></body></html>");
+  await writeFile(join(workspace, "src", "index.template.html"), invalidTemplate ? "<!-- TALKS_SLOT --><!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->" : "<!doctype html><html><body><!-- TALKS_SLOT --><!-- ARTICLES_SLOT --></body></html>");
   await writeFile(join(workspace, "src", "robots.txt"), "User-agent: *\nAllow: /\n");
   await writeFile(join(workspace, "src", "sitemap.xml"), "<?xml version=\"1.0\"?><urlset></urlset>\n");
   await writeFile(join(workspace, "staticwebapp.config.json"), "{}\n");
@@ -39,6 +56,9 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
   await writeFile(join(workspace, "src", "js", "substack-embed.js"), "(() => {})();\n");
   await writeFile(join(workspace, "src", "assets", "images", "emerson-delatorre.jpg"), "jpeg");
   await writeFile(join(workspace, "src", "assets", "images", "fazedor-de-codigo-logo.svg"), "<svg></svg>");
+  await writeFile(join(workspace, "src", "assets", "images", "logo-spacexai.svg"), "<svg></svg>");
+  await writeFile(join(workspace, "src", "assets", "images", "logo-devin.svg"), "<svg></svg>");
+  await writeFile(join(workspace, "src", "assets", "images", "logo-n8n.svg"), "<svg></svg>");
   for (const name of [
     "space-grotesk-latin-700-normal.woff2",
     "inter-latin-400-normal.woff2",
@@ -49,6 +69,7 @@ async function makeWorkspace({ invalidTemplate = false, invalidSnapshot = false 
     "OFL-1.1.txt",
   ]) await writeFile(join(workspace, "src", "assets", "fonts", name), name);
   await writeFile(join(workspace, "content", "articles.snapshot.json"), JSON.stringify(invalidSnapshot ? { bad: true } : feedSnapshot()));
+  await writeFile(join(workspace, "content", "talks.snapshot.json"), JSON.stringify(talksSnapshot()));
   return workspace;
 }
 
@@ -88,6 +109,9 @@ test("successful snapshot build returns built report and swaps public atomically
     "assets/fonts/space-grotesk-latin-700-normal.woff2",
     "assets/images/emerson-delatorre.jpg",
     "assets/images/fazedor-de-codigo-logo.svg",
+    "assets/images/logo-devin.svg",
+    "assets/images/logo-n8n.svg",
+    "assets/images/logo-spacexai.svg",
     "css/site.css",
     "index.html",
     "js/substack-embed.js",
@@ -102,7 +126,7 @@ test("successful snapshot build returns built report and swaps public atomically
 
 test("invalid snapshot blocks before rendering and preserves the previous artifact", async () => {
   const workspace = await makeWorkspace({ invalidSnapshot: true });
-  await writeFile(join(workspace, "src", "index.template.html"), "<!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->");
+  await writeFile(join(workspace, "src", "index.template.html"), "<!-- TALKS_SLOT --><!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->");
   await import("node:fs/promises").then(({ mkdir }) => mkdir(join(workspace, "public"), { recursive: true }));
   await writeFile(join(workspace, "public", "old.txt"), "old");
   const before = await snapshotBytes(join(workspace, "public"));

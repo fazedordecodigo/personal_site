@@ -1,0 +1,30 @@
+[
+  {
+    "id": 3,
+    "title": "Cursor Weekly: Clareza & prática",
+    "description": "Uma <ideia> com texto útil.",
+    "url": "https://dev.to/fazedordecodigo/fixture-cursor",
+    "published_at": "2026-08-13T03:48:38.000Z"
+  },
+  {
+    "id": 1,
+    "title": "Fazedor de Código: um",
+    "description": "Resumo um.",
+    "url": "https://dev.to/fazedordecodigo/fixture-fazedor",
+    "published_at": "2026-08-11T12:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Devin Weekly: dois",
+    "description": "Resumo dois.",
+    "url": "https://dev.to/fazedordecodigo/fixture-devin",
+    "published_at": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "title": "Artigo extra",
+    "description": "Não entra no recorte.",
+    "url": "https://dev.to/fazedordecodigo/fixture-four",
+    "published_at": "2026-08-10T12:00:00.000Z"
+  }
+]

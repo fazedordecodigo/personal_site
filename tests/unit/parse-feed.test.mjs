@@ -4,7 +4,6 @@ import test from "node:test";
 
 import {
   EXCERPT_LIMIT,
-  FEED_URL,
   TITLE_LIMIT,
   TIME_ZONE,
 } from "../../scripts/articles/constants.mjs";
@@ -13,21 +12,17 @@ import { FeedContractError, parseFeed } from "../../scripts/articles/parse-feed.
 const fixture = (name) => readFile(new URL(`../fixtures/${name}`, import.meta.url), "utf8");
 
 test("normalizes, orders and limits valid articles without leaking ignored fields", async () => {
-  const result = parseFeed(await fixture("feed-valid.xml"));
+  const result = parseFeed(await fixture("articles-valid.json"));
   assert.deepEqual(Object.keys(result.articles[0]).sort(), ["excerpt", "eyebrow", "id", "publishedAt", "title", "url"]);
-  assert.deepEqual(result.articles.map((article) => article.id), [
-    "urn:fixture:cursor-3",
-    "urn:fixture:devin-2",
-    "urn:fixture:fazedor-1",
-  ]);
+  assert.deepEqual(result.articles.map((article) => article.id), ["3", "2", "1"]);
   assert.equal(result.articles[0].title, "Cursor Weekly: Clareza & prática");
   assert.equal(result.articles[0].excerpt, "Uma <ideia> com texto útil.");
-  assert.equal(result.articles[0].url, `${FEED_URL.replace("/feed", "")}/p/fixture-cursor`);
+  assert.equal(result.articles[0].url, "https://dev.to/fazedordecodigo/fixture-cursor");
   assert.equal(result.articles[0].publishedAt, "2026-08-13T03:48:38.000Z");
-  assert.deepEqual(result.articles.map((article) => article.eyebrow), ["Cursor Weekly", "Devin Weekly", "Fazedor de Código"]);
+  assert.deepEqual(result.articles.map((article) => article.eyebrow), ["Artigo", "Artigo", "Artigo"]);
   assert.deepEqual(result.diagnostics, {
-    totalItems: 6,
-    acceptedBeforeLimit: 6,
+    totalItems: 4,
+    acceptedBeforeLimit: 4,
     discardedByCode: {
       FIELD_INVALID: 0,
       URL_FORBIDDEN: 0,
@@ -36,62 +31,74 @@ test("normalizes, orders and limits valid articles without leaking ignored field
       DUPLICATE_IDENTICAL: 0,
     },
   });
-  assert.equal(Object.prototype.hasOwnProperty.call(result.articles[0], "content:encoded"), false);
-  assert.equal(Object.prototype.hasOwnProperty.call(result.articles[0], "enclosure"), false);
-  assert.equal(Object.prototype.hasOwnProperty.call(result.articles[0], "creator"), false);
-  assert.equal(Object.prototype.hasOwnProperty.call(result.articles[0], "email"), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(result.articles[0], "cover_image"), false);
+  assert.equal(Object.prototype.hasOwnProperty.call(result.articles[0], "user"), false);
   assert.equal(Object.isFrozen(result.articles), true);
   assert.equal(Object.isFrozen(result.articles[0]), true);
 });
 
 test("truncates title and excerpt by code point after NFC whitespace normalization", () => {
-  const longTitle = `  ${"A".repeat(TITLE_LIMIT + 10)}  `;
-  const longDescription = `  ${"😀".repeat(EXCERPT_LIMIT + 10)}  `;
-  const xml = `<rss><channel><item><title>${longTitle}</title><description>${longDescription}</description><link>https://fazedordecodigo.substack.com/p/fixture-long</link><guid>urn:fixture:long</guid><pubDate>Wed, 13 Aug 2026 10:00:00 GMT</pubDate></item><item><title>v2</title><description>v2</description><link>https://fazedordecodigo.substack.com/p/fixture-v2</link><guid>urn:fixture:v2</guid><pubDate>Tue, 12 Aug 2026 10:00:00 GMT</pubDate></item><item><title>v3</title><description>v3</description><link>https://fazedordecodigo.substack.com/p/fixture-v3</link><guid>urn:fixture:v3</guid><pubDate>Mon, 11 Aug 2026 10:00:00 GMT</pubDate></item></channel></rss>`;
-  const [article] = parseFeed(xml).articles;
+  const payload = [
+    { id: "long", title: `  ${"A".repeat(TITLE_LIMIT + 10)}  `, description: `  ${"😀".repeat(EXCERPT_LIMIT + 10)}  `, url: "https://dev.to/fazedordecodigo/fixture-long", published_at: "2026-08-13T10:00:00.000Z" },
+    { id: "v2", title: "v2", description: "v2", url: "https://dev.to/fazedordecodigo/fixture-v2", published_at: "2026-08-12T10:00:00.000Z" },
+    { id: "v3", title: "v3", description: "v3", url: "https://dev.to/fazedordecodigo/fixture-v3", published_at: "2026-08-11T10:00:00.000Z" },
+  ];
+  const [article] = parseFeed(JSON.stringify(payload)).articles;
   assert.equal(Array.from(article.title).length, TITLE_LIMIT);
   assert.equal(Array.from(article.excerpt).length, EXCERPT_LIMIT);
   assert.equal(article.title.startsWith("A"), true);
   assert.equal(article.excerpt, "😀".repeat(EXCERPT_LIMIT));
 });
 
-test("rejects DTD/entity declarations and malformed XML with stable error codes", async () => {
-  await assert.rejects(fixture("feed-malicious-dtd.xml").then(parseFeed), (error) => {
+test("rejects malformed JSON with a stable error code", () => {
+  assert.throws(() => parseFeed("{"), (error) => {
     assert.ok(error instanceof FeedContractError);
-    assert.equal(error.code, "DTD_FORBIDDEN");
+    assert.equal(error.code, "JSON_INVALID");
     return true;
   });
-  await assert.rejects(fixture("feed-malformed.xml").then(parseFeed), (error) => {
-    assert.ok(error instanceof FeedContractError);
-    assert.equal(error.code, "XML_INVALID");
+  assert.throws(() => parseFeed("{\"title\":\"no\"}"), (error) => {
+    assert.equal(error.code, "JSON_INVALID");
     return true;
   });
 });
 
-test("collapses identical duplicate IDs and discards conflicting groups", async () => {
-  const result = parseFeed(await fixture("feed-duplicates.xml"));
-  assert.deepEqual(result.articles.map((article) => article.id), [
-    "urn:fixture:valid-one",
-    "urn:fixture:valid-two",
-    "urn:fixture:valid-three",
-  ]);
+test("collapses identical duplicate IDs and discards conflicting groups", () => {
+  const payload = [
+    { id: "dup", title: "Mesmo", description: "Mesmo", url: "https://dev.to/fazedordecodigo/fixture-dup", published_at: "2026-08-13T10:00:00.000Z" },
+    { id: "dup", title: "Mesmo", description: "Mesmo", url: "https://dev.to/fazedordecodigo/fixture-dup", published_at: "2026-08-13T10:00:00.000Z" },
+    { id: "conflict", title: "A", description: "A", url: "https://dev.to/fazedordecodigo/fixture-a", published_at: "2026-08-12T10:00:00.000Z" },
+    { id: "conflict", title: "B", description: "B", url: "https://dev.to/fazedordecodigo/fixture-b", published_at: "2026-08-12T10:00:00.000Z" },
+    { id: "one", title: "Um", description: "Um", url: "https://dev.to/fazedordecodigo/fixture-one", published_at: "2026-08-11T10:00:00.000Z" },
+    { id: "two", title: "Dois", description: "Dois", url: "https://dev.to/fazedordecodigo/fixture-two", published_at: "2026-08-10T10:00:00.000Z" },
+    { id: "three", title: "Três", description: "Três", url: "https://dev.to/fazedordecodigo/fixture-three", published_at: "2026-08-09T10:00:00.000Z" },
+  ];
+  const result = parseFeed(JSON.stringify(payload));
+  assert.deepEqual(result.articles.map((article) => article.id), ["dup", "one", "two"]);
   assert.equal(result.diagnostics.acceptedBeforeLimit, 4);
   assert.equal(result.diagnostics.discardedByCode.DUPLICATE_IDENTICAL, 1);
   assert.equal(result.diagnostics.discardedByCode.DUPLICATE_CONFLICT, 1);
 });
 
-test("counts invalid fields without persisting their values", async () => {
-  const result = parseFeed(await fixture("feed-invalid-fields.xml"));
+test("counts invalid fields without persisting their values", () => {
+  const payload = [
+    { id: "empty", title: "", description: "sem título", url: "https://dev.to/fazedordecodigo/empty", published_at: "2026-08-13T10:00:00.000Z" },
+    { id: "bad-url", title: "Fora", description: "resumo", url: "https://example.com/p/x", published_at: "2026-08-13T10:00:00.000Z" },
+    { id: "bad-date", title: "Data", description: "resumo", url: "https://dev.to/fazedordecodigo/date", published_at: "not a date" },
+    { id: "one", title: "Um", description: "Resumo um.", url: "https://dev.to/fazedordecodigo/one", published_at: "2026-08-11T10:00:00.000Z" },
+    { id: "two", title: "Dois", description: "Resumo dois.", url: "https://dev.to/fazedordecodigo/two", published_at: "2026-08-10T10:00:00.000Z" },
+    { id: "three", title: "Três", description: "Resumo três.", url: "https://dev.to/fazedordecodigo/three", published_at: "2026-08-09T10:00:00.000Z" },
+  ];
+  const result = parseFeed(JSON.stringify(payload));
   assert.equal(result.articles.length, 3);
   assert.equal(result.diagnostics.totalItems, 6);
   assert.equal(result.diagnostics.discardedByCode.FIELD_INVALID, 1);
   assert.equal(result.diagnostics.discardedByCode.URL_FORBIDDEN, 1);
   assert.equal(result.diagnostics.discardedByCode.DATE_INVALID, 1);
-  assert.doesNotMatch(JSON.stringify(result), /example\.com|not a date|invalid-title/);
+  assert.doesNotMatch(JSON.stringify(result), /example\.com|not a date|sem título/);
 });
 
-test("requires exactly three valid unique articles", async () => {
-  await assert.rejects(fixture("feed-empty.xml").then(parseFeed), (error) => {
+test("requires exactly three valid unique articles", () => {
+  assert.throws(() => parseFeed("[]"), (error) => {
     assert.equal(error.code, "ITEMS_INSUFFICIENT");
     return true;
   });

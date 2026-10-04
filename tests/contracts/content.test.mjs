@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const template = await readFile(new URL("../../src/index.template.html", import.meta.url), "utf8");
+const talks = JSON.parse(await readFile(new URL("../../content/talks.snapshot.json", import.meta.url), "utf8"));
+const html = await readFile(new URL("../../public/index.html", import.meta.url), "utf8");
 
 const staticCopy = [
   "Início",
@@ -13,7 +15,7 @@ const staticCopy = [
   "Artigos",
   "Newsletter",
   "Contato",
-  "EMERSON_",
+  "DELATORRE_",
   "Engenharia · Comunidade · Palco",
   "SpaceXAI Ambassador",
   "Devin Ambassador",
@@ -58,65 +60,11 @@ const staticCopy = [
   "Emerson lidera a Fazedor de Código. A marca, o site e a programação da comunidade ficam em fazedordecodigo.com.",
   "Visitar fazedordecodigo.com",
   "03 · Eventos",
-  "Eventos que organizo",
-  "Cinco encontros com papel de organização. Nome de meetup — por exemplo Cursor Meetup — descreve o evento, não um título de embaixador.",
-  "31/10/2026",
-  "Manaus",
-  "Devin Meetup",
-  "Tema a definir. Organização.",
-  "26/09/2026",
-  "Rio de Janeiro / FIAP",
-  "Organização.",
-  "Abrir Devin Meetup no Luma",
-  "22/09/2026",
-  "Salvador / Espaço SIC",
-  "Codecon Meetup Salvador #3",
-  "Organização e apoio Devin.",
-  "08/08/2026",
-  "Cursor Meetup",
-  "11/07/2026",
-  "Rio de Janeiro / BQ Coworking",
-  "Organização e palestra.",
-  "Abrir Cursor Meetup no Luma",
+  "Agenda no Luma",
+  "Os encontros que organizo e os da comunidade ficam no mesmo calendário do Luma usado em fazedordecodigo.com. Confirme presença por lá.",
+  "Abrir agenda no Luma",
   "04 · Palestras",
-  "Palestras e painéis",
-  "Oito destaques recentes. A lista completa desta vitrine fica em Ver mais palestras. Títulos e datas vêm da agenda fechada; nada foi inventado.",
-  "24/09/2026",
-  "TDC São Paulo",
-  "Qualidade de Código com Agentes…",
-  "19/09/2026",
-  "Tech Summit Rio",
-  "29/08/2026",
-  "IEEE Computer Society (UERJ)",
-  "SDD e o Fim do “Vibe Coding”…",
-  "MVP Conf RJ",
-  "18/08/2026",
-  "AWS Meetup RJ",
-  "…com Kiro",
-  "07/08/2026",
-  "SUCESU-SP (Zoom)",
-  "IA para Conselheiros",
-  "06/08/2026",
-  "Rio Innovation Week",
-  "Painel Cidade 5.0",
-  "05/08/2026",
-  "YouTube live",
-  "SDD…",
-  "Ver mais palestras",
-  "07/07/2026",
-  "GDG Rio",
-  "01/07/2026",
-  "Cybersecurity Summit Rio",
-  "Painel Aplicação, Mercado e Futuro",
-  "27/06/2026",
-  "FIAP Reboot Experience",
-  "Primeiros Passos técnicos em IA",
-  "13/06/2026",
-  "Agentcon Rio",
-  "28/02/2026",
-  "Codecon Meetup Rio",
-  "A Ascensão dos Agentes…",
-  "Qualidade de Código…",
+  "Quatorze registros da coleção Conteúdos no Notion, com Tipo contendo Palestra, da data mais recente para a mais antiga. Tema, data, evento, local e o link saem do snapshot revisável.",
   "Ver mais no Sessionize",
   "05 · Certificações",
   "Credenciais ativas nesta vitrine",
@@ -137,9 +85,10 @@ const staticCopy = [
   "Expira",
   "mar/2027",
   "06 · Artigos",
-  "Ideias recentes, direto do Substack",
-  "Três publicações recentes do Fazedor de Código, atualizadas a partir do feed oficial do Substack.",
-  "Ver todos os artigos no Substack",
+  "Artigos no dev.to",
+  "Três publicações recentes do perfil Fazedor de Código no dev.to, no mesmo formato da lista de fazedordecodigo.com.",
+  "Artigos · dev.to",
+  "Ver todos os artigos no dev.to →",
   "Newsletter · secundária",
   "Receba o Fazedor de Código no e-mail",
   "A assinatura da newsletter é um canal extra, não o convite principal desta página. Carregue o formulário somente se quiser interagir com o Substack. A moldura pertence a esta página; o conteúdo interno, a coleta e os estados do formulário pertencem ao terceiro.",
@@ -162,22 +111,26 @@ test("template contains every approved static string and canonical destination",
     "https://fazedordecodigo.com",
     "https://fazedordecodigo.substack.com/",
     "https://fazedordecodigo.substack.com/embed",
-    "https://luma.com/l2f11j2p",
-    "https://luma.com/45jawdhf",
+    "https://luma.com/embed/calendar/cal-ySWMeFE0nNFt5kA/events",
     "https://sessionize.com/emerson-delatorre/",
+    "https://dev.to/fazedordecodigo",
   ]) assert.ok(template.includes(url), `missing URL: ${url}`);
   assert.match(template, /href="#palestras"[^>]*>Ver palestras e eventos</);
   assert.match(template, /href="https:\/\/www\.linkedin\.com\/in\/fazedordecodigo\/"[^>]*>Vamos conversar</);
   assert.match(template, /href="https:\/\/fazedordecodigo\.com"[^>]*>Visitar fazedordecodigo\.com</);
-  for (const forbidden of ["PROTÓTIPO", "image-fallback", "?state=", "carrossel", "AllOrigins", "SociableKit", "noindex"]) {
+  assert.equal(template.includes("EMERSON_"), false);
+  for (const forbidden of ["PROTÓTIPO", "image-fallback", "?state=", "carrossel", "AllOrigins", "SociableKit", "noindex", "event-grid", "Tema a definir. Organização."]) {
     assert.equal(template.includes(forbidden), false, `forbidden token: ${forbidden}`);
   }
 });
 
-test("official ambassador titles are isolated English spans and exclude Cursor", () => {
-  assert.match(template, /<span[^>]*lang="en"[^>]*>SpaceXAI Ambassador<\/span>/);
-  assert.match(template, /<span[^>]*lang="en"[^>]*>Devin Ambassador<\/span>/);
-  assert.match(template, /<span[^>]*lang="en"[^>]*>N8N Ambassador<\/span>/);
+test("official ambassador titles are isolated English spans with local logos and exclude Cursor", () => {
+  assert.match(template, /<span[^>]*lang="en"[^>]*>[\s\S]*SpaceXAI Ambassador<\/span>/);
+  assert.match(template, /<span[^>]*lang="en"[^>]*>[\s\S]*Devin Ambassador<\/span>/);
+  assert.match(template, /<span[^>]*lang="en"[^>]*>[\s\S]*N8N Ambassador<\/span>/);
+  assert.match(template, /src="\/assets\/images\/logo-spacexai\.svg"/);
+  assert.match(template, /src="\/assets\/images\/logo-devin\.svg"/);
+  assert.match(template, /src="\/assets\/images\/logo-n8n\.svg"/);
   assert.equal(template.includes("Cursor Ambassador"), false);
 });
 
@@ -192,4 +145,18 @@ test("keeps the closed certification set and excludes expired or extra credentia
   assert.equal((template.match(/PL-900/g) ?? []).length, 1);
   assert.equal((template.match(/MS-900/g) ?? []).length, 1);
   assert.equal((template.match(/GitHub Foundations/g) ?? []).length, 1);
+});
+
+test("built talks section contains exactly the 14 snapshot rows", () => {
+  assert.equal(talks.count, 14);
+  assert.equal(talks.talks.length, 14);
+  assert.equal((html.match(/class="talk-item"/g) ?? []).length, 14);
+  for (const talk of talks.talks) {
+    assert.ok(html.includes(talk.tema), `missing talk tema: ${talk.tema}`);
+    if (talk.evento !== null) assert.ok(html.includes(talk.evento), `missing talk evento: ${talk.evento}`);
+    for (const place of talk.local) assert.ok(html.includes(place), `missing talk local: ${place}`);
+    if (talk.url !== null) assert.ok(html.includes(talk.url), `missing talk url: ${talk.url}`);
+  }
+  assert.equal(html.includes("Painel Cidade 5.0"), false);
+  assert.equal(html.includes("Cybersecurity Summit Rio"), false);
 });

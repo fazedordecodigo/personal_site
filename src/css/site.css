@@ -225,6 +225,7 @@ button {
 }
 
 .badge {
+  align-items: center;
   background: var(--beige);
   border: 1px solid var(--ink);
   border-radius: 999px;
@@ -232,11 +233,19 @@ button {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.72rem;
   font-weight: 700;
+  gap: 8px;
   max-width: 100%;
   min-height: 32px;
   overflow-wrap: anywhere;
   padding: 7px 12px;
   white-space: normal;
+}
+
+.badge__logo {
+  flex: 0 0 auto;
+  height: 16px;
+  object-fit: contain;
+  width: auto;
 }
 
 h1,
@@ -528,9 +537,34 @@ li,
   padding: 0;
 }
 
-.event-grid,
 .cert-grid {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+
+.luma-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  display: flex;
+  margin-top: 48px;
+  min-width: 0;
+  padding: 16px;
+}
+
+.luma-embed {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  flex: 1;
+  min-height: 640px;
+  width: 100%;
+}
+
+.luma-wrap + .text-link {
+  align-items: center;
+  display: inline-flex;
+  margin-top: 24px;
+  min-height: 44px;
 }
 
 .spotlight-card,
@@ -556,7 +590,8 @@ li,
   margin: 16px 0 0;
 }
 
-.spotlight-card .text-link {
+.spotlight-card .text-link,
+.talk-item .text-link {
   align-items: center;
   display: inline-flex;
   margin-top: auto;
@@ -564,77 +599,94 @@ li,
   padding-top: 8px;
 }
 
-.talks-more {
-  margin-top: 24px;
-}
-
-.talks-more summary {
-  align-items: center;
-  border: 1px solid var(--ink);
-  border-radius: var(--radius-small);
-  cursor: pointer;
-  display: inline-flex;
-  font-weight: 600;
-  min-height: 44px;
-  padding: 12px 18px;
-}
-
-.talks-more .talk-list--more {
-  margin-top: 16px;
-}
-
-.talks-more + .text-link {
+.talk-list + .text-link {
   align-items: center;
   display: inline-flex;
   margin-top: 24px;
   min-height: 44px;
 }
 
-.article-grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 48px;
-}
-
-.article-card {
+.article-panel {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-medium);
-  display: flex;
-  flex-direction: column;
+  margin-top: 48px;
   min-width: 0;
-  padding: 24px;
+  overflow: hidden;
 }
 
-.article-card h3 {
-  margin-top: 8px;
+.article-panel > .card-kicker {
+  background: var(--beige);
+  color: var(--ink);
+  margin: 0;
+  padding: 18px 24px;
 }
 
-.article-card > p:not(.card-kicker) {
+.article-list {
+  display: grid;
+  min-width: 0;
+}
+
+.article-row {
+  align-items: baseline;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 20px 24px;
+}
+
+.article-row h3 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.article-row h3 .text-link {
+  align-items: center;
+  display: inline-flex;
+  min-height: 44px;
+}
+
+.article-row p {
   color: var(--muted);
-  margin: 20px 0;
+  margin: 8px 0 0;
 }
 
-.article-card time {
+.article-row time {
   color: var(--muted);
+  display: block;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.78rem;
-  margin-top: auto;
-  padding-top: 16px;
+  margin-top: 12px;
 }
 
-.article-card .text-link {
-  margin-top: 16px;
+.article-panel + .text-link {
+  align-items: center;
+  display: inline-flex;
+  margin-top: 24px;
+  min-height: 44px;
+}
+
+.tag {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  flex: 0 0 auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 7px 12px;
+  text-transform: uppercase;
 }
 
 .article-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 24px;
-  grid-column: 1 / -1;
-  margin-top: 24px;
+  margin-bottom: 8px;
   min-width: 0;
+  padding: 16px 24px 8px;
 }
 
 .article-meta p {
@@ -795,9 +847,6 @@ li,
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .article-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 768px) {
@@ -836,10 +885,6 @@ li,
 
   .proof-item:nth-last-child(-n + 2) {
     border-bottom: 0;
-  }
-
-  .article-grid {
-    grid-template-columns: 1fr;
   }
 
   .newsletter-panel {
@@ -890,12 +935,18 @@ li,
   }
 
   .profile-card,
-  .article-card,
+  .article-row,
+  .article-panel > .card-kicker,
   .embed-shell,
   .community-panel,
   .spotlight-card,
   .talk-item {
     padding: 20px;
+  }
+
+  .article-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .newsletter-panel {
@@ -925,8 +976,9 @@ li,
 
   .button,
   .cta-row,
-  .talks-more summary,
-  .talks-more + .text-link,
+  .talk-list + .text-link,
+  .luma-wrap + .text-link,
+  .article-panel + .text-link,
   .profile-card__link {
     width: 100%;
   }

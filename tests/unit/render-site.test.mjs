@@ -7,6 +7,7 @@ import {
   escapeHtmlText,
   renderArticles,
   renderSite,
+  renderTalks,
 } from "../../scripts/render-site.mjs";
 
 const hostileFeed = (overrides = {}) => ({
@@ -15,31 +16,39 @@ const hostileFeed = (overrides = {}) => ({
   fetchedAt: "2026-08-15T12:17:00.000Z",
   warningCode: null,
   articles: [1, 2, 3].map((number) => ({
-    id: `urn:hostile:${number}`,
+    id: `${number}`,
     title: number === 1 ? `A <b>& ' " </b> </style><script>` : `Fazedor de Código ${number}`,
     excerpt: number === 1 ? `E <b>& ' " </b> </style><script>` : `Resumo ${number}`,
     publishedAt: number === 1 ? "2026-08-13T00:48:38Z" : `2026-08-${String(10 + number).padStart(2, "0")}T12:00:00Z`,
-    url: `https://fazedordecodigo.substack.com/p/hostile-${number}?ignored=1#fragment`,
-    eyebrow: "Fazedor de Código",
+    url: `https://dev.to/fazedordecodigo/hostile-${number}?ignored=1#fragment`,
+    eyebrow: "Artigo",
   })),
   ...overrides,
 });
+
+const talksResult = {
+  talks: [
+    { tema: "Tema com <b>HTML</b>", data: "2026-10-31", evento: "Devin Meetup", local: ["Manaus"], url: null },
+    { tema: "Sem evento", data: "2026-08-05", evento: null, local: ["Youtube"], url: "https://www.youtube.com/watch?v=bBt4K-ZmNt4" },
+  ],
+};
 
 test("escapes text and attribute contexts independently", () => {
   assert.equal(escapeHtmlText(`<>&'"`), "&lt;&gt;&amp;'\"");
   assert.equal(escapeHtmlAttribute(`<>&'"`), "&lt;&gt;&amp;&#39;&quot;");
 });
 
-test("renders three safely escaped cards with canonical links and local dates", () => {
+test("renders three safely escaped rows with canonical links and local dates", () => {
   const html = renderArticles(hostileFeed());
-  assert.equal((html.match(/class="article-card"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="article-row"/g) ?? []).length, 3);
   assert.ok(html.includes(`A &lt;b&gt;&amp; ' " &lt;/b&gt; &lt;/style&gt;&lt;script&gt;`));
   assert.doesNotMatch(html, /<b>|<script>|<\/style>/);
   assert.match(html, /datetime="2026-08-13T00:48:38\.000Z"/);
   assert.match(html, />12 ago\. 2026</);
-  assert.match(html, /href="https:\/\/fazedordecodigo\.substack\.com\/p\/hostile-1"/);
+  assert.match(html, /href="https:\/\/dev\.to\/fazedordecodigo\/hostile-1"/);
   assert.doesNotMatch(html, /ignored=1|fragment/);
   assert.doesNotMatch(html, /<img/);
+  assert.match(html, />Artigo</);
 });
 
 test("renders capture metadata and stale warning at the strict boundary", () => {
@@ -50,12 +59,25 @@ test("renders capture metadata and stale warning at the strict boundary", () => 
   assert.match(stale, /Conteúdo preservado; a última atualização tem mais de 48 horas\./);
 });
 
-test("replaces exactly one article slot and rejects missing or duplicate slots", async () => {
+test("renders talks with date, local, optional evento and optional link", () => {
+  const html = renderTalks(talksResult);
+  assert.match(html, /datetime="2026-10-31"/);
+  assert.match(html, />31\/10\/2026</);
+  assert.match(html, /Manaus/);
+  assert.match(html, /Tema com &lt;b&gt;HTML&lt;\/b&gt;/);
+  assert.match(html, /Devin Meetup/);
+  assert.doesNotMatch(html.split("Sem evento")[0] ?? "", /Ver palestra/);
+  assert.match(html, /href="https:\/\/www\.youtube\.com\/watch\?v=bBt4K-ZmNt4"/);
+  assert.doesNotMatch(html, /null/);
+});
+
+test("replaces exactly one article slot and one talks slot", async () => {
   const feedResult = hostileFeed();
   const template = await readFile(new URL("../../src/index.template.html", import.meta.url), "utf8");
-  const rendered = renderSite({ template, feedResult });
+  const rendered = renderSite({ template, feedResult, talksResult });
   assert.equal(rendered.includes("<!-- ARTICLES_SLOT -->"), false);
-  assert.equal((rendered.match(/article-card/g) ?? []).length, 3);
-  assert.throws(() => renderSite({ template: "<main></main>", feedResult }), /ARTICLE_SLOT/);
-  assert.throws(() => renderSite({ template: "<!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->", feedResult }), /ARTICLE_SLOT/);
+  assert.equal(rendered.includes("<!-- TALKS_SLOT -->"), false);
+  assert.equal((rendered.match(/article-row/g) ?? []).length, 3);
+  assert.throws(() => renderSite({ template: "<main></main>", feedResult, talksResult }), /TALKS_SLOT|ARTICLE_SLOT/);
+  assert.throws(() => renderSite({ template: "<!-- TALKS_SLOT --><!-- ARTICLES_SLOT --><!-- ARTICLES_SLOT -->", feedResult, talksResult }), /ARTICLE_SLOT/);
 });

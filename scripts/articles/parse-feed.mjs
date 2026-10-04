@@ -1,13 +1,10 @@
-import { parseFragment } from "parse5";
-import { SaxesParser } from "saxes";
-
 import {
   ARTICLE_EYEBROWS,
+  ARTICLE_HOST,
+  ARTICLE_PATH_PREFIX,
   EXCERPT_LIMIT,
   TITLE_LIMIT,
 } from "./constants.mjs";
-
-const ITEM_FIELDS = new Set(["title", "description", "link", "guid", "pubdate"]);
 
 const DISCARDED_BY_CODE = Object.freeze({
   FIELD_INVALID: 0,
@@ -33,24 +30,6 @@ function truncateCodePoints(value, limit) {
   return Array.from(value).slice(0, limit).join("");
 }
 
-function textFromHtmlFragment(value) {
-  const fragment = parseFragment(value);
-  const textParts = [];
-
-  const visit = (node) => {
-    if (node.nodeName === "#text") {
-      textParts.push(node.value);
-      return;
-    }
-    for (const child of node.childNodes ?? []) {
-      visit(child);
-    }
-  };
-
-  visit(fragment);
-  return normalizeWhitespace(textParts.join(" "));
-}
-
 function compareCodePoints(left, right) {
   const leftPoints = Array.from(left, (character) => character.codePointAt(0));
   const rightPoints = Array.from(right, (character) => character.codePointAt(0));
@@ -63,18 +42,11 @@ function compareCodePoints(left, right) {
   return leftPoints.length - rightPoints.length;
 }
 
-function deriveEyebrow(title) {
-  const lowerTitle = title.toLowerCase();
-  if (lowerTitle.startsWith("cursor weekly")) {
-    return ARTICLE_EYEBROWS[0];
-  }
-  if (lowerTitle.startsWith("devin weekly")) {
-    return ARTICLE_EYEBROWS[1];
-  }
-  return ARTICLE_EYEBROWS[2];
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
-function normalizeUrl(rawLink) {
+export function normalizeArticleUrl(rawLink) {
   if (typeof rawLink !== "string") {
     return null;
   }
@@ -86,11 +58,11 @@ function normalizeUrl(rawLink) {
   }
   if (
     url.protocol !== "https:" ||
-    url.hostname !== "fazedordecodigo.substack.com" ||
+    url.hostname !== ARTICLE_HOST ||
     url.username !== "" ||
     url.password !== "" ||
     url.port !== "" ||
-    !url.pathname.startsWith("/p/")
+    !url.pathname.startsWith(ARTICLE_PATH_PREFIX)
   ) {
     return null;
   }
@@ -100,21 +72,28 @@ function normalizeUrl(rawLink) {
 }
 
 function normalizeItem(item, diagnostics) {
+  if (!isRecord(item)) {
+    diagnostics.FIELD_INVALID += 1;
+    return null;
+  }
+
   const title = typeof item.title === "string" ? truncateCodePoints(normalizeWhitespace(item.title), TITLE_LIMIT) : "";
-  const excerpt = typeof item.description === "string" ? truncateCodePoints(textFromHtmlFragment(item.description), EXCERPT_LIMIT) : "";
-  const rawId = typeof item.guid === "string" ? item.guid.normalize("NFC").trim() : "";
+  const excerptSource = typeof item.description === "string" ? item.description : "";
+  const excerpt = truncateCodePoints(normalizeWhitespace(excerptSource), EXCERPT_LIMIT);
+  const rawId = item.id === undefined || item.id === null ? "" : String(item.id).normalize("NFC").trim();
   if (Array.from(rawId).length === 0 || Array.from(rawId).length > 2048 || title.length === 0 || excerpt.length === 0) {
     diagnostics.FIELD_INVALID += 1;
     return null;
   }
 
-  const url = normalizeUrl(item.link);
+  const url = normalizeArticleUrl(item.url);
   if (url === null) {
     diagnostics.URL_FORBIDDEN += 1;
     return null;
   }
 
-  const date = typeof item.pubdate === "string" ? new Date(item.pubdate.trim()) : new Date(NaN);
+  const dateValue = typeof item.published_at === "string" ? item.published_at : typeof item.publishedAt === "string" ? item.publishedAt : "";
+  const date = new Date(dateValue.trim());
   if (Number.isNaN(date.getTime())) {
     diagnostics.DATE_INVALID += 1;
     return null;
@@ -126,86 +105,33 @@ function normalizeItem(item, diagnostics) {
     excerpt,
     publishedAt: date.toISOString(),
     url,
-    eyebrow: deriveEyebrow(title),
+    eyebrow: ARTICLE_EYEBROWS[0],
   });
 }
 
-function collectItems(xmlText) {
-  if (typeof xmlText !== "string") {
-    throw new FeedContractError("XML_INVALID", "Feed XML must be a string.");
-  }
-  if (/<!\s*(?:doctype|entity)\b/iu.test(xmlText)) {
-    throw new FeedContractError("DTD_FORBIDDEN", "DTD and entity declarations are forbidden.");
+export function parseFeed(jsonText) {
+  if (typeof jsonText !== "string") {
+    throw new FeedContractError("JSON_INVALID", "Feed JSON must be a string.");
   }
 
-  const items = [];
-  let currentItem = null;
-  let currentField = null;
-  let currentFieldText = [];
-  let parseError = null;
-  const parser = new SaxesParser({ xmlns: false });
-
-  parser.on("error", (error) => {
-    parseError ??= error;
-  });
-  parser.on("opentag", (tag) => {
-    const name = tag.name.toLowerCase();
-    if (name === "item" && currentItem === null) {
-      currentItem = {};
-      currentField = null;
-      currentFieldText = [];
-      return;
-    }
-    if (currentItem !== null && ITEM_FIELDS.has(name)) {
-      currentField = name;
-      currentFieldText = [];
-    }
-  });
-  const appendText = (value) => {
-    if (currentItem !== null && currentField !== null) {
-      currentFieldText.push(value);
-    }
-  };
-  parser.on("text", appendText);
-  parser.on("cdata", appendText);
-  parser.on("closetag", (tag) => {
-    const name = (typeof tag === "string" ? tag : tag.name).toLowerCase();
-    if (currentItem !== null && currentField === name) {
-      currentItem[currentField] = currentFieldText.join("");
-      currentField = null;
-      currentFieldText = [];
-    }
-    if (name === "item" && currentItem !== null) {
-      items.push(currentItem);
-      currentItem = null;
-      currentField = null;
-      currentFieldText = [];
-    }
-  });
-
+  let payload;
   try {
-    parser.write(xmlText).close();
-  } catch (error) {
-    if (error instanceof FeedContractError) {
-      throw error;
-    }
-    parseError ??= error;
+    payload = JSON.parse(jsonText);
+  } catch {
+    throw new FeedContractError("JSON_INVALID", "Feed JSON is not well formed.");
   }
-  if (parseError !== null) {
-    throw new FeedContractError("XML_INVALID", "Feed XML is not well formed.");
-  }
-  return items;
-}
 
-export function parseFeed(xmlText) {
-  const rawItems = collectItems(xmlText);
+  if (!Array.isArray(payload)) {
+    throw new FeedContractError("JSON_INVALID", "Feed JSON must be an array.");
+  }
+
   const diagnostics = {
-    totalItems: rawItems.length,
+    totalItems: payload.length,
     acceptedBeforeLimit: 0,
     discardedByCode: { ...DISCARDED_BY_CODE },
   };
   const normalizedItems = [];
-  for (const item of rawItems) {
+  for (const item of payload) {
     const article = normalizeItem(item, diagnostics.discardedByCode);
     if (article !== null) {
       normalizedItems.push(article);
