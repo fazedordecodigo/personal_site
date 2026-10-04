@@ -617,6 +617,7 @@ li,
 
 .article-panel > .card-kicker {
   background: var(--beige);
+  color: var(--ink);
   margin: 0;
   padding: 18px 24px;
 }
