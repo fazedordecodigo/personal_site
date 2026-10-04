@@ -2,6 +2,9 @@ import { readFile } from "node:fs/promises";
 
 import {
   ARTICLE_EYEBROWS,
+  ARTICLE_HOST,
+  ARTICLE_PATH_PREFIX,
+  API_PATH,
   FEED_URL,
   EXCERPT_LIMIT,
   MAX_FEED_BYTES,
@@ -73,11 +76,11 @@ function validArticle(article) {
     return false;
   }
   return url.protocol === "https:" &&
-    url.hostname === "fazedordecodigo.substack.com" &&
+    url.hostname === ARTICLE_HOST &&
     url.username === "" &&
     url.password === "" &&
     url.port === "" &&
-    url.pathname.startsWith("/p/") &&
+    url.pathname.startsWith(ARTICLE_PATH_PREFIX) &&
     url.search === "" &&
     url.hash === "";
 }
@@ -141,11 +144,11 @@ function validateRemoteUrl(value) {
   }
   if (
     url.protocol !== "https:" ||
-    url.hostname !== "fazedordecodigo.substack.com" ||
+    url.hostname !== ARTICLE_HOST ||
     url.username !== "" ||
     url.password !== "" ||
     url.port !== "" ||
-    url.pathname !== "/feed"
+    url.pathname !== API_PATH
   ) {
     throw new FeedFetchError("REDIRECT_FORBIDDEN", "Redirect host or path is not approved.");
   }
@@ -155,7 +158,7 @@ function validateRemoteUrl(value) {
 function contentTypeAllowed(response) {
   const value = response.headers.get("content-type") ?? "";
   const mediaType = value.split(";", 1)[0].trim().toLowerCase();
-  return mediaType === "application/xml" || mediaType === "text/xml";
+  return mediaType === "application/json" || mediaType === "application/vnd.forem.api-v1+json";
 }
 
 async function readLimitedBody(response) {
@@ -199,7 +202,7 @@ async function requestFeed({ fetchImpl, timeoutMs }) {
         response = await fetchImpl(currentUrl, {
           redirect: "manual",
           signal: controller.signal,
-          headers: { accept: "application/xml, text/xml" },
+          headers: { accept: "application/json" },
         });
       } catch (error) {
         if (error instanceof FeedFetchError) {

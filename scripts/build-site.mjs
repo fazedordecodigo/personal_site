@@ -6,6 +6,7 @@ import { SnapshotContractError, FeedFetchError, loadArticles } from "./articles/
 import { copyStaticAssets } from "./copy-static-assets.mjs";
 import { renderSite } from "./render-site.mjs";
 import { STATIC_COPY_MANIFEST } from "./static-assets.mjs";
+import { TalksSnapshotError, loadTalks } from "./talks/load-talks.mjs";
 
 export const nodeFsAdapter = {
   lstat: (...args) => import("node:fs/promises").then(({ lstat }) => lstat(...args)),
@@ -139,6 +140,7 @@ export async function buildSite({
 } = {}) {
   const { workspace, candidate: output } = await ensureOutputRoot(workspaceRoot, outputDir, fsImpl);
   const snapshotPath = join(workspace, "content/articles.snapshot.json");
+  const talksPath = join(workspace, "content/talks.snapshot.json");
   let feedResult;
   try {
     feedResult = await loadArticles({ mode: articleMode, snapshotPath, now, fetchImpl, sleep });
@@ -154,11 +156,26 @@ export async function buildSite({
     return report;
   }
 
+  let talksResult;
+  try {
+    talksResult = await loadTalks({ snapshotPath: talksPath });
+  } catch (error) {
+    const report = buildReport({
+      mode: articleMode,
+      state: "empty",
+      source: feedResult.source,
+      fallbackReasonCode: error instanceof TalksSnapshotError ? error.code : "TALKS_SNAPSHOT_INVALID",
+      fetchedAt: feedResult.fetchedAt,
+    });
+    await writeReport(workspace, report, fsImpl);
+    return report;
+  }
+
   const temporary = join(workspace, `.public.tmp-${process.pid}-${Math.random().toString(36).slice(2)}`);
   try {
     await fsImpl.mkdir(temporary, { recursive: false });
     const template = await fsImpl.readFile(join(workspace, "src/index.template.html"), "utf8");
-    const html = renderSite({ template, feedResult });
+    const html = renderSite({ template, feedResult, talksResult });
     await fsImpl.writeFile(join(temporary, "index.html"), html, { encoding: "utf8", flag: "wx" });
     await copyStaticAssets({ sourceRoot: workspace, outputRoot: temporary, manifest: STATIC_COPY_MANIFEST, fsImpl });
     const outputFiles = await listFiles(temporary, fsImpl);

@@ -4,20 +4,21 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
+import { FEED_URL } from "../../scripts/articles/constants.mjs";
 import { writeSnapshotAtomic } from "../../scripts/articles/snapshot.mjs";
 
 const makeSnapshot = () => ({
   schemaVersion: 1,
-  sourceUrl: "https://fazedordecodigo.substack.com/feed",
+  sourceUrl: FEED_URL,
   fetchedAt: "2026-08-15T12:17:00.000Z",
   timeZone: "America/Sao_Paulo",
   articles: [1, 2, 3].map((number) => ({
-    id: `urn:fixture:${number}`,
+    id: `${number}`,
     title: `Fazedor de Código: ${number}`,
     excerpt: `Resumo ${number}.`,
     publishedAt: `2026-08-${String(10 + number).padStart(2, "0")}T12:00:00.000Z`,
-    url: `https://fazedordecodigo.substack.com/p/fixture-${number}`,
-    eyebrow: "Fazedor de Código",
+    url: `https://dev.to/fazedordecodigo/fixture-${number}`,
+    eyebrow: "Artigo",
   })),
 });
 

@@ -1,5 +1,7 @@
 import { readFile } from "node:fs/promises";
 
+import { normalizeArticleUrl } from "./articles/parse-feed.mjs";
+
 const TIME_ZONE = "America/Sao_Paulo";
 const MONTHS = ["jan.", "fev.", "mar.", "abr.", "mai.", "jun.", "jul.", "ago.", "set.", "out.", "nov.", "dez."];
 
@@ -25,33 +27,45 @@ function formatCaptureDate(dateValue) {
   return `Última atualização: ${parts.day}/${parts.month}/${parts.year} às ${parts.hour}:${parts.minute} (${TIME_ZONE}).`;
 }
 
-function canonicalArticleUrl(value) {
-  const url = new URL(value);
-  if (url.protocol !== "https:" || url.hostname !== "fazedordecodigo.substack.com" || url.username !== "" || url.password !== "" || url.port !== "" || !url.pathname.startsWith("/p/")) {
-    throw new Error("Article URL is not permitted.");
-  }
-  url.search = "";
-  url.hash = "";
-  return url.toString();
+function formatTalkDate(isoDate) {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
 }
 
 export function renderArticles(feedResult) {
-  const cards = feedResult.articles.map((article) => {
+  const rows = feedResult.articles.map((article) => {
     const publishedAt = new Date(article.publishedAt).toISOString();
-    const url = canonicalArticleUrl(article.url);
-    return `<article class="article-card"><p class="card-kicker">${escapeHtmlText(article.eyebrow)}</p><h3>${escapeHtmlText(article.title)}</h3><p>${escapeHtmlText(article.excerpt)}</p><time datetime="${escapeHtmlAttribute(publishedAt)}">${escapeHtmlText(formatArticleDate(publishedAt))}</time><a class="text-link" href="${escapeHtmlAttribute(url)}">Ler no Substack →</a></article>`;
+    const url = normalizeArticleUrl(article.url);
+    if (url === null) {
+      throw new Error("Article URL is not permitted.");
+    }
+    return `<div class="article-row"><div><h3><a class="text-link" href="${escapeHtmlAttribute(url)}">${escapeHtmlText(article.title)}</a></h3><p>${escapeHtmlText(article.excerpt)}</p><time datetime="${escapeHtmlAttribute(publishedAt)}">${escapeHtmlText(formatArticleDate(publishedAt))}</time></div><span class="tag">${escapeHtmlText(article.eyebrow)}</span></div>`;
   }).join("");
   const updated = `<div class="article-meta"><p>${escapeHtmlText(formatCaptureDate(feedResult.fetchedAt))}</p>${feedResult.warningCode === "SNAPSHOT_STALE" ? "<p class=\"stale-warning\">Conteúdo preservado; a última atualização tem mais de 48 horas.</p>" : ""}</div>`;
-  return `${updated}${cards}`;
+  return `${updated}${rows}`;
 }
 
-export function renderSite({ template, feedResult }) {
-  const token = "<!-- ARTICLES_SLOT -->";
+export function renderTalks(talksResult) {
+  return talksResult.talks.map((talk) => {
+    const local = talk.local.join(" / ");
+    const kicker = `<time datetime="${escapeHtmlAttribute(talk.data)}">${escapeHtmlText(formatTalkDate(talk.data))}</time> · ${escapeHtmlText(local)}`;
+    const evento = talk.evento === null ? "" : `<p>${escapeHtmlText(talk.evento)}</p>`;
+    const link = talk.url === null ? "" : `<a class="text-link" href="${escapeHtmlAttribute(talk.url)}">Ver palestra</a>`;
+    return `<li><article class="talk-item"><p class="card-kicker">${kicker}</p><h3>${escapeHtmlText(talk.tema)}</h3>${evento}${link}</article></li>`;
+  }).join("");
+}
+
+function replaceUniqueToken(template, token, replacement, label) {
   const occurrences = template.split(token).length - 1;
   if (occurrences !== 1) {
-    throw new Error("ARTICLE_SLOT must occur exactly once.");
+    throw new Error(`${label} must occur exactly once.`);
   }
-  return template.replace(token, renderArticles(feedResult));
+  return template.replace(token, replacement);
+}
+
+export function renderSite({ template, feedResult, talksResult }) {
+  const withTalks = replaceUniqueToken(template, "<!-- TALKS_SLOT -->", renderTalks(talksResult), "TALKS_SLOT");
+  return replaceUniqueToken(withTalks, "<!-- ARTICLES_SLOT -->", renderArticles(feedResult), "ARTICLE_SLOT");
 }
 
 export async function readTemplate(templatePath) {

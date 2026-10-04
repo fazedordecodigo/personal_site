@@ -49,6 +49,11 @@ test("keeps the approved portrait and exact local font allowlist", async () => {
   assert.match(logo, /viewBox="0 0 511\.94 100"/);
   assert.match(logo, /Fazedor de Código — versão horizontal estreita/);
   assert.doesNotMatch(logo, /(?:src|href)="https?:\/\//);
+  for (const name of ["logo-spacexai.svg", "logo-devin.svg", "logo-n8n.svg"]) {
+    const mark = await readText(`src/assets/images/${name}`);
+    assert.match(mark, /<svg/);
+    assert.doesNotMatch(mark, /(?:src|href)="https?:\/\//);
+  }
   const fontNames = (await readdir(new URL("../../src/assets/fonts/", import.meta.url))).sort();
   assert.deepEqual(fontNames, [
     "LICENSES.md",
@@ -77,15 +82,21 @@ test("uses only local font URLs and the approved local images", async () => {
   walk(document, (node) => {
     if (node.tagName === "img") images.push(node);
   });
-  assert.equal(images.length, 2);
-  const portrait = Object.fromEntries(images[0].attrs.map((entry) => [entry.name, entry.value]));
-  assert.equal(portrait.src, "/assets/images/emerson-delatorre.jpg");
+  assert.equal(images.length, 5);
+  const sources = images.map((node) => Object.fromEntries(node.attrs.map((entry) => [entry.name, entry.value])).src);
+  assert.deepEqual(sources, [
+    "/assets/images/logo-spacexai.svg",
+    "/assets/images/logo-devin.svg",
+    "/assets/images/logo-n8n.svg",
+    "/assets/images/emerson-delatorre.jpg",
+    "/assets/images/fazedor-de-codigo-logo.svg",
+  ]);
+  const portrait = Object.fromEntries(images[3].attrs.map((entry) => [entry.name, entry.value]));
   assert.equal(portrait.width, "400");
   assert.equal(portrait.height, "400");
   assert.equal(portrait.fetchpriority, "high");
   assert.equal(portrait.loading, undefined);
-  const logo = Object.fromEntries(images[1].attrs.map((entry) => [entry.name, entry.value]));
-  assert.equal(logo.src, "/assets/images/fazedor-de-codigo-logo.svg");
+  const logo = Object.fromEntries(images[4].attrs.map((entry) => [entry.name, entry.value]));
   assert.equal(logo.width, "512");
   assert.equal(logo.height, "100");
   assert.equal(logo.alt, "Logo oficial da comunidade Fazedor de Código");

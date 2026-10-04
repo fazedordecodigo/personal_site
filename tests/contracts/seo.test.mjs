@@ -87,7 +87,7 @@ test("keeps the social image, robots, sitemap and article links crawlable", asyn
   assert.match(robots, /^User-agent: \*\nAllow: \/\nSitemap: https:\/\/delatorre\.dev\/sitemap\.xml\n$/);
   const sitemap = await readFile(new URL("public/sitemap.xml", root), "utf8");
   assert.equal((sitemap.match(/<loc>https:\/\/delatorre\.dev\/<\/loc>/g) ?? []).length, 1);
-  const articleLinks = elements("a").map((node) => attr(node, "href")).filter((href) => href?.startsWith("https://fazedordecodigo.substack.com/p/"));
+  const articleLinks = elements("a").map((node) => attr(node, "href")).filter((href) => href?.startsWith("https://dev.to/fazedordecodigo/"));
   assert.equal(articleLinks.length, 3);
   assert.equal(new Set(articleLinks).size, 3);
 });

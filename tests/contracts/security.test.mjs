@@ -26,7 +26,7 @@ function attr(node, name) {
 }
 
 const config = JSON.parse(await readText("staticwebapp.config.json"));
-const expectedCsp = "default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-src https://fazedordecodigo.substack.com; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests";
+const expectedCsp = "default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; frame-src https://fazedordecodigo.substack.com https://luma.com https://lu.ma; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests";
 
 test("keeps resources local until the explicit iframe boundary", async () => {
   assert.equal(elements("script").length, 1);
@@ -34,13 +34,18 @@ test("keeps resources local until the explicit iframe boundary", async () => {
   assert.equal(attr(elements("script")[0], "defer"), "");
   assert.deepEqual(elements("link").filter((node) => attr(node, "rel") === "stylesheet").map((node) => attr(node, "href")), ["/css/site.css"]);
   assert.deepEqual(elements("img").map((node) => attr(node, "src")), [
+    "/assets/images/logo-spacexai.svg",
+    "/assets/images/logo-devin.svg",
+    "/assets/images/logo-n8n.svg",
     "/assets/images/emerson-delatorre.jpg",
     "/assets/images/fazedor-de-codigo-logo.svg",
   ]);
   const frames = elements("iframe");
-  assert.equal(frames.length, 1);
-  assert.equal(attr(frames[0], "src"), undefined);
-  assert.equal(attr(frames[0], "data-src"), "https://fazedordecodigo.substack.com/embed");
+  assert.equal(frames.length, 2);
+  assert.equal(attr(frames[0], "src"), "https://luma.com/embed/calendar/cal-ySWMeFE0nNFt5kA/events");
+  assert.equal(attr(frames[0], "title"), "Agenda de eventos no Luma");
+  assert.equal(attr(frames[1], "src"), undefined);
+  assert.equal(attr(frames[1], "data-src"), "https://fazedordecodigo.substack.com/embed");
   const resourceNodes = [...elements("script"), ...elements("link").filter((node) => attr(node, "rel") === "stylesheet"), ...elements("img")];
   for (const node of resourceNodes) {
     const url = attr(node, "src") ?? attr(node, "href");

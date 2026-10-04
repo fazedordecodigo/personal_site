@@ -25,7 +25,7 @@ test.describe("@a11y controlled page", () => {
       return rect.width > 0 && rect.height > 0 && !(element.textContent || "").trim() && !element.getAttribute("aria-label");
     }).map((element) => element.outerHTML));
     expect(unnamed).toEqual([]);
-    const undersized = await page.locator(".button, button, .nav-list a, .footer-links a, .external-link, .talks-more summary, .spotlight-card .text-link, .profile-card__link").evaluateAll((elements) => elements.filter((element) => {
+    const undersized = await page.locator(".button, button, .nav-list a, .footer-links a, .external-link, .talk-item .text-link, .spotlight-card .text-link, .profile-card__link, .luma-wrap + .text-link, .article-panel + .text-link").evaluateAll((elements) => elements.filter((element) => {
       const rect = element.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0 && (rect.width < 44 || rect.height < 44);
     }).map((element) => element.textContent?.trim()));

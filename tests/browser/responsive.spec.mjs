@@ -14,7 +14,7 @@ for (const width of widths) {
     }));
     expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
     expect(metrics.bodyScrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
-    const controls = page.locator(".button, button, .nav-list a, .footer-links a, .external-link, .talks-more summary, .spotlight-card .text-link, .profile-card__link");
+    const controls = page.locator(".button, button, .nav-list a, .footer-links a, .external-link, .talk-item .text-link, .spotlight-card .text-link, .profile-card__link, .luma-wrap + .text-link, .article-panel + .text-link");
     const count = await controls.count();
     for (let index = 0; index < count; index += 1) {
       const box = await controls.nth(index).boundingBox();
@@ -33,29 +33,28 @@ test("stacks the approved regions at tablet and mobile widths", async ({ page })
   await page.setViewportSize({ width: 768, height: 900 });
   await page.goto("/");
   expect(await page.locator(".hero").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length)).toBe(1);
-  expect(await page.locator(".article-grid").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length)).toBe(1);
   await page.setViewportSize({ width: 1440, height: 900 });
   expect(await page.locator(".hero").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length)).toBe(2);
-  expect(await page.locator(".article-grid").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length)).toBe(3);
 });
 
-test("aligns all article cards below the update metadata on desktop", async ({ page }) => {
+test("keeps article rows below the update metadata on desktop", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
-  const layout = await page.locator(".article-grid").evaluate((grid) => {
-    const metadata = grid.querySelector(".article-meta");
-    const cards = [...grid.querySelectorAll(".article-card")];
+  const layout = await page.locator(".article-list").evaluate((list) => {
+    const metadata = list.querySelector(".article-meta");
+    const rows = [...list.querySelectorAll(".article-row")];
 
     return {
       metadataBottom: metadata.getBoundingClientRect().bottom,
-      cardTops: cards.map((card) => card.getBoundingClientRect().top),
+      rowTops: rows.map((row) => row.getBoundingClientRect().top),
     };
   });
 
-  expect(layout.cardTops).toHaveLength(3);
-  expect(layout.cardTops.every((top) => Math.abs(top - layout.cardTops[0]) < 1)).toBe(true);
-  expect(layout.cardTops[0]).toBeGreaterThan(layout.metadataBottom);
+  expect(layout.rowTops).toHaveLength(3);
+  expect(layout.rowTops[0]).toBeGreaterThan(layout.metadataBottom);
+  expect(layout.rowTops[1]).toBeGreaterThan(layout.rowTops[0]);
+  expect(layout.rowTops[2]).toBeGreaterThan(layout.rowTops[1]);
 });
 
 test("reflows at a narrow 160 CSS pixel viewport without clipped content", async ({ page }) => {

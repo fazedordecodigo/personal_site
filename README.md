@@ -5,8 +5,9 @@ Site pessoal estático de Emerson Delatorre, publicado como um artefato fechado 
 ## Arquitetura
 
 - `src/index.template.html` é renderizado por `scripts/build-site.mjs`.
-- `content/articles.snapshot.json` é a fonte determinística para desenvolvimento e pull requests.
-- O modo remoto valida o RSS oficial do Substack no build e só publica quando a resposta é válida; uma falha remota bloqueia o novo artefato e preserva o último deploy válido.
+- `content/articles.snapshot.json` é a fonte determinística dos artigos do dev.to para desenvolvimento e pull requests.
+- `content/talks.snapshot.json` é a fonte determinística das palestras geradas no build.
+- O modo remoto valida a API oficial do dev.to no build e só publica quando a resposta é válida; uma falha remota bloqueia o novo artefato e preserva o último deploy válido.
 - O build recria `public/` por um manifesto allowlist. Contratos, Nu HTML Checker, Playwright, axe e Lighthouse inspecionam exatamente esse diretório.
 - O workflow `.github/workflows/site.yml` valida PRs sem segredo e separa o artifact verificado das lanes opcionais de preview e produção.
 
@@ -28,7 +29,7 @@ npm run verify
 npm run verify:remote
 ```
 
-`npm run verify` executa lint, testes unitários, um build por snapshot e todos os gates sobre o mesmo `public/`. `npm run verify:remote` troca somente o modo de artigos para `remote-required` e não deve ser usado em pull requests. Para atualizar o snapshot, execute `npm run snapshot:refresh`, revise os três artigos normalizados e inclua a alteração em uma revisão humana; nenhum workflow faz commit automático.
+`npm run verify` executa lint, testes unitários, um build por snapshot e todos os gates sobre o mesmo `public/`. `npm run verify:remote` troca somente o modo de artigos para `remote-required` e não deve ser usado em pull requests. Para atualizar o snapshot de artigos, execute `npm run snapshot:refresh`, revise os três artigos normalizados do dev.to e inclua a alteração em uma revisão humana; nenhum workflow faz commit automático.
 
 ## Workflow e autorização de publicação
 

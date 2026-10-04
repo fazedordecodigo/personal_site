@@ -19,7 +19,7 @@ Os hashes permitem reconhecer os artefatos de decisão quando disponíveis, mas 
 
 ```text
 ┌──────────────────────────────────────────────────────────────┐
-│ EMERSON_        Início Perfil Artigos Newsletter Contato     │
+│ DELATORRE_      Início Perfil Artigos Newsletter Contato     │
 ├──────────────────────────────────────────────────────────────┤
 │ HERO: eyebrow + badges + H1 + lead + CTAs  │ retrato real   │
 ├──────────────────────────────────────────────────────────────┤
@@ -41,7 +41,7 @@ Em desktop, hero, perfil e newsletter usam duas colunas; provas usam quatro; art
 ## Hierarquia visual
 
 1. O rosto de Emerson e o H1 são os dois pontos dominantes do primeiro viewport.
-2. O nome `EMERSON_` identifica a marca principal.
+2. O nome `DELATORRE_` identifica a marca principal.
 3. `Cursor Ambassador` e `Devin Ambassador` aparecem juntos, com destaque de pílula, abaixo do eyebrow e acima do H1.
 4. O CTA laranja de assinatura domina o CTA contornado de conversa.
 5. Fazedor de Código ganha uma superfície escura na seção de perfil e o grande painel de newsletter, sem virar marca-mãe.
