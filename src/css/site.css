@@ -683,6 +683,7 @@ li,
   display: flex;
   flex-wrap: wrap;
   gap: 8px 24px;
+  margin-bottom: 8px;
   min-width: 0;
   padding: 16px 24px 8px;
 }
