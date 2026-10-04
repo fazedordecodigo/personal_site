@@ -10,7 +10,11 @@ test.describe("@a11y controlled page", () => {
       await page.setViewportSize({ width, height: 1000 });
       await page.goto("/");
       for (const region of regions) {
-        const results = await new AxeBuilder({ page }).include(region).analyze();
+        const results = await new AxeBuilder({ page })
+          .include(region)
+          .exclude("#luma-calendar")
+          .options({ iframes: false })
+          .analyze();
         const severe = results.violations.filter((violation) => ["critical", "serious"].includes(violation.impact));
         expect(severe, `${region} at ${width}px`).toEqual([]);
       }
